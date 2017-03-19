@@ -1,0 +1,51 @@
+{
+  "name": "snipe",
+  "version": "0.0.1",
+  "description": "API service for a freelancer marketplace",
+  "main": "app.js",
+  "scripts": {
+    "test": "gulp sanity"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnsembleLab/snipe.git"
+  },
+  "keywords": [
+    "marketplace",
+    "freelance"
+  ],
+  "author": "Olufemi Olanipekun <iolufemi@ymail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/EnsembleLab/snipe/issues"
+  },
+  "homepage": "https://github.com/EnsembleLab/snipe#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.4",
+    "gulp-mocha": "^4.1.0",
+    "gulp-nodemon": "^2.2.1",
+    "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "aes-js": "^3.0.0",
+    "body-parser": "^1.17.1",
+    "bugsnag": "^1.9.1",
+    "cluster": "^0.7.7",
+    "crypto": "0.0.3",
+    "debug": "^2.6.3",
+    "express": "^4.15.2",
+    "express-validator": "^3.1.2",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.9.0",
+    "q": "^1.4.1",
+    "randomstring": "^1.1.5",
+    "util": "^0.10.3",
+    "winston": "^2.3.1",
+    "winston-bugsnag": "^2.1.0"
+  }
+}
