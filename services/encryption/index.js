@@ -7,19 +7,19 @@ var q = require('q');
 var debug = require('debug')('encryption');
 
 module.exports = {
-	generateKey: function(flutterwaveApiKey, flutterwaveMerchantKey){
+	generateKey: function(){
 		return q.Promise(function(resolve, reject){
 			var salt = randomstring.generate(256);
 			debug('salt: ', salt);
 
 			var bits = 256;
 
-			crypto.pbkdf2(flutterwaveApiKey+flutterwaveMerchantKey, salt, 100000, bits / 8, 'sha512', function(err, key){
+			crypto.pbkdf2(config.secret, salt, 100000, bits / 8, 'sha512', function(err, key){
 				if (err){
 					reject(new Error(err));
 				}else{
 					var randomNumber = Math.floor((Math.random() * 9999) + 1);
-					resolve(new Buffer(aesjs.util.convertBytesToString(key, 'hex')+'//////'+randomNumber).toString('base64'));
+					resolve(new Buffer(aesjs.utils.hex.fromBytes(key)+'//////'+randomNumber).toString('base64'));
 				}
 			});
 		});
@@ -35,7 +35,7 @@ module.exports = {
 		var counter = ((splitKey[1] * 1) * 10) / 5;
 		debug('our counter: ', counter);
 		debug('our key: ', key);
-		key = aesjs.util.convertStringToBytes(key, 'hex');
+		key = aesjs.utils.hex.toBytes(key);
 		debug('in buffer: ', key);
 
 		return q.Promise(function(resolve){
@@ -44,19 +44,19 @@ module.exports = {
 
 		    // Convert text to bytes
 		    debug('our text: ',text);
-		    var textBytes = aesjs.util.convertStringToBytes(text);
+		    var textBytes = aesjs.utils.utf8.toBytes(text);
 		    debug('textBytes: ',textBytes);
 		    var aesCbc = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(counter));
 		    var encryptedBytes = aesCbc.encrypt(textBytes);
 
 		    // Convert our bytes back into text
-		    var encryptedText = aesjs.util.convertBytesToString(encryptedBytes, 'hex');
+		    var encryptedText = aesjs.utils.hex.fromBytes(encryptedBytes);
 		    debug('finished encryption');
 		    resolve(encryptedText);
 		});
 	},
 
-	decrypt: function(text, key){
+	decrypt: function(text, key, truthHash){
 		debug('text: ',text);
 		key = new Buffer(key, 'base64').toString('utf-8');
 		debug('What i see here: ', key);
@@ -65,12 +65,12 @@ module.exports = {
 		var counter = ((splitKey[1] * 1) * 10) / 5;
 		debug('our counter: ', counter);
 		debug('our key: ', key);
-		key = aesjs.util.convertStringToBytes(key, 'hex');
+		key = aesjs.utils.hex.toBytes(key);
 
-		return q.Promise(function(resolve){
+		return q.Promise(function(resolve,reject,notify){
 			debug('our key2: ', key);
 		    // Convert text to bytes
-		    var textBytes = aesjs.util.convertStringToBytes(text, 'hex');
+		    var textBytes = aesjs.utils.hex.toBytes(text);
 
 		    // The cipher-block chaining mode of operation maintains internal
 	        // state, so to decrypt a new instance must be instantiated.
@@ -78,8 +78,22 @@ module.exports = {
 	        var decryptedBytes = aesCbc.decrypt(textBytes);
 
 	        // Convert our bytes back into text
-	        var decryptedText = aesjs.util.convertBytesToString(decryptedBytes);
-	        resolve(decryptedText);
+	        var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+	        
+	        notify('checking if data was not hijacked...');
+	        
+	        var truthConfirmationHash = crypto.createHash('sha512')
+	        .update(decryptedText)
+	        .digest('hex');
+	        debug('sent hash: ', truthHash);
+			debug('generated hash: ', truthConfirmationHash);
+			
+			if(truthHash === truthConfirmationHash){
+				resolve(decryptedText);
+			}else{
+				reject(new Error('Data integrity compromised!'));
+			}
+	        
 	    });
 	},
 
@@ -93,7 +107,8 @@ module.exports = {
 
 			if(req.method === 'POST' && config.secureMode){
 				if(req.body.secureData){
-					encryption.decrypt(req.body.secureData, key)
+					var truthHash = req.body.truth;
+					encryption.decrypt(req.body.secureData, key, truthHash)
 					.then(function(resp){
 						if(typeof resp === 'object'){
 							req.body = resp;
@@ -106,7 +121,7 @@ module.exports = {
 						}
 					})
 					.catch(function(err){
-						next(err);
+						next(new Error(err));
 					});
 				}else{
 					res.badRequest(false,'Expecting an encrypted data to be sent in the secureData body parameter.');

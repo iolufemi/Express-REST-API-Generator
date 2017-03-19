@@ -4,7 +4,7 @@
   "description": "API service for a freelancer marketplace",
   "main": "app.js",
   "scripts": {
-    "test": "mocha"
+    "test": "gulp"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/EnsembleLab/snipe#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.4",
     "gulp-mocha": "^4.1.0",
@@ -34,6 +35,7 @@
     "aes-js": "^3.0.0",
     "body-parser": "^1.17.1",
     "bugsnag": "^1.9.1",
+    "cluster": "^0.7.7",
     "crypto": "0.0.3",
     "debug": "^2.6.3",
     "express": "^4.15.2",
