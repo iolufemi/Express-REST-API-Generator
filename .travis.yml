@@ -4,10 +4,8 @@ node_js:
   - "6"
   - "4"
 before_script:
-  - npm install -g gulp mocha gulp-cli
+  - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
 script: 
-  - npm test
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov
