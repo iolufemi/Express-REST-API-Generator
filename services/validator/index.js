@@ -1,18 +1,20 @@
 "use strict";
 var util = require('util');
 var debug = require('debug')('validator');
+var _ = require('lodash');
 
 module.exports = function(req, res, next){
 	debug('starting validation check.');
 	debug('What we got: ', req.body);
 	var parameters = req._required;
+	var ignores = req._ignored;
 	if(parameters.length){
 		var last = parameters.length - 1;
 		for(var n in parameters){
 			if(parameters[n]){
 				debug('validating '+parameters[n]);
 				req.check(parameters[n], parameters[n]+' is required').notEmpty();
-				if(parameters[n] === 'otptransactionidentifier' || parameters[n] === 'trxreference' || parameters[n] === 'trxauthorizeid'){ /* jshint ignore:line */
+				if(_.indexOf(parameters[n]) > -1){ /* jshint ignore:line */
 					// Skip
 				}else{
 					req.sanitize(parameters[n]).escape();

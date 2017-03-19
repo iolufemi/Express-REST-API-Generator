@@ -160,12 +160,21 @@ describe('#Encryption service test', function(){
         req.body.secureData = req.header('encryptedData');
         req.body.truth = demoDataHash;
         encryption.interpreter(req,res,next);
-        setTimeout(100,function(){
+        setTimeout(1000,function(){
             nextChecker.should.be.true; /* jslint ignore:line */
+            nextChecker = false;
         });
         done();
     });
-    
-    
-    
+});
+
+// Testing validation service
+
+var validator = require('../services/validator');
+
+describe('#Validation service test', function(){
+    it('should exist as a function',function(done){
+        validator.should.exist; /* jslint ignore:line */
+        done();
+    });
 });
