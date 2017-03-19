@@ -160,10 +160,10 @@ describe('#Encryption service test', function(){
         req.body.secureData = req.header('encryptedData');
         req.body.truth = demoDataHash;
         encryption.interpreter(req,res,next);
-        setTimeout(1000,function(){
+        setTimeout(function(){
             nextChecker.should.be.true; /* jslint ignore:line */
             nextChecker = false;
-        });
+        },1000);
         done();
     });
 });
