@@ -4,7 +4,7 @@
   "description": "API service for a freelancer marketplace",
   "main": "app.js",
   "scripts": {
-    "test": "gulp"
+    "test": "gulp sanity"
   },
   "repository": {
     "type": "git",
