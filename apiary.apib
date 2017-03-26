@@ -7,135 +7,99 @@ Snipe is an API backend for the Snipe Marketplace
 
 ## Authentication [/auth]
 
-### Register [GET]
+### Register [POST /auth/register] 
+
++ Request (application/json)
+
+        {
+            "firstname": "John",
+            "lastname": "Doe",
+            "phonenumber": "+2348077788899",
+            "email": "john@doe.com",
+            "password": "theSafePa$$w0rd$$555//"
+        }
 
 + Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
         
-### Forgot Password [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "firstname": "John",
+                "lastname": "Doe",
+                "phonenumber": "+2348077788899",
+                "email": "john@doe.com"
             }
-        ]
+        }
         
-### Sign In [GET]
+### Reset Password [POST /auth/resetpassword]
+
++ Request (application/json)
+
+        {
+            "email": "john@doe.com",
+            "oldPassword": "theSafePa$$w0rd$$555//", // (optional)
+            "password": "theSafePa$$w0rd$$555//",
+            "confirmPassword": "theSafePa$$w0rd$$555//"
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "message": "Verification email sent. or Password changed."
             }
-        ]
+        }
         
-### Sign Out [GET]
+### Verify Password Reset [GET /auth/verifyresetpassword/:hash]
+Do html redirect to the password reset successful page
 
-+ Response 200 (application/json)
++ Parameters
+    + hash: "2d3343ae567c8f8a0b9e8f" (string, required) - verification hash from password reset verification email.
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
++ Response 200 (text/html)
         
-### Deactivate [GET]
+### Log In [POST]
+
++ Request (application/json)
+
+        {
+            "email": "john@doe.com",
+            "password": "theSafePa$$w0rd$$555//",
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "accessToken": "2d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
+                "expiry": "3600",
+                "refreshToken": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f"
             }
-        ]
+        }
+        
+### Log Out [GET /auth/logout]
+
++ Response 200 (text/html)
+    + Note: Do html redirect to the password reset successful page and kill the active access token and refresh tokens
+        
+### Deactivate [GET /auth/deactivate/:user_id]
+
++ Parameter
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f // This token must be of an administrator or the user to be deactivated
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "message": "User deactivated."
+            }
+        }
 
 ## User Management [/users]
 
