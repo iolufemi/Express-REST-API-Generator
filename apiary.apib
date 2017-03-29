@@ -91,7 +91,7 @@ Note: Do html redirect to the password reset successful page and kill the active
 + Parameter
     + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
 
-+ Headers
+Finished + Headers
     Authorization: dd3343ae567c8f8a0b9e8f // This token must be of an administrator or the user to be deactivated
 
 + Response 200 (application/json)
@@ -182,7 +182,13 @@ Note: Do html redirect to the password reset successful page and kill the active
                 "addressBook": [{
                     "phonenumber": "+2348077788899",
                     "email": "john@doe.com"
-                }]
+                }],
+                "products": {
+                    "item":"price",
+                    "item2":"price",
+                    "item3":"price",
+                    "item4":"price",
+                }
             }
         }
         
@@ -465,6 +471,10 @@ Note: Do html redirect to the password reset successful page and kill the active
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -725,582 +735,969 @@ Note: Do html redirect to the password reset successful page and kill the active
             }
         }
         
-### Complete Booking [GET]
+### Complete Booking [POST /bookings/:booking_id/complete]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "message":"Booking Completed"
             }
-        ]
+        }
+        
+### Cancel Booking [POST /bookings/:booking_id/cancel]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of booking to return
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "message":"Booking Canceled"
+            }
+        }
         
 ### Filter Bookings [GET]
 
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + amount: 2000 (String)  - Amount of a booking
+    + status: "completed" (String)  - Status of a booking
+    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
+
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+        {
+            "status": "success",
+            "data": {
+                [
                     {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "amount": 2000,
+                        "data": {
+                            "kitchen": 1,
+                            "livingRoom": 1,
+                            "bedroom": 3,
+                            "bathroom": 1,
+                            "cupboard": 1
+                        },
+                        "statu": "pending",
+                        "payments": [
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "completed",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            },
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "pending",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "processing",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "amount": 2000,
+                        "data": {
+                            "kitchen": 1,
+                            "livingRoom": 1,
+                            "bedroom": 3,
+                            "bathroom": 1,
+                            "cupboard": 1
+                        },
+                        "statu": "completed",
+                        "payments": [
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "completed",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            },
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "pending",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "processing",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "amount": 2000,
+                        "data": {
+                            "kitchen": 1,
+                            "livingRoom": 1,
+                            "bedroom": 3,
+                            "bathroom": 1,
+                            "cupboard": 1
+                        },
+                        "statu": "canceled",
+                        "payments": [
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "completed",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            },
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "pending",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "processing",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "amount": 2000,
+                        "data": {
+                            "kitchen": 1,
+                            "livingRoom": 1,
+                            "bedroom": 3,
+                            "bathroom": 1,
+                            "cupboard": 1
+                        },
+                        "statu": "ongoing",
+                        "payments": [
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "completed",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            },
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "pending",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                            {
+                                "user_id": "2d3343ae567c8f8a0b9e8f",
+                                "amount": 2000,
+                                "fee": 20,
+                                "providerFee": 10,
+                                "status": "processing",
+                                "provider_response": {
+                                    "statusCode": "00",
+                                    "message": "successful"
+                                }
+                            }
+                        ]
                     }
                 ]
             }
-        ]
+        }
         
-### New Booking [GET]
+### New Booking [POST]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Request (application/json)
+
+        {
+            "amount": 2000,
+            "data": {
+                "kitchen": 1,
+                "livingRoom": 1,
+                "bedroom": 3,
+                "bathroom": 1,
+                "cupboard": 1
+            }
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "amount": 2000,
+                "data": {
+                    "kitchen": 1,
+                    "livingRoom": 1,
+                    "bedroom": 3,
+                    "bathroom": 1,
+                    "cupboard": 1
+                },
+                "statu": "pending",
+                "payments": []
             }
-        ]
+        }
         
-### Copy Booking [GET]
+### Copy Booking [POST /bookings/:booking_id/copy]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "amount": 2000,
+                "data": {
+                    "kitchen": 1,
+                    "livingRoom": 1,
+                    "bedroom": 3,
+                    "bathroom": 1,
+                    "cupboard": 1
+                },
+                "status": "pending",
+                "payments": []
             }
-        ]
+        }
         
-### Cancel Booking Subscription [GET]
+### Stop Booking Reminder [POST /bookings/:booking_id/stopreminder]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "message": "Reminder disabled for this booking"
             }
-        ]
+        }
         
-### Assign Worker to Booking [GET]
+### Assign Worker to Booking [POST /bookings/:booking_id/assign]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "worker_id": dd3343ae567c8f8a0b9e8f
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "data": {
+                    "kitchen": 1,
+                    "livingRoom": 1,
+                    "bedroom": 3,
+                    "bathroom": 1,
+                    "cupboard": 1
+                },
+                "status": "ongoing",
+                "payments": [],
+                "assignedTo": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com"
+                    }]
+                }]
             }
-        ]
-        
-### Pay for a Booking [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-        
-### Rate and Write a Review for a Booking [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
+        }
         
 ### Export Bookings [GET]
 
-+ Response 200 (application/json)
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + amount: 2000 (String)  - Amount of a booking
+    + status: "completed" (String)  - Status of a booking
+    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Pay Worker for Bookings [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
++ Response 200 (text/csv)
         
-### Recommend Worker for a Booking [GET]
+### Recommend Worker for a Booking [GET /booking/:booking_id/recommendworker]
+Check if the Worker is close to the state and LGA of the booking, then arrange the workers by rating. High rating first
 
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + booking_id (Number)  - ID of the booking
+    
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+        {
+            "status": "success",
+            "data": {
+                [
                     {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "firstname": "John",
+                        "lastname": "Doe",
+                        "addressBook": [{
+                            "phonenumber": "+2348077788899",
+                            "email": "john@doe.com"
+                        }]
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "firstname": "John",
+                        "lastname": "Doe",
+                        "addressBook": [{
+                            "phonenumber": "+2348077788899",
+                            "email": "john@doe.com"
+                        }]
                     }
                 ]
             }
-        ]
+        }
         
-### Get Customer Details for a Booking [GET]
+### Get Customer Details for a Booking [GET /booking/:booking_id/customerdetails]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "firstname": "John",
+                "lastname": "Doe",
+                "addressBook": [{
+                    "phonenumber": "+2348077788899",
+                    "email": "john@doe.com"
+                }]
             }
-        ]
+        }
         
-### Get Worker Details for a Booking [GET]
+### Get Workers Details for a Booking [GET /booking/:booking_id/workersdetails]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+        {
+            "status": "success",
+            "data": {
+                [
                     {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "firstname": "John",
+                        "lastname": "Doe",
+                        "addressBook": [{
+                            "phonenumber": "+2348077788899",
+                            "email": "john@doe.com"
+                        }]
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "firstname": "John",
+                        "lastname": "Doe",
+                        "addressBook": [{
+                            "phonenumber": "+2348077788899",
+                            "email": "john@doe.com"
+                        }]
                     }
                 ]
             }
-        ]
+        }
+        
+### Rate and Write a Review for a Booking [POST /booking/:booking_id/review]
+Add the rating and review to each worker assigned to the project
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id (Number)  - ID of the booking
+    
++ Request (application/json)
+    
+    {
+        "rating": 5,
+        "review": "This is a review for this good service"
+    }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "message": "Review has been added successful."
+            }
+        }
+        
+### Pay Worker for Bookings [POST /booking/:booking_id/payworker]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Parameters
+    + booking_id (Number)  - ID of the booking
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "message": "Review has been added successful.",
+                "amountPaid": 5000
+            }
+        }
+        
+## Payments [/payments]
+
+### Initiate Payment for a Booking [POST]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Request (application/json)
+
+        {
+            "booking_id": "dd3343ae567c8f8a0b9e8f",
+            "amount": 4000
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "booking_id": "dd3343ae567c8f8a0b9e8f",
+                "amount": 4000,
+                "user_id": "dd3343ae567c8f8a0b9e8f",
+                "fee": 20,
+                "status": "pending",
+                "provider_response": {}
+            }
+        }
+
+### Complete Payment for a Booking [POST /payments/:payment_id/complete]
+Remember to requery the transaction to confirm the true state from the processor
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Parameters
+    + payment_id (Number)  - ID of the payment
+
++ Request (application/json)
+
+        {
+            "status": "completed or failed"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "booking_id": "dd3343ae567c8f8a0b9e8f",
+                "amount": 4000,
+                "user_id": "dd3343ae567c8f8a0b9e8f",
+                "fee": 20,
+                "status": "completed",
+                "provider_response": {}
+            }
+        }
+### View users payments [GET /payments]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Parameters
+    + user_id (Number)  - ID of the user
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + status: "completed" (String)  - Status of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "booking_id": "dd3343ae567c8f8a0b9e8f",
+                    "amount": 4000,
+                    "user_id": "dd3343ae567c8f8a0b9e8f",
+                    "fee": 20,
+                    "status": "completed",
+                    "provider_response": {}
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "booking_id": "dd3343ae567c8f8a0b9e8f",
+                    "amount": 4000,
+                    "user_id": "dd3343ae567c8f8a0b9e8f",
+                    "fee": 20,
+                    "status": "pending",
+                    "provider_response": {}
+                }]
+            }
+        }
         
 ## Reporting [/reporting]
         
 ### View Report [GET]
 
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + duration "weekly" (String)  - duration of report
+    + type "customers or transactions or workers" (String)  - Type of report
+    + date "2017-03-04" (Date)  - Reporting date
+
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "generateddate": "2017-03-02",
+                    "value": 4000,
+                    "volume": 20,
+                    "revenue": 20,
+                    "customername": "Akpan Uche", // Optional
+                    "workername": "Ngozi Emeka" // Optional
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "generateddate": "2017-03-02",
+                    "value": 4000,
+                    "volume": 20,
+                    "revenue": 20,
+                    "customername": "Akpan Uche", // Optional
+                    "workername": "Ngozi Emeka" // Optional
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "generateddate": "2017-03-02",
+                    "value": 4000,
+                    "volume": 20,
+                    "revenue": 20,
+                    "customername": "Akpan Uche", // Optional
+                    "workername": "Ngozi Emeka" // Optional
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "generateddate": "2017-03-02",
+                    "value": 4000,
+                    "volume": 20,
+                    "revenue": 20,
+                    "customername": "Akpan Uche", // Optional
+                    "workername": "Ngozi Emeka" // Optional
+                }]
             }
-        ]
+        }
         
 ## Collaboration [/collaboration]
         
 ### Invite Team Member [GET]
 
-+ Response 200 (application/json)
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
++ Request (application/json)
+
+        {
+            "firstname": "John",
+            "lastname": "Doe",
+            "phonenumber": "+2348077788899",
+            "email": "john@doe.com",
+            "password": "theSafePa$$w0rd$$555//",
+            "role_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
         
-## Access Management [/accessmanagement]
+        {
+            "status": "success",
+            "data": {
+                "firstname": "John",
+                "lastname": "Doe",
+                "phonenumber": "+2348077788899",
+                "email": "john@doe.com",
+                "passwordReset": true
+            }
+        }
+        
+## Access Management [/roles]
         
 ### View Roles [GET]
 
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-        
-### Assign Role [GET]
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+        {
+            "status": "success",
+            "data": {
+                [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "rolename": "Admin",
+                    "permisions": [{
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "User",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    },
                     {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "Authentication",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "Transactions",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    }]
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "rolename": "Public",
+                    "permisions": [{
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "User",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "Authentication",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    },
+                    {
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "Transactions",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    }]
+                }]
             }
-        ]
+        }
         
-### View Role [GET]
+### Assign Role [POST /roles/:role_id/assign]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role to assign
+
++ Request (application/json)
+
+        [{
+            "user_id": "dd3343ae567c8f8a0b9e8fd"
+        },
+        {
+            "user_id": "e4d3343ae567c8f8a0b9e8f"
+        }]
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "firstname": "John",
+                "lastname": "Doe",
+                "addressBook": [{
+                    "phonenumber": "+2348077788899",
+                    "email": "john@doe.com"
+                }],
+                "role_id": "2d3343ae567c8f8a0b9e8f"
+            }]
+        }
         
-### Update Role [GET]
+### View Role [GET /roles/:role_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": []
             }
-        ]
+        }
         
-### Add Permissions to Role [GET]
+### Update Role [PUT /roles/:role_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role
+    
++ Request (application/json)
+
+        {
+            "rolename": "SomeOtherName"
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": []
             }
-        ]
+        }
         
-### Remove Permissions From Role [GET]
+### Add Permissions to Role [POST /roles/:role_id/addpermission]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role
+    
++ Request (application/json)
+        { 
+            "model": "Transactions",
+            "read": true,
+            "update": false,
+            "create": true,
+            "delete": false
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "rolename": "Public",
+                    "permisions": [{
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "User",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    }]
+                }]
             }
-        ]
+        }
         
-## Payment Page [/paymentpage]
-        
-### Payment Page [GET]
+### Update Permissions on Role [PUT /roles/:role_id/updatepermission/:permission_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role
+    + permission_id: "20" (Number) - The ID of the permission to update
+    
++ Request (application/json)
+        { 
+            "model": "Transactions",
+            "read": true,
+            "update": false,
+            "create": true,
+            "delete": false
+        }
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "rolename": "Public",
+                    "permisions": [{
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "User",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    }]
+                }]
             }
-        ]
+        }
+        
+### Remove Permissions From Role [DELETE /roles/:role_id/deletepermission/:permission_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role
+    + permission_id: "20" (Number) - The ID of the permission to update
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "rolename": "Public",
+                    "permisions": [{
+                        "id": "2d3343ae567c8f8a0b9e8f", 
+                        "model": "User",
+                        "read": true,
+                        "update": false,
+                        "create": true,
+                        "delete": false
+                    }]
+                }]
+            }
+        }
+        
+## Payment Page [/pay]
+        
+### Payment Page [GET /pay/:alias]
+
++ Response 200 (text/html)
