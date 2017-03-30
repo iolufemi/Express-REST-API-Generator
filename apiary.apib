@@ -16,7 +16,13 @@ Snipe is an API backend for the Snipe Marketplace
             "lastname": "Doe",
             "phonenumber": "+2348077788899",
             "email": "john@doe.com",
-            "password": "theSafePa$$w0rd$$555//"
+            "dateofbirth": "2016-03-19",
+            "password": "theSafePa$$w0rd$$555//",
+            "address line1": "address line 1",
+            "address line2": "address line 2",
+            "regionorzip": "354662/LGA",
+            "state": "Toronto",
+            "country": "Nigeria"
         }
 
 + Response 200 (application/json)
@@ -24,10 +30,18 @@ Snipe is an API backend for the Snipe Marketplace
         {
             "status": "success",
             "data": {
-                "firstname": "John",
-                "lastname": "Doe",
-                "phonenumber": "+2348077788899",
-                "email": "john@doe.com"
+                "user": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "phonenumber": "+2348077788899",
+                    "email": "john@doe.com"
+                },
+                "auth": {
+                    "accessToken": "2d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
+                    "expiry": "3600",
+                    "refreshToken": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
+                    "x-tag": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f/=="
+                }
             }
         }
         
@@ -161,10 +175,18 @@ Do html redirect to the password reset successful page
         {
             "status": "success",
             "data": {
-                "accessToken": "2d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
-                "expiry": "3600",
-                "refreshToken": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
-                "x-tag": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f/=="
+                "user": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "phonenumber": "+2348077788899",
+                    "email": "john@doe.com"
+                },
+                "auth": {
+                    "accessToken": "2d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
+                    "expiry": "3600",
+                    "refreshToken": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f",
+                    "x-tag": "3d3343ae567c8f8a0b9e8f2d3343ae567c8f8a0b9e8f/=="
+                }
             }
         }
         
@@ -298,7 +320,14 @@ Note: Do html redirect to the password reset successful page and kill the active
                         "lastname": "Doe",
                         "addressBook": [{
                             "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
+                            "email": "john@doe.com",
+                            "address": {
+                                "line1": "address line 1",
+                                "line2": "address line 2",
+                                "ziporregion": "address line 1",
+                                "state": "address line 1",
+                                "country": "address line 1"
+                            }
                         }]
                     },
                     {
@@ -307,7 +336,14 @@ Note: Do html redirect to the password reset successful page and kill the active
                         "lastname": "Doe",
                         "addressBook": [{
                             "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
+                            "email": "john@doe.com",
+                            "address": {
+                                "line1": "address line 1",
+                                "line2": "address line 2",
+                                "Zip/region": "address line 1",
+                                "state": "address line 1",
+                                "country": "address line 1"
+                            }
                         }]
                     }
                 ]
@@ -498,6 +534,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     + lastname: "John" (String)  - Last name of the user
     + rangeFrom: "2017-03-01" (Date)  - Date range start
     + rangeTo: "2017-03-15" (Date)  - Date range end
+    + role: "worker" (Role)  - Role of the user
 
 + Response 200 (application/json)
 
@@ -1085,6 +1122,71 @@ Note: Do html redirect to the password reset successful page and kill the active
                         "is_opened": false
                     }
                 ]
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Send Notification [POST /notifications]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f 
+    
++ Request (application/json)
+
+        {
+            "content": "This is a message",
+            "destination": "fio@yahoo.com",
+            "type": "email"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "content": "This is a message",
+                "destination": "fio@yahoo.com",
+                "type": "email",
+                "is_opened": true
             }
         }
         
@@ -2222,7 +2324,7 @@ Note: Do html redirect to the password reset successful page and kill the active
         }
         
 ### Recommend Worker for a Booking [GET /booking/:booking_id/recommendworker]
-Check if the Worker is close to the state and LGA of the booking, then arrange the workers by rating. High rating first
+Check if the Worker matches some tags on the booking ( eg. the state and LGA of the booking), then arrange the workers by rating. High rating first
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f 
@@ -3082,6 +3184,67 @@ Remember to requery the transaction to confirm the true state from the processor
                 }],
                 "role_id": "2d3343ae567c8f8a0b9e8f"
             }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### Add New Role [POST /roles]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "rolename": "Admin"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "rolename": "Admin",
+                "permisions": []
+            }
         }
         
 + Response 400 (application/json)
