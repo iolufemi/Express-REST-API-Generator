@@ -1291,6 +1291,79 @@ Note: Do html redirect to the password reset successful page and kill the active
         
 ## Bookings [/bookings]
 
+### View booking payments [GET /bookings/:booking_id/payments]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Parameters
+    + booking_id (Number)  - ID of the booking
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "booking_id": "dd3343ae567c8f8a0b9e8f",
+                    "amount": 4000,
+                    "user_id": "dd3343ae567c8f8a0b9e8f",
+                    "fee": 20,
+                    "status": "completed",
+                    "provider_response": {}
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "booking_id": "dd3343ae567c8f8a0b9e8f",
+                    "amount": 4000,
+                    "user_id": "dd3343ae567c8f8a0b9e8f",
+                    "fee": 20,
+                    "status": "pending",
+                    "provider_response": {}
+                }]
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
 ### View Bookings [GET]
 
 + Headers
@@ -1762,6 +1835,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
     + rangeFrom: "2017-03-01" (Date)  - Date range start
     + rangeTo: "2017-03-15" (Date)  - Date range end
+    + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
 
 + Response 200 (application/json)
 
@@ -2015,7 +2089,8 @@ Note: Do html redirect to the password reset successful page and kill the active
                 "bedroom": 3,
                 "bathroom": 1,
                 "cupboard": 1
-            }
+            },
+            "offline": true
         }
 
 + Response 200 (application/json)
@@ -2080,6 +2155,9 @@ Note: Do html redirect to the password reset successful page and kill the active
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of booking to copy
 
 + Response 200 (application/json)
 
@@ -2138,11 +2216,71 @@ Note: Do html redirect to the password reset successful page and kill the active
             "message": "unauthorized", // May come with a more detailed message sometimes
             "data": {}
         }
+ 
+### Refund Booking [POST /bookings/:booking_id/refund]
+Refunds should go to the customers rewards balance, so he can use it for another booking
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of booking to refund
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "message": "Booking successfully refunded."
+            }
+        }
         
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+       
 ### Stop Booking Reminder [POST /bookings/:booking_id/stopreminder]
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2196,6 +2334,9 @@ Note: Do html redirect to the password reset successful page and kill the active
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + booking_id: "10" (Number) - ID of the booking
     
 + Request (application/json)
 
@@ -2324,7 +2465,7 @@ Note: Do html redirect to the password reset successful page and kill the active
         }
         
 ### Recommend Worker for a Booking [GET /booking/:booking_id/recommendworker]
-Check if the Worker matches some tags on the booking ( eg. the state and LGA of the booking), then arrange the workers by rating. High rating first
+Check if the Worker matches some tags on the booking and worker is not assigned for the time slot ( eg. the state and LGA of the booking), then arrange the workers by rating. High rating first
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f 
@@ -2984,7 +3125,7 @@ Remember to requery the transaction to confirm the true state from the processor
             "phonenumber": "+2348077788899",
             "email": "john@doe.com",
             "password": "theSafePa$$w0rd$$555//",
-            "role_id": "2d3343ae567c8f8a0b9e8f"
+            "role_id": ["2d3343ae567c8f8a0b9e8f"]
         }
 
 + Response 200 (application/json)
@@ -3182,7 +3323,79 @@ Remember to requery the transaction to confirm the true state from the processor
                     "phonenumber": "+2348077788899",
                     "email": "john@doe.com"
                 }],
-                "role_id": "2d3343ae567c8f8a0b9e8f"
+                "role_id": ["2d3343ae567c8f8a0b9e8f"]
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Unassign Role [POST /roles/:role_id/unassign]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + role_id: "10" (Number) - The ID of the role to assign
+
++ Request (application/json)
+
+        [{
+            "user_id": "dd3343ae567c8f8a0b9e8fd"
+        },
+        {
+            "user_id": "e4d3343ae567c8f8a0b9e8f"
+        }]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "firstname": "John",
+                "lastname": "Doe",
+                "addressBook": [{
+                    "phonenumber": "+2348077788899",
+                    "email": "john@doe.com"
+                }],
+                "role_id": ["2d3343ae567c8f8a0b9e8f"]
             }]
         }
         
@@ -3434,15 +3647,11 @@ Remember to requery the transaction to confirm the true state from the processor
                 "rolename": "Admin",
                 "permisions": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
-                    "rolename": "Public",
-                    "permisions": [{
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "model": "User",
-                        "read": true,
-                        "update": false,
-                        "create": true,
-                        "delete": false
-                    }]
+                    "model": "User",
+                    "read": true,
+                    "update": false,
+                    "create": true,
+                    "delete": false
                 }]
             }
         }
@@ -3513,15 +3722,11 @@ Remember to requery the transaction to confirm the true state from the processor
                 "rolename": "Admin",
                 "permisions": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
-                    "rolename": "Public",
-                    "permisions": [{
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "model": "User",
-                        "read": true,
-                        "update": false,
-                        "create": true,
-                        "delete": false
-                    }]
+                    "model": "User",
+                    "read": true,
+                    "update": false,
+                    "create": true,
+                    "delete": false
                 }]
             }
         }
@@ -3583,15 +3788,11 @@ Remember to requery the transaction to confirm the true state from the processor
                 "rolename": "Admin",
                 "permisions": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
-                    "rolename": "Public",
-                    "permisions": [{
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "model": "User",
-                        "read": true,
-                        "update": false,
-                        "create": true,
-                        "delete": false
-                    }]
+                    "model": "User",
+                    "read": true,
+                    "update": false,
+                    "create": true,
+                    "delete": false
                 }]
             }
         }
@@ -3650,3 +3851,251 @@ Remember to requery the transaction to confirm the true state from the processor
 + Response 500 (text/html)
 
 + Response 401 (text/html)
+
+## Rewards [/rewards]
+
+### Get Reward Balance [GET /rewards/balance]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + user_id: "10" (Number) - The ID of the user
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Get User Rewards [GET /rewards/me]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Credit User Rewards [POST /rewards/credit]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "amount": 40,
+            "description": "Reward for writing this description",
+            "user_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Debit User Rewards [POST /rewards/debit]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "amount": 40,
+            "description": "Reward for writing this description",
+            "user_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 1960,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
