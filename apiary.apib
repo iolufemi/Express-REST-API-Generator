@@ -4,6 +4,7 @@ HOST: http://private-225f59-sniper1.apiary-mock.com/
 # Snipe
 
 Snipe is an API backend for the Snipe Marketplace
+> Note: When response is an array, send the `total number of records` and expect a `skip` and `limit` attribute in the payload or query. This is to enable pagination
 
 ## Authentication [/auth]
 
@@ -147,7 +148,7 @@ Snipe is an API backend for the Snipe Marketplace
 Do html redirect to the password reset successful page
 
 + Parameters
-    + hash: "2d3343ae567c8f8a0b9e8f" (string, required) - verification hash from password reset verification email.
+  + hash: "20d3343ae567c8f8a0b9e8f" (string, required) - verification hash from password reset verification email.
 
 + Response 200 (text/html)
 
@@ -248,7 +249,7 @@ Note: Do html redirect to the password reset successful page and kill the active
 ### Deactivate [GET /auth/deactivate/:user_id]
 
 + Parameter
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f // This token must be of an administrator or the user to be deactivated
@@ -312,42 +313,41 @@ Note: Do html redirect to the password reset successful page and kill the active
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com",
-                            "address": {
-                                "line1": "address line 1",
-                                "line2": "address line 2",
-                                "ziporregion": "address line 1",
-                                "state": "address line 1",
-                                "country": "address line 1"
-                            }
-                        }]
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com",
-                            "address": {
-                                "line1": "address line 1",
-                                "line2": "address line 2",
-                                "Zip/region": "address line 1",
-                                "state": "address line 1",
-                                "country": "address line 1"
-                            }
-                        }]
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com",
+                        "address": {
+                            "line1": "address line 1",
+                            "line2": "address line 2",
+                            "ziporregion": "address line 1",
+                            "state": "address line 1",
+                            "country": "address line 1"
+                        }
+                    }]
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com",
+                        "address": {
+                            "line1": "address line 1",
+                            "line2": "address line 2",
+                            "Zip/region": "address line 1",
+                            "state": "address line 1",
+                            "country": "address line 1"
+                        }
+                    }]
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -395,7 +395,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
 
 + Response 200 (application/json)
 
@@ -457,9 +457,9 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -527,41 +527,40 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + email: "foo@joo.com" (String)  - Email of the user
-    + firstname: "Foo" (String)  - First name of the user
-    + lastname: "John" (String)  - Last name of the user
-    + rangeFrom: "2017-03-01" (Date)  - Date range start
-    + rangeTo: "2017-03-15" (Date)  - Date range end
-    + role: "worker" (Role)  - Role of the user
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + email: "foo@joo.com" (String)  - Email of the user
+  + firstname: "Foo" (String)  - First name of the user
+  + lastname: "John" (String)  - Last name of the user
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
+  + role: "worker" (Role)  - Role of the user
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
-                        }]
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
-                        }]
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com"
+                    }]
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com"
+                    }]
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -609,13 +608,13 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + email: "foo@joo.com" (String)  - Email of the user
-    + firstname: "Foo" (String)  - First name of the user
-    + lastname: "John" (String)  - Last name of the user
-    + rangeFrom: "2017-03-01" (Date)  - Date range start
-    + rangeTo: "2017-03-15" (Date)  - Date range end
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + email: "foo@joo.com" (String)  - Email of the user
+  + firstname: "Foo" (String)  - First name of the user
+  + lastname: "John" (String)  - Last name of the user
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (text/csv)
 
@@ -730,26 +729,25 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "url": "https://foo.com/asset.png"
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "url": "https://foo.com/asset.png"
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "url": "https://foo.com/asset.png"
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "url": "https://foo.com/asset.png"
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -797,8 +795,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -855,8 +853,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -913,25 +911,24 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "url": "https://foo.com/asset.png"
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "url": "https://foo.com/asset.png"
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "url": "https://foo.com/asset.png"
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "url": "https://foo.com/asset.png"
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -1039,7 +1036,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -1098,31 +1095,30 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "content": "This is a message",
-                        "destination": "fio@yahoo.com",
-                        "type": "email",
-                        "is_opened": true
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "content": "this is another message",
-                        "destination": "3456789876533",
-                        "type": "push",
-                        "is_opened": false
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "content": "This is a message",
+                    "destination": "fio@yahoo.com",
+                    "type": "email",
+                    "is_opened": true
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "content": "this is another message",
+                    "destination": "3456789876533",
+                    "type": "push",
+                    "is_opened": false
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -1235,7 +1231,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + notification_id: "10" (Number) - ID if notification to return
+  + notification_id: "10" (Number) - ID if notification to return
 
 + Response 200 (application/json)
 
@@ -1297,14 +1293,13 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + booking_id (Number)  - ID of the booking
+  + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [{
+            "data": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
                     "booking_id": "dd3343ae567c8f8a0b9e8f",
                     "amount": 4000,
@@ -1321,8 +1316,10 @@ Note: Do html redirect to the password reset successful page and kill the active
                     "fee": 20,
                     "status": "pending",
                     "provider_response": {}
-                }]
-            }
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -1370,16 +1367,14 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
+            "data": [{
                         "id": "2d3343ae567c8f8a0b9e8f", 
                         "amount": 2000,
                         "data": {
@@ -1566,9 +1561,10 @@ Note: Do html redirect to the password reset successful page and kill the active
                                 }
                             }
                         ]
-                    }
-                ]
-            }
+                    }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -1616,7 +1612,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id: "10" (Number) - ID of booking to return
+  + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1716,7 +1712,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id: "10" (Number) - ID of booking to return
+  + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1772,7 +1768,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id: "10" (Number) - ID of booking to return
+  + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1828,22 +1824,20 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + amount: 2000 (String)  - Amount of a booking
-    + status: "completed" (String)  - Status of a booking
-    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
-    + rangeFrom: "2017-03-01" (Date)  - Date range start
-    + rangeTo: "2017-03-15" (Date)  - Date range end
-    + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + amount: 2000 (String)  - Amount of a booking
+  + status: "completed" (String)  - Status of a booking
+  + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
+  + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
+            "data": [{
                         "id": "2d3343ae567c8f8a0b9e8f", 
                         "amount": 2000,
                         "data": {
@@ -2030,9 +2024,10 @@ Note: Do html redirect to the password reset successful page and kill the active
                                 }
                             }
                         ]
-                    }
-                ]
-            }
+                    }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -2157,7 +2152,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + booking_id: "10" (Number) - ID of booking to copy
+  + booking_id: "10" (Number) - ID of booking to copy
 
 + Response 200 (application/json)
 
@@ -2224,7 +2219,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + booking_id: "10" (Number) - ID of booking to refund
+  + booking_id: "10" (Number) - ID of booking to refund
 
 + Response 200 (application/json)
 
@@ -2280,7 +2275,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + booking_id: "10" (Number) - ID of the booking
+  + booking_id: "10" (Number) - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2336,7 +2331,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + booking_id: "10" (Number) - ID of the booking
+  + booking_id: "10" (Number) - ID of the booking
     
 + Request (application/json)
 
@@ -2415,13 +2410,13 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + amount: 2000 (String)  - Amount of a booking
-    + status: "completed" (String)  - Status of a booking
-    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
-    + rangeFrom: "2017-03-01" (Date)  - Date range start
-    + rangeTo: "2017-03-15" (Date)  - Date range end
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + amount: 2000 (String)  - Amount of a booking
+  + status: "completed" (String)  - Status of a booking
+  + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (text/csv)
 
@@ -2471,17 +2466,15 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + booking_id (Number)  - ID of the booking
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + booking_id (Number)  - ID of the booking
     
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
+            "data": [{
                         "id": "2d3343ae567c8f8a0b9e8f", 
                         "firstname": "John",
                         "lastname": "Doe",
@@ -2498,9 +2491,10 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
                             "phonenumber": "+2348077788899",
                             "email": "john@doe.com"
                         }]
-                    }
-                ]
-            }
+                    }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -2548,7 +2542,7 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+  + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2610,34 +2604,35 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+  + booking_id (Number)  - ID of the booking
+  + skip (Number) - Number of records to skip
+  + limit (Number) - Number of records to return
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
-                        }]
-                    },
-                    {
-                        "id": "2d3343ae567c8f8a0b9e8f", 
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "addressBook": [{
-                            "phonenumber": "+2348077788899",
-                            "email": "john@doe.com"
-                        }]
-                    }
-                ]
-            }
+            "data": [{
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com"
+                    }]
+                },
+                {
+                    "id": "2d3343ae567c8f8a0b9e8f", 
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "addressBook": [{
+                        "phonenumber": "+2348077788899",
+                        "email": "john@doe.com"
+                    }]
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -2686,7 +2681,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+  + booking_id (Number)  - ID of the booking
     
 + Request (application/json)
     
@@ -2749,7 +2744,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+  + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2875,7 +2870,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + payment_id (Number)  - ID of the payment
+  + payment_id (Number)  - ID of the payment
 
 + Request (application/json)
 
@@ -2943,19 +2938,18 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + user_id (Number)  - ID of the user
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
-    + status: "completed" (String)  - Status of a booking
-    + rangeFrom: "2017-03-01" (Date)  - Date range start
-    + rangeTo: "2017-03-15" (Date)  - Date range end
+  + user_id (Number)  - ID of the user
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + status: "completed" (String)  - Status of a booking
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [{
+            "data": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
                     "booking_id": "dd3343ae567c8f8a0b9e8f",
                     "amount": 4000,
@@ -2972,8 +2966,10 @@ Remember to requery the transaction to confirm the true state from the processor
                     "fee": 20,
                     "status": "pending",
                     "provider_response": {}
-                }]
-            }
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -3023,16 +3019,17 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + duration "weekly" (String)  - duration of report
-    + type "customers or transactions or workers" (String)  - Type of report
-    + date "2017-03-04" (Date)  - Reporting date
+  + duration "weekly" (String) - duration of report
+  + type "customers or transactions or workers" (String) - Type of report
+  + date "2017-03-04" (Date) - Reporting date
+  + limit "10" (Number) - Number of records to return
+  + skip "0" (Number) - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [{
+            "data": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
                     "generateddate": "2017-03-02",
                     "value": 4000,
@@ -3067,8 +3064,10 @@ Remember to requery the transaction to confirm the true state from the processor
                     "revenue": 20,
                     "customername": "Akpan Uche", // Optional
                     "workername": "Ngozi Emeka" // Optional
-                }]
-            }
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -3188,15 +3187,14 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + limit: "10" (Number) - Number of records to return
-    + skip: "0" (Number)  - Number of records to skip
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
-                [{
+            "data": [{
                     "id": "2d3343ae567c8f8a0b9e8f", 
                     "rolename": "Admin",
                     "permisions": [{
@@ -3251,8 +3249,10 @@ Remember to requery the transaction to confirm the true state from the processor
                         "create": true,
                         "delete": false
                     }]
-                }]
-            }
+                }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -3300,7 +3300,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role to assign
+  + role_id: "10" (Number) - The ID of the role to assign
 
 + Request (application/json)
 
@@ -3372,7 +3372,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role to assign
+  + role_id: "10" (Number) - The ID of the role to assign
 
 + Request (application/json)
 
@@ -3505,7 +3505,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role
+  + role_id: "10" (Number) - The ID of the role
 
 + Response 200 (application/json)
 
@@ -3563,7 +3563,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role
+  + role_id: "10" (Number) - The ID of the role
     
 + Request (application/json)
 
@@ -3627,7 +3627,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role
+  + role_id: "10" (Number) - The ID of the role
     
 + Request (application/json)
         { 
@@ -3701,8 +3701,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role
-    + permission_id: "20" (Number) - The ID of the permission to update
+  + role_id: "10" (Number) - The ID of the role
+  + permission_id: "20" (Number) - The ID of the permission to update
     
 + Request (application/json)
         { 
@@ -3776,8 +3776,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + role_id: "10" (Number) - The ID of the role
-    + permission_id: "20" (Number) - The ID of the permission to update
+  + role_id: "10" (Number) - The ID of the role
+  + permission_id: "20" (Number) - The ID of the permission to update
 
 + Response 200 (application/json)
 
@@ -3860,7 +3860,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + user_id: "10" (Number) - The ID of the user
+  + user_id: "10" (Number) - The ID of the user
 
 + Response 200 (application/json)
 
@@ -3915,6 +3915,10 @@ Remember to requery the transaction to confirm the true state from the processor
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+  + skip (Number) - Number of records to skip
+  + limit (Number) - Number of records to return
 
 + Response 200 (application/json)
 
@@ -3930,7 +3934,10 @@ Remember to requery the transaction to confirm the true state from the processor
                 "balance": 2000,
                 "description": "Reward for writing this description",
                 "user_id": "2d3343ae567c8f8a0b9e8f"
-            }]
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
         }
         
 + Response 400 (application/json)
@@ -4058,6 +4065,464 @@ Remember to requery the transaction to confirm the true state from the processor
                 "balance": 1960,
                 "description": "Reward for writing this description",
                 "user_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+## Products [/products]
+
+### Add New Product [POST /products]
+Alias `[POST /users/:user_id/products]` No need to pass `user_id` in JSON payload with this alias
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "name": "A Product",
+            "amount": 40,
+            "description": "Reward for writing this description",
+            "user_id": "2d3343ae567c8f8a0b9e8f",
+            "additional_data": {
+                "someKey":"a value",
+                "anotherKey": "one value"
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### Update Product [PUT /products/:product_id] 
+Alias `[PUT /users/:user_id/products/:product_id]` No need to pass `user_id` in JSON payload with this alias
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "name": "A Product",
+            "amount": 40,
+            "description": "Reward for writing this description",
+            "user_id": "2d3343ae567c8f8a0b9e8f",
+            "additional_data": {
+                "someKey":"a value",
+                "anotherKey": "one value"
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### Delete Product [DELETE /products/:product_id]
+Alias `[DELETE /users/:user_id/products/:product_id]` No need to pass `user_id` in JSON payload with this alias
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### View Products [GET /products]
+Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload with this alias
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### Filter Products [GET /products]
+Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload with this alias
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Parameters
+  + limit: "10" (Number) - Number of records to return
+  + skip: "0" (Number)  - Number of records to skip
+  + amount: 2000 (String)  - Amount of a product
+  + name: "Some Name" (String)  - Status of a product
+  + description: "Some Description" (String)  - description of a product
+  + rangeFrom: "2017-03-01" (Date)  - Date range start
+  + rangeTo: "2017-03-15" (Date)  - Date range end
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### View Product [GET /products/:product_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
             }
         }
         
