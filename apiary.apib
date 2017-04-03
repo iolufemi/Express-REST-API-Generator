@@ -148,7 +148,7 @@ Snipe is an API backend for the Snipe Marketplace
 Do html redirect to the password reset successful page
 
 + Parameters
-  + hash: "20d3343ae567c8f8a0b9e8f" (string, required) - verification hash from password reset verification email.
+    + hash: "20d3343ae567c8f8a0b9e8f" (string, required) - verification hash from password reset verification email.
 
 + Response 200 (text/html)
 
@@ -249,7 +249,7 @@ Note: Do html redirect to the password reset successful page and kill the active
 ### Deactivate [GET /auth/deactivate/:user_id]
 
 + Parameter
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user to be deactivated
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f // This token must be of an administrator or the user to be deactivated
@@ -395,7 +395,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
 
 + Response 200 (application/json)
 
@@ -457,9 +457,9 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -527,14 +527,14 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + email: "foo@joo.com" (String)  - Email of the user
-  + firstname: "Foo" (String)  - First name of the user
-  + lastname: "John" (String)  - Last name of the user
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
-  + role: "worker" (Role)  - Role of the user
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + email: "foo@joo.com" (String)  - Email of the user
+    + firstname: "Foo" (String)  - First name of the user
+    + lastname: "John" (String)  - Last name of the user
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
+    + role: "worker" (Role)  - Role of the user
 
 + Response 200 (application/json)
 
@@ -608,13 +608,13 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + email: "foo@joo.com" (String)  - Email of the user
-  + firstname: "Foo" (String)  - First name of the user
-  + lastname: "John" (String)  - Last name of the user
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + email: "foo@joo.com" (String)  - Email of the user
+    + firstname: "Foo" (String)  - First name of the user
+    + lastname: "John" (String)  - Last name of the user
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (text/csv)
 
@@ -729,9 +729,9 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -795,8 +795,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -853,8 +853,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
-  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+    + user_id: "2d3343ae567c8f8a0b9e8f" (String, required) - The id of the user
+    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -911,8 +911,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -1036,7 +1036,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
 
 + Parameters
-  + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
+    + file_id: "5d3343ae567c8f8a0b9e8f" (String, required) - The id of the file
 
 + Response 200 (application/json)
 
@@ -1095,8 +1095,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -1231,7 +1231,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + notification_id: "10" (Number) - ID if notification to return
+    + notification_id: "10" (Number) - ID if notification to return
 
 + Response 200 (application/json)
 
@@ -1293,7 +1293,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-  + booking_id (Number)  - ID of the booking
+    + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -1367,8 +1367,8 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -1612,7 +1612,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id: "10" (Number) - ID of booking to return
+    + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1712,7 +1712,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id: "10" (Number) - ID of booking to return
+    + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1768,7 +1768,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id: "10" (Number) - ID of booking to return
+    + booking_id: "10" (Number) - ID of booking to return
 
 + Response 200 (application/json)
 
@@ -1824,14 +1824,14 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + amount: 2000 (String)  - Amount of a booking
-  + status: "completed" (String)  - Status of a booking
-  + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
-  + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + amount: 2000 (String)  - Amount of a booking
+    + status: "completed" (String)  - Status of a booking
+    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
+    + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
 
 + Response 200 (application/json)
 
@@ -2152,7 +2152,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + booking_id: "10" (Number) - ID of booking to copy
+    + booking_id: "10" (Number) - ID of booking to copy
 
 + Response 200 (application/json)
 
@@ -2219,7 +2219,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + booking_id: "10" (Number) - ID of booking to refund
+    + booking_id: "10" (Number) - ID of booking to refund
 
 + Response 200 (application/json)
 
@@ -2275,7 +2275,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + booking_id: "10" (Number) - ID of the booking
+    + booking_id: "10" (Number) - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2331,7 +2331,7 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + booking_id: "10" (Number) - ID of the booking
+    + booking_id: "10" (Number) - ID of the booking
     
 + Request (application/json)
 
@@ -2410,13 +2410,13 @@ Refunds should go to the customers rewards balance, so he can use it for another
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + amount: 2000 (String)  - Amount of a booking
-  + status: "completed" (String)  - Status of a booking
-  + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + amount: 2000 (String)  - Amount of a booking
+    + status: "completed" (String)  - Status of a booking
+    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (text/csv)
 
@@ -2466,9 +2466,9 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + booking_id (Number)  - ID of the booking
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + booking_id (Number)  - ID of the booking
     
 + Response 200 (application/json)
 
@@ -2542,7 +2542,7 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id (Number)  - ID of the booking
+    + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2604,9 +2604,9 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id (Number)  - ID of the booking
-  + skip (Number) - Number of records to skip
-  + limit (Number) - Number of records to return
+    + booking_id (Number)  - ID of the booking
+    + skip (Number) - Number of records to skip
+    + limit (Number) - Number of records to return
 
 + Response 200 (application/json)
 
@@ -2681,7 +2681,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id (Number)  - ID of the booking
+    + booking_id (Number)  - ID of the booking
     
 + Request (application/json)
     
@@ -2744,7 +2744,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-  + booking_id (Number)  - ID of the booking
+    + booking_id (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2870,7 +2870,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-  + payment_id (Number)  - ID of the payment
+    + payment_id (Number)  - ID of the payment
 
 + Request (application/json)
 
@@ -2938,12 +2938,12 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-  + user_id (Number)  - ID of the user
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + status: "completed" (String)  - Status of a booking
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
+    + user_id (Number)  - ID of the user
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + status: "completed" (String)  - Status of a booking
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (application/json)
 
@@ -3019,11 +3019,11 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + duration "weekly" (String) - duration of report
-  + type "customers or transactions or workers" (String) - Type of report
-  + date "2017-03-04" (Date) - Reporting date
-  + limit "10" (Number) - Number of records to return
-  + skip "0" (Number) - Number of records to skip
+    + duration "weekly" (String) - duration of report
+    + type "customers or transactions or workers" (String) - Type of report
+    + date "2017-03-04" (Date) - Reporting date
+    + limit "10" (Number) - Number of records to return
+    + skip "0" (Number) - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -3187,8 +3187,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -3300,7 +3300,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role to assign
+    + role_id: "10" (Number) - The ID of the role to assign
 
 + Request (application/json)
 
@@ -3372,7 +3372,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role to assign
+    + role_id: "10" (Number) - The ID of the role to assign
 
 + Request (application/json)
 
@@ -3505,7 +3505,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role
+    + role_id: "10" (Number) - The ID of the role
 
 + Response 200 (application/json)
 
@@ -3563,7 +3563,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role
+    + role_id: "10" (Number) - The ID of the role
     
 + Request (application/json)
 
@@ -3627,7 +3627,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role
+    + role_id: "10" (Number) - The ID of the role
     
 + Request (application/json)
         { 
@@ -3701,8 +3701,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role
-  + permission_id: "20" (Number) - The ID of the permission to update
+    + role_id: "10" (Number) - The ID of the role
+    + permission_id: "20" (Number) - The ID of the permission to update
     
 + Request (application/json)
         { 
@@ -3776,8 +3776,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + role_id: "10" (Number) - The ID of the role
-  + permission_id: "20" (Number) - The ID of the permission to update
+    + role_id: "10" (Number) - The ID of the role
+    + permission_id: "20" (Number) - The ID of the permission to update
 
 + Response 200 (application/json)
 
@@ -3860,7 +3860,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + user_id: "10" (Number) - The ID of the user
+    + user_id: "10" (Number) - The ID of the user
 
 + Response 200 (application/json)
 
@@ -3917,8 +3917,8 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + skip (Number) - Number of records to skip
-  + limit (Number) - Number of records to return
+    + skip (Number) - Number of records to skip
+    + limit (Number) - Number of records to return
 
 + Response 200 (application/json)
 
@@ -4328,8 +4328,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -4417,13 +4417,13 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-  + limit: "10" (Number) - Number of records to return
-  + skip: "0" (Number)  - Number of records to skip
-  + amount: 2000 (String)  - Amount of a product
-  + name: "Some Name" (String)  - Status of a product
-  + description: "Some Description" (String)  - description of a product
-  + rangeFrom: "2017-03-01" (Date)  - Date range start
-  + rangeTo: "2017-03-15" (Date)  - Date range end
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+    + amount: 2000 (String)  - Amount of a product
+    + name: "Some Name" (String)  - Status of a product
+    + description: "Some Description" (String)  - description of a product
+    + rangeFrom: "2017-03-01" (Date)  - Date range start
+    + rangeTo: "2017-03-15" (Date)  - Date range end
 
 + Response 200 (application/json)
 
