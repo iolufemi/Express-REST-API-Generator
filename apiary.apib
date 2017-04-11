@@ -1828,7 +1828,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     + skip: "0" (Number)  - Number of records to skip
     + amount: 2000 (String)  - Amount of a booking
     + status: "completed" (String)  - Status of a booking
-    + id: "f2dd3343ae567c8f8a0b9e8f" (String)  - ID of a booking
+    + assigned_to: "f2dd3343ae567c8f8a0b9e8f" (String)  - The ID of the user which the booking is assigned to.
     + rangeFrom: "2017-03-01" (Date)  - Date range start
     + rangeTo: "2017-03-15" (Date)  - Date range end
     + assignedWorkerID: "dd3343ae567c8f8a0b9e8f" (Number) - The id of the assigned worker
@@ -4344,7 +4344,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
                 "additional_data": {
                     "someKey":"a value",
                     "anotherKey": "one value"
-                }
+                },
+                "categories":[]
             },{
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Product",
@@ -4354,7 +4355,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
                 "additional_data": {
                     "someKey":"a value",
                     "anotherKey": "one value"
-                }
+                },
+                "categories":[]
             },{
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Product",
@@ -4364,7 +4366,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
                 "additional_data": {
                     "someKey":"a value",
                     "anotherKey": "one value"
-                }
+                },
+                "categories":[]
             }],
             "total": 200,
             "limit": 10,
@@ -4424,6 +4427,471 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
     + description: "Some Description" (String)  - description of a product
     + rangeFrom: "2017-03-01" (Date)  - Date range start
     + rangeTo: "2017-03-15" (Date)  - Date range end
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                },
+                "categories":[]
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                },
+                "categories":[]
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                },
+                "categories":[]
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
+### View Product [GET /products/:product_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                },
+                "categories":[]
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+## Categories [/categories]
+
+### Add New Category [POST /categories]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "name": "A Category"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Category",
+                "slug": "a_category"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Update Category [PUT /categories]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "name": "A Modified Category"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Delete Category [DELETE /categories/:category_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "F3dd3343ae567c8f8a0b9e8f" (Number) - Id of the category to be deleted
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+        
+### View Category [GET /categories/:category_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "F3dd3343ae567c8f8a0b9e8f" (Number) - Id of the category to be deleted
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### View Categories [GET /categories]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Modified Category",
+                "slug": "a_modified_category"
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### View Category Products [GET /categories/:category_id/products]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "F3dd3343ae567c8f8a0b9e8f" (Number) - Id of the category
+    + limit: "10" (Number) - Number of records to return
+    + skip: "0" (Number)  - Number of records to skip
 
 + Response 200 (application/json)
 
@@ -4503,17 +4971,24 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
             "message": "unauthorized", // May come with a more detailed message sometimes
             "data": {}
         }
-
-### View Product [GET /products/:product_id]
+        
+### Add Products to Category [POST /categories/:category_id/products]
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "F3dd3343ae567c8f8a0b9e8f" (Number) - Id of the category
+    
++ Request (application/json)
+
+        ["F3dd3343ae567c8f8a0b9e8f","F3dd3343ae567c8f8a0b9e8f"] // Product IDs
 
 + Response 200 (application/json)
 
         {
             "status": "success",
-            "data": {
+            "data": [{
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Product",
                 "amount": 40,
@@ -4523,7 +4998,115 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
                     "someKey":"a value",
                     "anotherKey": "one value"
                 }
-            }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Remove Products from Category [DELETE /categories/:category_id/products]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "F3dd3343ae567c8f8a0b9e8f" (Number) - Id of the category
+    
++ Request (application/json)
+
+        ["F3dd3343ae567c8f8a0b9e8f","F3dd3343ae567c8f8a0b9e8f"] // Product IDs
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "name": "A Product",
+                "amount": 40,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "additional_data": {
+                    "someKey":"a value",
+                    "anotherKey": "one value"
+                }
+            }]
         }
         
 + Response 400 (application/json)
