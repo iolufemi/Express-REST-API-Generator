@@ -4582,7 +4582,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
 + Request (application/json)
 
         {
-            "name": "A Category"
+            "name": "A Category",
+            "is_featured": true
         }
 
 + Response 200 (application/json)
@@ -4592,7 +4593,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
             "data": {
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Category",
-                "slug": "a_category"
+                "slug": "a_category",
+                "is_featured": true
             }
         }
         
@@ -4643,7 +4645,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
 + Request (application/json)
 
         {
-            "name": "A Modified Category"
+            "name": "A Modified Category",
+            "is_featured": false
         }
 
 + Response 200 (application/json)
@@ -4653,7 +4656,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
             "data": {
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Modified Category",
-                "slug": "a_modified_category"
+                "slug": "a_modified_category",
+                "is_featured": false
             }
         }
         
@@ -4770,7 +4774,8 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
             "data": {
                 "id": "2d3343ae567c8f8a0b9e8f", 
                 "name": "A Modified Category",
-                "slug": "a_modified_category"
+                "slug": "a_modified_category",
+                "is_featured": true
             }
         }
         
@@ -4821,6 +4826,7 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
 + Parameters
     + limit: "10" (Number) - Number of records to return
     + skip: "0" (Number)  - Number of records to skip
+    + featured: true (Boolean) - If this call should return only featured categories.
 
 + Response 200 (application/json)
 
@@ -5106,6 +5112,879 @@ Alias `[GET /users/:user_id/products]` No need to pass `user_id` in JSON payload
                     "someKey":"a value",
                     "anotherKey": "one value"
                 }
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+## Fees [/fees]
+
+### Add New User Fee [POST /fee/user]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "flat", // can be flat or a percentage
+            "value": 100,
+            "user_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Get User Fees [GET /fee/user/:user_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + user_id: "dd67ac34ff6da23effdc89" (String) - The user id of the user we want to get fees for.
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Remove a Fee [DELETE /fee/:fee_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + fee_id: "dd55fa76ce87cc78deffc3" (String) - Id of the fee to be deleted
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Add New Product Fee [POST /fee/product]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "flat", // can be flat or a percentage
+            "value": 100,
+            "product_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "product_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Get Product Fees [GET /fee/product/:product_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + product_id: "dd55ee66ad77fd54ae32" (String) - Id of the product we want to get a fee for
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "product_id": "2d3343ae567c8f8a0b9e8f"
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Add New Category Fee [POST /fee/category]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "flat", // can be flat or a percentage
+            "value": 100,
+            "category_id": "2d3343ae567c8f8a0b9e8f"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "category_id": "2d3343ae567c8f8a0b9e8f"
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+        
+### Get Category Fees [GET /fee/category/:category_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "dd66af76de43ff3caed5f" (String) - Id of the category we are getting fees for
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "flat", // can be flat or a percentage
+                "value": 100,
+                "category_id": "2d3343ae567c8f8a0b9e8f"
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+
+## Limits [/limits]
+
+### Add New User Limit [POST /limits/user]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+            "value": 100,
+            "user_id": "2d3343ae567c8f8a0b9e8f",
+            "priority": 1
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Get User Limits [GET /limits/user/:user_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + user_id: "dd67ac34ff6da23effdc89" (String) - The user id of the user we want to get fees for.
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Remove a Limit [DELETE /limits/:limit_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + limit_id: "dd55fa76ce87cc78deffc3" (String) - Id of the limit to be deleted
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "user_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Add New Product Limit [POST /limits/product]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+            "value": 100,
+            "product_id": "2d3343ae567c8f8a0b9e8f",
+            "priority": 1
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "product_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Get Product Limits [GET /limits/product/:product_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + product_id: "dd55ee66ad77fd54ae32" (String) - Id of the product we want to get a fee for
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "product_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }]
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Add New Category Limit [POST /limits/category]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Request (application/json)
+
+        {
+            "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+            "value": 100,
+            "category_id": "2d3343ae567c8f8a0b9e8f",
+            "priority": 1
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "category_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
+            }
+        }
+        
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+        
+### Get Category Limits [GET /limits/category/:category_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + category_id: "dd66af76de43ff3caed5f" (String) - Id of the category we are getting fees for
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "6d3343ae567c8f8a0b9e8f",
+                "type": "daily_limit", // can be a daily_limit or a per_transaction_limit
+                "value": 100,
+                "categoryFee_id": "2d3343ae567c8f8a0b9e8f",
+                "priority": 1
             }]
         }
         
