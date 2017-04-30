@@ -5,7 +5,7 @@ node_js:
   - '4'
 before_script:
   - npm install -g gulp mocha gulp-cli codecov istanbul dredd@3.3.0
-  - dredd ./apiary.apib
+  - dredd ./apiary.apib http://127.0.0.1:8080 --dry-run
 install:
   - npm install
 script:
