@@ -320,6 +320,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                     "addressBook": [{
                         "phonenumber": "+2348077788899",
                         "email": "john@doe.com",
+                        "validated": false,
                         "address": {
                             "line1": "address line 1",
                             "line2": "address line 2",
@@ -336,6 +337,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                     "addressBook": [{
                         "phonenumber": "+2348077788899",
                         "email": "john@doe.com",
+                        "validated": false,
                         "address": {
                             "line1": "address line 1",
                             "line2": "address line 2",
@@ -407,7 +409,8 @@ Note: Do html redirect to the password reset successful page and kill the active
                 "lastname": "Doe",
                 "addressBook": [{
                     "phonenumber": "+2348077788899",
-                    "email": "john@doe.com"
+                    "email": "john@doe.com",
+                    "validated": false
                 }]
             }
         }
@@ -2213,7 +2216,7 @@ Note: Do html redirect to the password reset successful page and kill the active
         }
  
 ### Refund Booking [POST /bookings/:booking_id/refund]
-Refunds should go to the customers rewards balance, so he can use it for another booking
+Refunds should go to the customers wallet's balance, so he can use it for another booking
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
@@ -3852,9 +3855,10 @@ Remember to requery the transaction to confirm the true state from the processor
 
 + Response 401 (text/html)
 
-## Rewards [/rewards]
+## Wallets [/wallets]
 
-### Get Reward Balance [GET /rewards/balance]
+### Get Wallet Balance [GET /wallets/balance]
+If user_id is not provided, get current users wallet balance
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
@@ -3911,7 +3915,7 @@ Remember to requery the transaction to confirm the true state from the processor
             "data": {}
         }
         
-### Get User Rewards [GET /rewards/me]
+### Get Current User's Wallet Statement [GET /wallets/me]
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
@@ -3978,8 +3982,77 @@ Remember to requery the transaction to confirm the true state from the processor
             "message": "unauthorized", // May come with a more detailed message sometimes
             "data": {}
         }
+
+### Get User's Wallet Statement [GET /wallets/user/:user_id]
+
++ Headers
+    Authorization: dd3343ae567c8f8a0b9e8f
+    
++ Parameters
+    + skip (Number) - Number of records to skip
+    + limit (Number) - Number of records to return
+    + user_id (String) - Id of the user we want to get a statement for
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            },{
+                "id": "2d3343ae567c8f8a0b9e8f", 
+                "balance": 2000,
+                "description": "Reward for writing this description",
+                "user_id": "2d3343ae567c8f8a0b9e8f"
+            }],
+            "total": 200,
+            "limit": 10,
+            "skip": 20
+        }
         
-### Credit User Rewards [POST /rewards/credit]
++ Response 400 (application/json)
+        
+        {
+            "status": "error",
+            "message": "bad request", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 503 (application/json)
+        
+        {
+            "status": "error",
+            "message": "forbidden", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
++ Response 404 (application/json)
+        
+        {
+            "status": "error",
+            "message": "not found"
+        }
+        
++ Response 500 (application/json)
+        
+        {
+            "status": "error",
+            "message": "server error", // May come with a more detailed message sometimes
+            "data": {}
+        }
+
++ Response 401 (application/json)
+        
+        {
+            "status": "error",
+            "message": "unauthorized", // May come with a more detailed message sometimes
+            "data": {}
+        }
+        
+### Credit User's Wallet [POST /wallets/credit]
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
@@ -4043,7 +4116,7 @@ Remember to requery the transaction to confirm the true state from the processor
             "data": {}
         }
         
-### Debit User Rewards [POST /rewards/debit]
+### Debit User's Wallet [POST /wallets/debit]
 
 + Headers
     Authorization: dd3343ae567c8f8a0b9e8f
