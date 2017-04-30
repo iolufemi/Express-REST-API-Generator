@@ -5,7 +5,7 @@ node_js:
   - '4'
 before_script:
   - npm install -g gulp mocha gulp-cli codecov istanbul dredd@3.3.0
-  - dredd
+  - dredd ./apiary.apib
 install:
   - npm install
 script:
