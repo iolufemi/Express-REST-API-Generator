@@ -29,7 +29,7 @@ if (cluster.isMaster && config.env === 'production') {
 		app.enable('trust proxy');
 	}
 
-	app.use('/',router);
+	// app.use('/',router);
 	
 	if(config.env === 'production'){
 		log.info('Worker %d running!', cluster.worker.id);
