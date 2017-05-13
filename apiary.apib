@@ -1387,6 +1387,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "bathroom": 1,
                             "cupboard": 1
                         },
+                        "products":[],
                         "statu": "pending",
                         "payments": [
                             {
@@ -1434,6 +1435,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "bathroom": 1,
                             "cupboard": 1
                         },
+                        "products":[],
                         "statu": "completed",
                         "payments": [
                             {
@@ -1481,6 +1483,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "bathroom": 1,
                             "cupboard": 1
                         },
+                        "products":[],
                         "statu": "canceled",
                         "payments": [
                             {
@@ -1528,6 +1531,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "bathroom": 1,
                             "cupboard": 1
                         },
+                        "products":[],
                         "statu": "ongoing",
                         "payments": [
                             {
@@ -1631,6 +1635,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                     "bathroom": 1,
                     "cupboard": 1
                 },
+                "products":[],
                 "statu": "ongoing",
                 "payments": [
                     {
@@ -1851,6 +1856,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "cupboard": 1
                         },
                         "statu": "pending",
+                        "products":[],
                         "payments": [
                             {
                                 "user_id": "2d3343ae567c8f8a0b9e8f",
@@ -1898,6 +1904,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "cupboard": 1
                         },
                         "statu": "completed",
+                        "products":[],
                         "payments": [
                             {
                                 "user_id": "2d3343ae567c8f8a0b9e8f",
@@ -1945,6 +1952,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "cupboard": 1
                         },
                         "statu": "canceled",
+                        "products":[],
                         "payments": [
                             {
                                 "user_id": "2d3343ae567c8f8a0b9e8f",
@@ -1992,6 +2000,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                             "cupboard": 1
                         },
                         "statu": "ongoing",
+                        "products":[],
                         "payments": [
                             {
                                 "user_id": "2d3343ae567c8f8a0b9e8f",
@@ -2088,6 +2097,7 @@ Note: Do html redirect to the password reset successful page and kill the active
                 "bathroom": 1,
                 "cupboard": 1
             },
+            "products":[],
             "offline": true
         }
 
@@ -2223,6 +2233,12 @@ Refunds should go to the customers wallet's balance, so he can use it for anothe
     
 + Parameters
     + booking_id: "10" (Number) - ID of booking to refund
+    
++ Request (application/json)
+        
+        {
+            "products": []
+        }
 
 + Response 200 (application/json)
 
