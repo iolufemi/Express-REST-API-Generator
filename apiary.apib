@@ -1296,7 +1296,7 @@ Note: Do html redirect to the password reset successful page and kill the active
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + booking_id (Number)  - ID of the booking
+    + booking_id: "10" (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2471,7 +2471,7 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
 + Parameters
     + limit: "10" (Number) - Number of records to return
     + skip: "0" (Number)  - Number of records to skip
-    + booking_id (Number)  - ID of the booking
+    + booking_id: "10" (Number)  - ID of the booking
     
 + Response 200 (application/json)
 
@@ -2545,7 +2545,7 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+    + booking_id: "10" (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2607,9 +2607,9 @@ Check if the Worker matches some tags on the booking and worker is not assigned 
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
-    + skip (Number) - Number of records to skip
-    + limit (Number) - Number of records to return
+    + booking_id: "10" (Number)  - ID of the booking
+    + skip: "10" (Number) - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
 
 + Response 200 (application/json)
 
@@ -2684,7 +2684,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+    + booking_id: "10" (Number)  - ID of the booking
     
 + Request (application/json)
     
@@ -2747,7 +2747,7 @@ Add the rating and review to each worker assigned to the project
     Authorization: dd3343ae567c8f8a0b9e8f 
     
 + Parameters
-    + booking_id (Number)  - ID of the booking
+    + booking_id: "10" (Number)  - ID of the booking
 
 + Response 200 (application/json)
 
@@ -2873,7 +2873,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + payment_id (Number)  - ID of the payment
+    + payment_id: "10" (Number)  - ID of the payment
 
 + Request (application/json)
 
@@ -2941,7 +2941,7 @@ Remember to requery the transaction to confirm the true state from the processor
     Authorization: dd3343ae567c8f8a0b9e8f
 
 + Parameters
-    + user_id (Number)  - ID of the user
+    + user_id: "10" (Number)  - ID of the user
     + limit: "10" (Number) - Number of records to return
     + skip: "0" (Number)  - Number of records to skip
     + status: "completed" (String)  - Status of a booking
@@ -3921,8 +3921,8 @@ If user_id is not provided, get current users wallet balance
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + skip (Number) - Number of records to skip
-    + limit (Number) - Number of records to return
+    + skip: "10" (Number) - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
 
 + Response 200 (application/json)
 
@@ -3989,9 +3989,9 @@ If user_id is not provided, get current users wallet balance
     Authorization: dd3343ae567c8f8a0b9e8f
     
 + Parameters
-    + skip (Number) - Number of records to skip
-    + limit (Number) - Number of records to return
-    + user_id (String) - Id of the user we want to get a statement for
+    + skip: "10" (Number) - Number of records to skip
+    + limit: "10" (Number) - Number of records to return
+    + user_id: "10" (String) - Id of the user we want to get a statement for
 
 + Response 200 (application/json)
 

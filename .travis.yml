@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-  - "7"
-  - "6"
-  - "4"
+  - '7'
+  - '6'
 before_script:
-  - npm install -g gulp mocha gulp-cli codecov istanbul
+  - npm install -g gulp mocha gulp-cli codecov istanbul dredd@3.3.0
+  - dredd ./apiary.apib http://127.0.0.1:8080 --dry-run
 install:
   - npm install
-script: 
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov
+script:
+  - >-
+    istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+    && codecov
