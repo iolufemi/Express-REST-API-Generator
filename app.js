@@ -23,13 +23,13 @@ if (cluster.isMaster && config.env === 'production') {
 } else {
 	var express = require('express');
 	var app = express();
-	var router = require('./routes');
+	// var router = require('./routes');
 
 	if(config.trustProxy === 'yes'){
 		app.enable('trust proxy');
 	}
 
-	app.use('/',router);
+	// app.use('/',router);
 	
 	if(config.env === 'production'){
 		log.info('Worker %d running!', cluster.worker.id);
