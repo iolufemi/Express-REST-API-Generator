@@ -3,8 +3,7 @@ node_js:
   - '7'
   - '6'
 before_script:
-  - npm install -g gulp mocha gulp-cli codecov istanbul dredd@3.3.0
-  - dredd ./apiary.apib http://127.0.0.1:8080 --dry-run
+  - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
 script:
