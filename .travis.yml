@@ -1,11 +1,12 @@
 language: node_js
 services: mongodb
 env:
-  - MONGOURL=mongodb://127.0.0.1/snipe
+  - MONGOLAB_URL=mongodb://127.0.0.1/snipe
 node_js:
   - '7'
   - '6'
 before_script:
+  - sleep 15
   - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
