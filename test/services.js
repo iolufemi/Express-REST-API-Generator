@@ -155,7 +155,6 @@ describe('#Encryption service test', function(){
     
     it('should interpret data when data is POST', function(done){
         req.method = 'POST';
-        // process.env.SECURE_MODE = true;
         req.body = {};
         req.body.secureData = req.header('encryptedData');
         req.body.truth = demoDataHash;
@@ -175,6 +174,17 @@ var validator = require('../services/validator');
 describe('#Validation service test', function(){
     it('should exist as a function',function(done){
         validator.should.exist; /* jslint ignore:line */
+        done();
+    });
+});
+
+// Testing database service
+
+var db = require('../services/database/mongo');
+
+describe('#Database service test', function(){
+    it('should exist as a function',function(done){
+        db.should.exist; /* jslint ignore:line */
         done();
     });
 });

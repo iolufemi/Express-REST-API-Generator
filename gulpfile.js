@@ -32,4 +32,8 @@ gulp.task('test', function() {
     }
 );
 
+gulp.task('create', function(){
+
+});
+
 gulp.task('sanity',['lint','test']);

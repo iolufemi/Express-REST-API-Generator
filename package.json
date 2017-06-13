@@ -1,25 +1,25 @@
 {
-  "name": "snipe",
+  "name": "api-template",
   "version": "0.0.1",
-  "description": "API service for a freelancer marketplace",
+  "description": "A template for creating APIs Fast",
   "main": "app.js",
   "scripts": {
     "test": "gulp sanity"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EnsembleLab/snipe.git"
+    "url": "git+https://github.com/EnsembleLab/api-template.git"
   },
   "keywords": [
-    "marketplace",
-    "freelance"
+    "REST",
+    "API"
   ],
   "author": "Olufemi Olanipekun <iolufemi@ymail.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/EnsembleLab/snipe/issues"
+    "url": "https://github.com/EnsembleLab/api-template/issues"
   },
-  "homepage": "https://github.com/EnsembleLab/snipe#readme",
+  "homepage": "https://github.com/EnsembleLab/api-template#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
@@ -29,7 +29,11 @@
     "gulp-nodemon": "^2.2.1",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "mongoose-mock": "^0.4.0",
+    "proxyquire": "^1.8.0",
+    "sinon": "^2.3.4",
+    "sinon-chai": "^2.11.0"
   },
   "dependencies": {
     "aes-js": "^3.0.0",
