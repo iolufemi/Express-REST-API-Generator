@@ -1,4 +1,7 @@
 language: node_js
+services: mongodb
+env:
+  - MONGOURL=mongodb://127.0.0.1/snipe
 node_js:
   - '7'
   - '6'
