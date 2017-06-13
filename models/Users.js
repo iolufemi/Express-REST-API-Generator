@@ -59,8 +59,7 @@ var Schema = db.Schema(schemaObject);
 // Schema.index({'tags': 'text'});
 
 Schema.statics.search = function(string) {
-    return this.find({$text: {$search: string}}, { score : { $meta: "textScore" } })
-    .sort({ score : { $meta : 'textScore' } });
+    return this.find({$text: {$search: string}});
 };
 
 // assign a function to the "methods" object of our Schema
