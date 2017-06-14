@@ -15,6 +15,8 @@ var User;
 // Testing The User Model
 describe('User Model',function(){
 
+    var id;
+    var id2;
 
     before(function(){  /* jslint ignore:line */
         User = proxyquire('../models/Users', {'mongoose': 'mongooseMock'});
@@ -23,12 +25,10 @@ describe('User Model',function(){
 
     describe('Test CRUDS', function(){
         it('should save data', function(done){
-            var cb = sinon.spy();
             var myuser = User.create({name: 'femi'});
 
             myuser.then(function(res){
-                cb();
-                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
             .catch(function(err){
@@ -37,12 +37,10 @@ describe('User Model',function(){
         });
 
         it('should read data', function(done){
-            var cb = sinon.spy();
             var myuser = User.findOne({name: 'femi'});
 
             myuser.then(function(res){
-                cb();
-                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
             .catch(function(err){
@@ -51,12 +49,10 @@ describe('User Model',function(){
         });
 
         it('should read all data', function(done){
-            var cb = sinon.spy();
             var myuser = User.find();
 
             myuser.then(function(res){
-                cb();
-                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                res.should.be.an.array; /* jslint ignore:line */
                 done();
             })
             .catch(function(err){
@@ -93,13 +89,11 @@ describe('User Model',function(){
         });
 
         it('should search data', function(done){
-            var cb = sinon.spy();
             // Search needs more work for more accuracy
             var myuser = User.search('femi');
 
             myuser.then(function(res){
-                cb();
-                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
             .catch(function(err){
@@ -108,14 +102,12 @@ describe('User Model',function(){
         });
 
         it('should delete data', function(done){
-            var cb = sinon.spy();
             var cb2 = sinon.spy();
             var ouruser = User.create([{name:'Olaolu'},{name: 'fola'},{name: 'bolu'}]);
             var myuser = User.deleteOne({name: 'bolu'});
 
             ouruser.then(function(res){
-                cb();
-                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                res.should.be.an.object; /* jslint ignore:line */
                 return myuser;
             }).then(function(res){
                 cb2();
@@ -145,6 +137,7 @@ describe('User Model',function(){
             var myuser = User.create({name: 'this is for the gods'});
 
             myuser.then(function(res){
+                id = res._id;
                 res.should.have.property('createdAt');
                 done();
             })
@@ -155,9 +148,8 @@ describe('User Model',function(){
 
         it('should add updatedAt', function(done){
             var myuser = User.create({name: 'i am a demigod!'});
-            var id;
             myuser.then(function(res){
-                id = res._id;
+                id2 = res._id;
                 return User.update({_id: id},{name: 'This is the titan'});
             })
             .then(function(res){
@@ -172,11 +164,102 @@ describe('User Model',function(){
             });
         });
 
-        // it('should tag database entries properly');
+        it('should tag database entries properly', function(done){
+            var myuser = User.create({name: 'femi',someOtherStringData: 'random stuff'});
 
-        // it('should tag database entries properly');
+            myuser.then(function(res){
+                res.tags.length.should.equal(2);/* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
 
-        // it('should tag database entries properly');
+        it('should count returned records', function(done){
+            var myuser = User.count({name: 'This is the titan'});
+
+            myuser.then(function(res){
+                res.should.be.a.number; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find a record by id', function(done){
+            var myuser = User.findById(id);
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find a record by id and delete', function(done){
+            var myuser = User.findByIdAndRemove(id2);
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find a record by id and update', function(done){
+            var myuser = User.findByIdAndUpdate(id,{name: 'fufu'});
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find the first match from a query', function(done){
+            var myuser = User.findOne({name: 'fufu'});
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find the first match from a query and update', function(done){
+            var myuser = User.findOneAndUpdate({name: 'fufu'},{name: 'funmi'});
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find the first match from a query and delete', function(done){
+            var myuser = User.findOneAndRemove({name: 'funmi'});
+
+            myuser.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
     });
 });
 

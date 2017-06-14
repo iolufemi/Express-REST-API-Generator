@@ -10,6 +10,9 @@ var debug = require('debug')(collection);
 var schemaObject = {
     name: {
         type: 'String'
+    },
+    someOtherStringData: {
+        type: 'String'
     }
 };
 
