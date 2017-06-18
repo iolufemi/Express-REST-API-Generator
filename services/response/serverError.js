@@ -9,10 +9,16 @@ module.exports = function(data, message){
 			data = data.toString();
 		}
 	}
+    var statusCode;
+    if(data.statusCode){
+        statusCode = data.statusCode;
+    }else{
+        statusCode = 500;
+    }
 
 	if(data){
-		this.status(500).json({status: 'error', data: data, message: message ? message : 'server error'});
+		this.status(statusCode).json({status: 'error', data: data, message: message ? message : 'server error'});
 	}else{
-		this.status(500).json({status: 'error', message: message ? message : 'server error'});
+		this.status(statusCode).json({status: 'error', message: message ? message : 'server error'});
 	}
 };

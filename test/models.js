@@ -263,3 +263,4 @@ describe('User Model',function(){
     });
 });
 
+// test populate

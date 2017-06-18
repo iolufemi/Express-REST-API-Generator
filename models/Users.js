@@ -1,7 +1,6 @@
 "use strict";
 
 var db = require('../services/database/mongo');
-var _ = require('lodash');
 
 var collection = 'Users';
 
