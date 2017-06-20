@@ -24,41 +24,25 @@ if (cluster.isMaster && config.env === 'production') {
 	var express = require('express');
 	var app = express();
 	var router = require('./routes');
-    var helmet = require('helmet');
-    var client = require('redis').createClient(config.redisURL);
-    var limiter = require('express-limiter')(app, client);
+    var express_enforces_ssl = require('express-enforces-ssl');
 
     if(config.trustProxy === 'yes'){
       app.enable('trust proxy');
   }
 
+  if(config.enforceSSL === 'yes'){
+    app.use(express_enforces_ssl());
+}
 
-  app.use(helmet());
-    // no client side caching
-    if(config.noFrontendCaching === 'yes'){
-        app.use(helmet.noCache());
-    }
+app.use('/',router);
 
-    limiter({
-      path: '*',
-      method: 'all',
-      lookup: 'userId',
-      total: config.rateLimit * 1,
-      expire: config.rateLimitExpiry * 1,
-      onRateLimited: function (req, res, next) {
-        next({ message: 'Rate limit exceeded', statusCode: 429 });
-    }
+if(config.env === 'production'){
+  log.info('Worker %d running!', cluster.worker.id);
+}
+
+
+app.listen(config.port, function () {
+  log.info('listening on port '+config.port+'!');
 });
-
-    app.use('/',router);
-
-    if(config.env === 'production'){
-      log.info('Worker %d running!', cluster.worker.id);
-  }
-
-
-  app.listen(config.port, function () {
-      log.info('listening on port '+config.port+'!');
-  });
 
 }
