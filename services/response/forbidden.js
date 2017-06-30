@@ -1,8 +1,17 @@
 "use strict";
 var log = require('../logger');
+var RequestLogs = require('../../models/RequestLogs');
+var _ = require('lodash');
 
 module.exports = function(data, message){
 	log.warn('Sending forbidden response: ', data, message || 'forbidden');
+    var req = this.req;
+    var res = this;
+
+    RequestLogs.update({RequestId: req.requestId},{response: {status: 'error', data: data, message: message ? message : 'forbidden'}})
+    .then(function(res){
+        return _.identity(res);
+    });
 
 	if (data !== undefined && data !== null) {
 		if(Object.keys(data).length === 0 && JSON.stringify(data) === JSON.stringify({})){

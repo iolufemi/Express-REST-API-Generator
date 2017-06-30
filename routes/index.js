@@ -17,6 +17,20 @@ var cors = require('cors');
 var hpp = require('hpp');
 var contentLength = require('express-content-length-validator');
 var MAX_CONTENT_LENGTH_ACCEPTED = config.maxContentLength * 1;
+var url = require('url');
+var fnv = require('fnv-plus');
+var RequestLogs = require('../models/RequestLogs');
+
+var sanitizeRequestUrl = function(req) {
+  var requestUrl = url.format({
+    protocol: req.protocol,
+    host: req.hostname,
+    pathname: req.originalUrl || req.url,
+    query: req.query
+});
+
+  return requestUrl.replace(/(password=).*?(&|$)/ig, '$1<hidden>$2');
+};
 
 var allRequestData = function(req,res,next){
     var requestData = {};
@@ -41,8 +55,6 @@ var enforceUserIdAndAppId = function(req,res,next){
     }else if(!appId){
         res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
     }else{
-        // Do a middleware that validates userId and appID here. put the user service endpoint in the env var. ideally, this should be the gateway endpoint
-        // Check if this user and app is allowed on this service
         req.userId = userId;
         req.appId = appId;
         next();
@@ -80,9 +92,32 @@ limiter({
 
 router.use(response);
 router.use(expressValidator());
+// Log requests here
 router.use(function(req,res,next){
-    log.info('[TIME: '+new Date().toISOString()+'] [IP Address: '+req.ip+'] [METHOD: '+req.method+'] [URL: '+req.originalUrl+']');
-    next();
+  var ipAddress = req.get('x-forwarded-for') || req.connection && req.connection.remoteAddress;
+  req.requestId = fnv.hash(new Date().valueOf() + ipAddress, 128).str();
+
+  var reqLog = {
+    RequestId: req.requestId,
+    ipAddress: ipAddress,
+    url: sanitizeRequestUrl(req),
+    method: req.method,
+    body: _.omit(req.body, ['password','cardno']),
+    app: req.appId,
+    user: req.userId,
+    device: req.get('user-agent'),
+    createdAt: new Date()
+};
+
+RequestLogs.create(reqLog)
+.then(function(res){
+    return _.identity(res);
+});
+
+  // persist RequestLog entry in the background; continue immediately
+
+  log.info(reqLog);
+  next();
 });
 
 router.get('/', function (req, res) {
