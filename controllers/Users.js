@@ -40,4 +40,8 @@ UsersController.count = function(query){
     return Users.count(query);
 };
 
+UsersController.restore = function(query){
+    return Users.count(query);
+};
+
 module.exports = UsersController;
