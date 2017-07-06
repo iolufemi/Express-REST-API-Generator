@@ -7,10 +7,13 @@ module.exports = function(){
 	log.warn('Sending 404 response: '+'not found');
     var req = this.req;
     var res = this;
-
+    // ToDo: Move this to a queue. Not good for performance
     RequestLogs.update({RequestId: req.requestId},{response: {status: 'error', message: 'not found'}})
     .then(function(res){
         return _.identity(res);
+    })
+    .catch(function(err){
+        log.error(err);
     });
 
 	this.status(404).json({status: 'error', message: 'not found'});

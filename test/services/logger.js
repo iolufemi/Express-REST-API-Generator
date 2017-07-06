@@ -42,7 +42,7 @@ var demoDataHash = crypto.createHash('sha512')
         header[key] = value;
         return header[key];
     };
-    req.header = function(key){
+    req.get = function(key){
         return header[key];
     };
     

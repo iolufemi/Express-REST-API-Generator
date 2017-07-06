@@ -20,8 +20,8 @@ describe('Trash Model',function(){
     var id2;
 
     before(function(){  /* jslint ignore:line */
-        Trash = proxyquire('../../models/Trash', {'mongoose': 'mongooseMock'});
-        // Trash = require('../models/Trashs');
+        // Trash = proxyquire('../../models/Trash', {'mongoose': 'mongooseMock'});
+        Trash = require('../../models/Trash');
     });
 
     describe('Test CRUDS', function(){

@@ -82,6 +82,7 @@ Schema.pre('save', function(next) {
     // Indexing for search
     var ourDoc = this._doc;
     var split = [];
+    // ToDo: Move this to a queue and index only pure strings
     for(var n in ourDoc){
         if(typeof ourDoc[n] === 'string'){
             split.push(ourDoc[n].split(' '));
@@ -136,6 +137,7 @@ Schema.pre('update', function(next) {
     // Indexing for search
     var ourDoc = this._update.$set;
     var split = [];
+    // ToDo: Move this to a queue and index only pure strings
     for(var n in ourDoc){
         if(typeof ourDoc[n] === 'string'){
             split.push(ourDoc[n].split(' '));
@@ -152,5 +154,6 @@ Schema.pre('update', function(next) {
 });
 
 var Model = db.model(collection, Schema);
+Model._mongoose = db;
 
 module.exports = Model;

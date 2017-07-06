@@ -21,7 +21,8 @@ module.exports = function(req, res, next){
 					req.sanitize(parameters[n]).trim();
 				}
 				
-				if((n*1) === last){
+				if(n*1 === last){
+                    debug("parameters: ", parameters[n]);
 					debug('validation over, lets take it home...');
 					var errors = req.validationErrors();
 					if (errors) {

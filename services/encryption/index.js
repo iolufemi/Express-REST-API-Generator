@@ -99,11 +99,11 @@ module.exports = {
 
     interpreter: function(req, res, next){
         var encryption = require('./');
-        if(req.header('x-tag')){
-            res.set('x-tag', req.header('x-tag'));
+        if( req.get('x-tag') ){
+            res.set('x-tag', req.get('x-tag'));
             res.set('Access-Control-Expose-Headers','x-tag');
 
-            var key = req.header('x-tag');
+            var key = req.get('x-tag');
 
             if(req.method === 'POST' && config.secureMode){
                 if(req.body.secureData){

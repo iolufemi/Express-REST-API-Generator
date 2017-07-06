@@ -42,7 +42,7 @@ res.set = function(key, value){
     header[key] = value;
     return header[key];
 };
-req.header = function(key){
+req.get = function(key){
     return header[key];
 };
 

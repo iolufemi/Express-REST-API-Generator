@@ -7,10 +7,13 @@ module.exports = function(data, message){
 	log.warn('Sending bad request response: ', data, message || 'bad request');
     var req = this.req;
     var res = this;
-
+    // ToDo: Move this to a queue. Not good for performance
     RequestLogs.update({RequestId: req.requestId},{response: {status: 'error', data: data, message: message ? message : 'bad request'}})
     .then(function(res){
         return _.identity(res);
+    })
+    .catch(function(err){
+        log.error(err);
     });
 
 	if (data !== undefined && data !== null) {

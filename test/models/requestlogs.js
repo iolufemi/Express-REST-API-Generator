@@ -20,8 +20,8 @@ describe('RequestLog Model',function(){
     var id2;
 
     before(function(){  /* jslint ignore:line */
-        RequestLog = proxyquire('../../models/RequestLogs', {'mongoose': 'mongooseMock'});
-        // RequestLog = require('../models/RequestLogs');
+        // RequestLog = proxyquire('../../models/RequestLogs', {'mongoose': 'mongooseMock'});
+        RequestLog = require('../../models/RequestLogs');
     });
 
     describe('Test CRUDS', function(){

@@ -19,8 +19,8 @@ describe('User Model',function(){
     var id2;
 
     before(function(){  /* jslint ignore:line */
-        User = proxyquire('../../models/Users', {'mongoose': 'mongooseMock'});
-        // User = require('../models/Users');
+        // User = proxyquire('../../models/Users', {'mongoose': 'mongooseMock'});
+        User = require('../../models/Users');
     });
 
     describe('Test CRUDS', function(){

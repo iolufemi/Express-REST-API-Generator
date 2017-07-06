@@ -8,6 +8,12 @@ var config = require('../../config');
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var crypto = require('crypto');
+var express = require('express');
+var app = express();
+var request = require('supertest');
+var expressValidator = require('express-validator');
+var response = require('../../services/response');
+var bodyParser = require('body-parser');
 
 // init
 
@@ -42,7 +48,7 @@ res.set = function(key, value){
     header[key] = value;
     return header[key];
 };
-req.header = function(key){
+req.get = function(key){
     return header[key];
 };
 
@@ -57,9 +63,45 @@ req.method = '';
 
 var validator = require('../../services/validator');
 
+// Dummy App
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(expressValidator());
+app.use(response);
+
+app.post('/', function(req,res,next){
+    req._required = [
+    'name',
+    'name2'
+    ];
+
+    next();
+},
+validator,
+function(req,res){
+    res.ok('It worked!');
+}
+);
+
+var agent = request(app);
+
 describe('#Validation service test', function(){
     it('should exist as a function',function(done){
         validator.should.exist; /* jslint ignore:line */
         done();
+    });
+
+    it('should fail due to non existence of a required parameter',function(done){
+        agent
+        .post('/')
+        .send({name:"femi"})
+        .expect(400,done);
+    });
+
+    it('should be successful', function(done){
+        agent
+        .post('/')
+        .send({name:'femi2',name2:'femi'})
+        .expect(200,done);
     });
 });

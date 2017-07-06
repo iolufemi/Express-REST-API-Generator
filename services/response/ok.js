@@ -10,17 +10,20 @@ module.exports = function(data){
 	debug("sending ok response");
 	var req = this.req;
 	var res = this;
-
+    // ToDo: Move this to a queue. Not good for performance
     RequestLogs.update({RequestId: req.requestId},{response: {status: 'success', data: data}})
     .then(function(res){
         return _.identity(res);
+    })
+    .catch(function(err){
+        log.error(err);
     });
 
     
 
-    if(req.header('x-tag') && req.method === 'POST' && config.secureMode && data){
+    if(req.get('x-tag') && req.method === 'POST' && config.secureMode && data){
       debug("i want to encrypt");
-      var key = req.header('x-tag');
+      var key = req.get('x-tag');
       debug('our encryption key: ', key);
       var text = JSON.stringify(data);
       debug("about to call encryption method");

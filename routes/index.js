@@ -21,7 +21,7 @@ var url = require('url');
 var fnv = require('fnv-plus');
 var RequestLogs = require('../models/RequestLogs');
 
-var sanitizeRequestUrl = function(req) {
+router._sanitizeRequestUrl = function(req) {
   var requestUrl = url.format({
     protocol: req.protocol,
     host: req.hostname,
@@ -32,7 +32,7 @@ var sanitizeRequestUrl = function(req) {
   return requestUrl.replace(/(password=).*?(&|$)/ig, '$1<hidden>$2');
 };
 
-var allRequestData = function(req,res,next){
+router._allRequestData = function(req,res,next){
     var requestData = {};
     req.param = function(key, defaultValue){
         var newRequestData = _.assignIn(requestData, req.params, req.body, req.query);
@@ -47,7 +47,7 @@ var allRequestData = function(req,res,next){
     next();
 };
 
-var enforceUserIdAndAppId = function(req,res,next){
+router._enforceUserIdAndAppId = function(req,res,next){
     var userId = req.param('userId');
     var appId = req.param('appId');
     if(!userId){
@@ -60,6 +60,37 @@ var enforceUserIdAndAppId = function(req,res,next){
         next();
     }
 };
+
+// Log requests here
+router.use(function(req,res,next){
+  var ipAddress = req.get('x-forwarded-for') || req.connection && req.connection.remoteAddress;
+  req.requestId = fnv.hash(new Date().valueOf() + ipAddress, 128).str();
+
+  var reqLog = {
+    RequestId: req.requestId,
+    ipAddress: ipAddress,
+    url: router._sanitizeRequestUrl(req),
+    method: req.method,
+    body: _.omit(req.body, ['password','cardno']),
+    app: req.appId,
+    user: req.userId,
+    device: req.get('user-agent'),
+    createdAt: new Date()
+};
+// ToDo: Move this to a queue. Not good for performance
+RequestLogs.create(reqLog)
+.then(function(res){
+    return _.identity(res);
+})
+.catch(function(err){
+  log.error(err);
+});
+
+  // persist RequestLog entry in the background; continue immediately
+
+  log.info(reqLog);
+  next();
+});
 
 router.use(helmet());
 // no client side caching
@@ -76,7 +107,7 @@ router.use(encryption.interpreter);
 router.use(hpp());
 router.use(contentLength.validateMax({max: MAX_CONTENT_LENGTH_ACCEPTED, status: 400, message: "Stop! Maximum content length exceeded."})); // max size accepted for the content-length
 // add the param function to request object
-router.use(allRequestData);
+router.use(router._allRequestData);
 
 // API Rate limiter
 limiter({
@@ -92,33 +123,6 @@ limiter({
 
 router.use(response);
 router.use(expressValidator());
-// Log requests here
-router.use(function(req,res,next){
-  var ipAddress = req.get('x-forwarded-for') || req.connection && req.connection.remoteAddress;
-  req.requestId = fnv.hash(new Date().valueOf() + ipAddress, 128).str();
-
-  var reqLog = {
-    RequestId: req.requestId,
-    ipAddress: ipAddress,
-    url: sanitizeRequestUrl(req),
-    method: req.method,
-    body: _.omit(req.body, ['password','cardno']),
-    app: req.appId,
-    user: req.userId,
-    device: req.get('user-agent'),
-    createdAt: new Date()
-};
-
-RequestLogs.create(reqLog)
-.then(function(res){
-    return _.identity(res);
-});
-
-  // persist RequestLog entry in the background; continue immediately
-
-  log.info(reqLog);
-  next();
-});
 
 router.get('/', function (req, res) {
     res.ok({name: me.name, version: me.version});
@@ -137,7 +141,7 @@ router.use('/', initialize);
 
 
 // Make userId compolsory in every request
-router.use(enforceUserIdAndAppId);
+router.use(router._enforceUserIdAndAppId);
 
 // Other routes here
 // 

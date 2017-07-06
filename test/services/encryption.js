@@ -42,7 +42,7 @@ res.set = function(key, value){
     header[key] = value;
     return header[key];
 };
-req.header = function(key){
+req.get = function(key){
     return header[key];
 };
 
@@ -77,12 +77,12 @@ describe('#Encryption service test', function(){
         .then(function(resp){
             header['x-tag'] = resp;
             
-            return encryption.encrypt(demoData, req.header('x-tag'));
+            return encryption.encrypt(demoData, req.get('x-tag'));
         })
         .then(function(resp){
             console.log("encrypted data: ", resp);
             res.set('encryptedData', resp);
-            return encryption.decrypt(resp, req.header('x-tag'), demoDataHash);
+            return encryption.decrypt(resp, req.get('x-tag'), demoDataHash);
         })
         .then(function(resp){
             console.log("decrypted data: ", resp);
@@ -95,7 +95,7 @@ describe('#Encryption service test', function(){
     });
     
     it('should detect compromised data', function(done){
-        encryption.decrypt('5b9f535be7edbad69ac03aced46f6586c1b2d', req.header('x-tag'), demoDataHash)
+        encryption.decrypt('5b9f535be7edbad69ac03aced46f6586c1b2d', req.get('x-tag'), demoDataHash)
         .then(function(resp){
             done(resp);
         })
@@ -118,7 +118,7 @@ describe('#Encryption service test', function(){
     it('should interpret data when data is POST', function(done){
         req.method = 'POST';
         req.body = {};
-        req.body.secureData = req.header('encryptedData');
+        req.body.secureData = req.get('encryptedData');
         req.body.truth = demoDataHash;
         encryption.interpreter(req,res,next);
         setTimeout(function(){
