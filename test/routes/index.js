@@ -54,7 +54,7 @@ app.use('/',router);
 describe('Test rate limiting', function(){
 
     it('should reach request rate limit', function(done){
-        var n = config.rateLimit;
+        var n = config.rateLimit * 1;
         var x = 0;
         while(n > 0){
             n = n - 1;
@@ -67,14 +67,7 @@ describe('Test rate limiting', function(){
         setTimeout(function(){
             request(app)
             .get('/initialize')
-            .expect(429)
-            .end(function(err,res){
-                if (err){
-                   done(err);
-               }else{
-                done();
-            }
-        });
+            .expect(429,done);
         },10000);
 
     });

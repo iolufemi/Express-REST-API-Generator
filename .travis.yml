@@ -3,6 +3,7 @@ language: node_js
 services: mongodb
 env:
   - MONGOLAB_URL=mongodb://127.0.0.1/snipe
+  - RATE_LIMIT=10
 addons:
   apt:
     sources:
