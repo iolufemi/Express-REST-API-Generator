@@ -67,7 +67,14 @@ describe('Test rate limiting', function(){
         setTimeout(function(){
             request(app)
             .get('/initialize')
-            .expect(429,done);
+            .expect(429)
+            .end(function(err,res){
+                if (err){
+                   done(err);
+               }else{
+                done();
+            }
+        });
         },10000);
 
     });
