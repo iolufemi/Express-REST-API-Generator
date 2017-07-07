@@ -64,13 +64,23 @@ describe('Test rate limiting', function(){
             setTimeout(function(){ /* jslint ignore:line */
                 agent
                 .get('/initialize')
-                .then();
+                .end(function(err, res){
+                    console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
+                });
             },1000*n);
         }
         setTimeout(function(){
             agent
             .get('/initialize')
-            .expect(429, done);
+            .expect(429)
+            .end(function(err, res){
+                if(err){
+                    done(err);
+                }else{
+                    console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+                    done();
+                }
+            });
         },10000);
 
     });
