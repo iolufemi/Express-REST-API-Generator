@@ -6,7 +6,6 @@ var config = require('../../config');
 var chaiAsPromised = require('chai-as-promised');
 // chai.use(chaiAsPromised);
 var mongooseMock = require('mongoose-mock');
-var proxyquire = require('proxyquire');
 // var expect = chai.expect;
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
@@ -19,7 +18,6 @@ describe('User Model',function(){
     var id2;
 
     before(function(){  /* jslint ignore:line */
-        // User = proxyquire('../../models/Users', {'mongoose': 'mongooseMock'});
         User = require('../../models/Users');
     });
 
