@@ -63,7 +63,7 @@ router._enforceUserIdAndAppId = function(req,res,next){
 
 // Log requests here
 router.use(function(req,res,next){
-  var ipAddress = req.get('x-forwarded-for') || req.connection && req.connection.remoteAddress;
+  var ipAddress = req.ip;
   req.requestId = fnv.hash(new Date().valueOf() + ipAddress, 128).str();
 
   var reqLog = {
@@ -113,7 +113,7 @@ router.use(router._allRequestData);
 limiter({
   path: '*',
   method: 'all',
-  lookup: ['userId','appId'],
+  lookup: ['ip','userId','appId'],
   total: config.rateLimit * 1,
   expire: config.rateLimitExpiry * 1,
   onRateLimited: function (req, res, next) {
