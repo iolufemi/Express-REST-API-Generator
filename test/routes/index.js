@@ -51,6 +51,9 @@ app.use('/',router);
 // };
 
 // req.method = '';
+
+var agent = request.agent(app);
+
 describe('Test rate limiting', function(){
 
     it('should reach request rate limit', function(done){
@@ -59,22 +62,15 @@ describe('Test rate limiting', function(){
         while(n > 0){
             n = n - 1;
             setTimeout(function(){ /* jslint ignore:line */
-                request(app)
+                agent
                 .get('/initialize')
                 .then();
             },1000*n);
         }
         setTimeout(function(){
-            request(app)
+            agent
             .get('/initialize')
-            .expect(429)
-            .end(function(err,res){
-                if (err){
-                   done(err);
-               }else{
-                done();
-            }
-        });
+            .expect(429, done);
         },10000);
 
     });
