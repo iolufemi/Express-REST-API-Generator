@@ -57,130 +57,66 @@ var agent = request.agent(app);
 describe('Test rate limiting', function(){
 
     it('should reach request rate limit', function(done){
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
+        agent
+        .get('/initialize')
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
+            .get('/initialize');
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            return agent
             .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*1);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*2);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*3);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*4);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*5);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*6);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*7);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*8);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*9);
-
-        setTimeout(function(){ /* jslint ignore:line */
-            agent
-            .get('/initialize')
-            .end(function(err, res){
-                if(err){
-                    return console.error(err);
-                }
-                console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining']);
-            });
-        },1000*10);
-
-        setTimeout(function(){
-            agent
-            .get('/initialize')
-            .expect(429)
-            .end(function(err, res){
-                if(err){
-                    done(err);
-                }else{
-                    console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-                    done();
-                }
-            });
-        },1000*11);
-
+            .expect(429);
+        })
+        .then(function(res){
+            console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
     });
 });
 
