@@ -20,7 +20,6 @@ before_script:
 install:
   - npm install
 script:
-  - npm start
   - >-
     istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
     && codecov
