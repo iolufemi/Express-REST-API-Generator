@@ -41,10 +41,10 @@ if(config.env === 'production'){
 }
 
 
-var server = app.listen(config.port,'0.0.0.0', function () {
+var server = app.listen(config.port, function () {
     var host = server.address().address;
     var port = server.address().port;
-    log.info('listening on host '+host+', port '+config.port+'!');
+    log.info('listening on host '+host+', port '+port+'!');
 });
 
 }

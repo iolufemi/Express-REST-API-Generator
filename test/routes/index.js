@@ -12,11 +12,6 @@ var express = require('express');
 
 var app = express();
 app.use('/',router);
-var server = app.listen(config.port,'0.0.0.0', function () {
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('listening on host '+host+', port '+config.port+'!');
-});
 
 // init
 
@@ -57,7 +52,7 @@ var server = app.listen(config.port,'0.0.0.0', function () {
 
 // req.method = '';
 
-var agent = request.agent(app);
+var agent = request.agent('http://0.0.0.0:'+config.port+'');
 
 describe('Test rate limiting', function(){
 

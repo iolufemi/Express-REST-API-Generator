@@ -4,7 +4,8 @@
   "description": "A template for creating APIs Fast",
   "main": "app.js",
   "scripts": {
-    "test": "gulp sanity"
+    "test": "gulp sanity",
+    "start": "node app"
   },
   "repository": {
     "type": "git",
