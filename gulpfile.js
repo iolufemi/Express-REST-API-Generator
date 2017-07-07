@@ -28,6 +28,7 @@ gulp.task('default', function(){
 gulp.task('test', function() {
     // Override RATE LIMIT HERE FOR UNIT TEST
     process.env.RATE_LIMIT = 10;
+    process.env.SECURE_MODE = true;
     gulp.src('./test', {read: false})
         // `gulp-mocha` needs filepaths so you can't have any plugins before it 
         .pipe(mocha({reporter: 'spec'}));
