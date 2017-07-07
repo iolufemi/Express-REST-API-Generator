@@ -4,7 +4,7 @@ services:
   - mongodb
   - redis-server
 env:
-  - MONGOLAB_URL=mongodb://127.0.0.1/snipe RATE_LIMIT=10
+  - MONGOLAB_URL=mongodb://127.0.0.1/snipe RATE_LIMIT=10 REDIS_URL=redis://127.0.0.1/1
 addons:
   apt:
     sources:

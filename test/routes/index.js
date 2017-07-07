@@ -52,7 +52,7 @@ app.use('/',router);
 
 // req.method = '';
 
-var agent = request.agent('http://0.0.0.0:'+config.port+'');
+var agent = request.agent(app);
 
 describe('Test rate limiting', function(){
 
