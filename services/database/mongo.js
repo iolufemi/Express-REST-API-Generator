@@ -13,7 +13,7 @@ var db = mongoose.connection;
 
 db.on('error', log.error);
 db.once('open', function() {
-  log.info('Database connection successful');
+  log.info('MongoDB database connection successful');
 });
 
 module.exports = mongoose;

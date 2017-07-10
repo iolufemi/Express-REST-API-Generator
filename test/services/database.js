@@ -56,11 +56,20 @@ req.method = '';
 
 // Testing database service
 
-var db = require('../../services/database/mongo');
+var mongodb = require('../../services/database/mongo');
 
 describe('#Database service test', function(){
     it('should exist as a function',function(done){
-        db.should.exist; /* jslint ignore:line */
+        mongodb.should.exist; /* jslint ignore:line */
+        done();
+    });
+});
+
+var redisdb = require('../../services/database/redis');
+
+describe('#Database service test', function(){
+    it('should exist as a function',function(done){
+        redisdb.should.exist; /* jslint ignore:line */
         done();
     });
 });

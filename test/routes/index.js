@@ -13,45 +13,6 @@ var express = require('express');
 var app = express();
 app.use('/',router);
 
-// init
-
-// var res = {};
-// var req = {};
-
-// var nextChecker = false;    
-// var next = function(){
-//     if(arguments.length > 0){
-//         console.log(arguments[0]);
-//     }else{
-//         nextChecker = true;
-//     }
-
-//     return nextChecker;
-// };
-// res.json = function(data){
-//     return res;
-// };
-
-// res.status = function(status){
-//     return res;
-// };
-
-// var header = {};
-// res.set = function(key, value){
-//     header[key] = value;
-//     return header[key];
-// };
-// req.get = function(key){
-//     return header[key];
-// };
-
-// header.set = function(data){
-//     header.temp = data;
-//     return header.temp;
-// };
-
-// req.method = '';
-
 var agent = request.agent(app);
 
 describe('Test rate limiting', function(){
