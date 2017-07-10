@@ -6,5 +6,13 @@ module.exports = {
 	bugsnagKey: process.env.BUGSNAG_KEY || false,
 	secureMode: process.env.SECURE_MODE || false,
 	secret: process.env.SECRET || 'lakikihdgdfdjjjdgd67264664vdjhjdyncmxuei8336%%^#%gdvdhj????jjhdghduue',
-	mongoURL: process.env.MONGOLAB_URL || 'mongodb://192.168.99.100/snipe'
+	mongoURL: process.env.MONGOLAB_URL || 'mongodb://192.168.99.100/snipe',
+    noFrontendCaching: process.env.NO_CACHE || 'yes',
+    rateLimit: process.env.RATE_LIMIT || '1800',
+    rateLimitExpiry: process.env.RATE_LIMIT_EXPIRY || '3600000',
+    redisURL: process.env.REDIS_URL || 'redis://192.168.99.100:6379/1',
+    letsencryptSSLVerificationURL: process.env.LETSENCRYPT_VERIFICATION_URL || '/.well-known/acme-challenge/xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8',
+    letsencryptSSLVerificationBody: process.env.LETSENCRYPT_VERIFICATION_BODY || 'xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8._v6aFbaRYWeOmSebtlD-X4Ixf5tPsyULMsXM8HjsK-Q',
+    maxContentLength: process.env.MAX_CONTENT_LENGTH || '9999',
+    enforceSSL: process.env.ENFORCE_SSL || 'no'
 };

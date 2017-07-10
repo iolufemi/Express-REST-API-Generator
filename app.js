@@ -23,21 +23,28 @@ if (cluster.isMaster && config.env === 'production') {
 } else {
 	var express = require('express');
 	var app = express();
-	// var router = require('./routes');
+	var router = require('./routes');
+    var express_enforces_ssl = require('express-enforces-ssl');
 
-	if(config.trustProxy === 'yes'){
-		app.enable('trust proxy');
-	}
+    if(config.trustProxy === 'yes'){
+      app.enable('trust proxy');
+  }
 
-	// app.use('/',router);
-	
-	if(config.env === 'production'){
-		log.info('Worker %d running!', cluster.worker.id);
-	}
-	
+  if(config.enforceSSL === 'yes'){
+    app.use(express_enforces_ssl());
+}
 
-	app.listen(config.port, function () {
-		log.info('listening on port '+config.port+'!');
-	});
+app.use('/',router);
+
+if(config.env === 'production'){
+  log.info('Worker %d running!', cluster.worker.id);
+}
+
+
+var server = app.listen(config.port, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+    log.info('listening on host '+host+', port '+port+'!');
+});
 
 }

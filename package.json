@@ -1,25 +1,26 @@
 {
-  "name": "snipe",
+  "name": "api-template",
   "version": "0.0.1",
-  "description": "API service for a freelancer marketplace",
+  "description": "A template for creating APIs Fast",
   "main": "app.js",
   "scripts": {
-    "test": "gulp sanity"
+    "test": "gulp sanity",
+    "start": "node app"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EnsembleLab/snipe.git"
+    "url": "git+https://github.com/EnsembleLab/api-template.git"
   },
   "keywords": [
-    "marketplace",
-    "freelance"
+    "REST",
+    "API"
   ],
   "author": "Olufemi Olanipekun <iolufemi@ymail.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/EnsembleLab/snipe/issues"
+    "url": "https://github.com/EnsembleLab/api-template/issues"
   },
-  "homepage": "https://github.com/EnsembleLab/snipe#readme",
+  "homepage": "https://github.com/EnsembleLab/api-template#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
@@ -29,21 +30,36 @@
     "gulp-nodemon": "^2.2.1",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "mongoose-mock": "^0.4.0",
+    "sinon": "^2.3.4",
+    "sinon-chai": "^2.11.0",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "aes-js": "^3.0.0",
     "body-parser": "^1.17.1",
     "bugsnag": "^1.9.1",
+    "cacheman": "^2.2.1",
     "cluster": "^0.7.7",
+    "cors": "^2.8.3",
     "crypto": "0.0.3",
     "debug": "^2.6.3",
     "express": "^4.15.2",
+    "express-content-length-validator": "^1.0.0",
+    "express-enforces-ssl": "^1.1.0",
+    "express-limiter": "^1.6.0",
     "express-validator": "^3.1.2",
+    "fnv-plus": "^1.2.12",
+    "helmet": "^3.6.1",
+    "hpp": "^0.2.2",
     "lodash": "^4.17.4",
     "mongoose": "^4.9.0",
+    "mongoose-delete": "^0.3.4",
+    "node-rest-client": "^3.1.0",
     "q": "^1.4.1",
     "randomstring": "^1.1.5",
+    "redis": "^2.7.1",
     "util": "^0.10.3",
     "winston": "^2.3.1",
     "winston-bugsnag": "^2.1.0"

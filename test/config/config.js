@@ -2,7 +2,7 @@
 var chai = require('chai');
 chai.should();
 
-var config = require('../config');
+var config = require('../../config');
 
 describe('#Config test', function(){
     it('should be an object', function(done){

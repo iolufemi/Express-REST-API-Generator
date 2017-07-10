@@ -1,8 +1,21 @@
+sudo: false
 language: node_js
+services: 
+  - mongodb
+  - redis-server
+env:
+  - MONGOLAB_URL=mongodb://127.0.0.1/snipe RATE_LIMIT=10 REDIS_URL=redis://127.0.0.1/1 SECURE_MODE=true
+addons:
+  apt:
+    sources:
+    - mongodb-3.0-precise
+    packages:
+    - mongodb-org-server
 node_js:
   - '7'
   - '6'
 before_script:
+  - sleep 15
   - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
