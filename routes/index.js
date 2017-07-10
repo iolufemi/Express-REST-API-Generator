@@ -51,9 +51,9 @@ router._enforceUserIdAndAppId = function(req,res,next){
     var userId = req.param('userId');
     var appId = req.param('appId');
     if(!userId){
-        res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
+        return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
     }else if(!appId){
-        res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
+        return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
     }else{
         req.userId = userId;
         req.appId = appId;
@@ -65,6 +65,7 @@ router._enforceUserIdAndAppId = function(req,res,next){
 router.use(function(req,res,next){
   var ipAddress = req.ip;
   req.requestId = fnv.hash(new Date().valueOf() + ipAddress, 128).str();
+  res.set('X-Request-Id',req.requestId);
 
   var reqLog = {
     RequestId: req.requestId,
