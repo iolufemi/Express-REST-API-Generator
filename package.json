@@ -41,6 +41,7 @@
     "body-parser": "^1.17.1",
     "bugsnag": "^1.9.1",
     "cacheman": "^2.2.1",
+    "cacheman-redis": "^1.1.2",
     "cluster": "^0.7.7",
     "cors": "^2.8.3",
     "crypto": "0.0.3",

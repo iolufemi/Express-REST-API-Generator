@@ -21,6 +21,45 @@ app.use('/',router);
 var agent = request.agent(app);
 var requestId;
 
+var res = {};
+var req = {};
+
+var nextChecker = false;    
+var next = function(){
+    if(arguments.length > 0){
+        console.log(arguments[0]);
+    }else{
+        nextChecker = true;
+    }
+    
+    return nextChecker;
+};
+res.json = function(data){
+    return res;
+};
+
+res.badRequest = sinon.spy();
+
+res.status = function(status){
+    return res;
+};
+
+var header = {};
+res.set = function(key, value){
+    header[key] = value;
+    return header[key];
+};
+req.get = function(key){
+    return header[key];
+};
+
+header.set = function(data){
+    header.temp = data;
+    return header.temp;
+};
+
+req.method = '';
+
 describe('Test rate limiting', function(){
 
     it('should reach request rate limit', function(done){
@@ -104,45 +143,6 @@ it('should save rate limit error on request log', function(done){
 
 });
 
-var res = {};
-var req = {};
-
-var nextChecker = false;    
-var next = function(){
-    if(arguments.length > 0){
-        console.log(arguments[0]);
-    }else{
-        nextChecker = true;
-    }
-    
-    return nextChecker;
-};
-res.json = function(data){
-    return res;
-};
-
-res.badRequest = sinon.spy();
-
-res.status = function(status){
-    return res;
-};
-
-var header = {};
-res.set = function(key, value){
-    header[key] = value;
-    return header[key];
-};
-req.get = function(key){
-    return header[key];
-};
-
-header.set = function(data){
-    header.temp = data;
-    return header.temp;
-};
-
-req.method = '';
-
 it('should contain a param function', function(done){
     router._allRequestData(req, res, next);
     nextChecker.should.be.true; /* jslint ignore:line */
@@ -170,4 +170,19 @@ it('should enforce UserId', function(done){
     done();
 });
 
+});
+
+
+describe('Cache Test', function(){
+    it('should initialize the API cache', function(done){
+        res.set = sinon.spy();
+        router._APICache(req, res, next);
+        nextChecker.should.be.true; /* jslint ignore:line */
+        nextChecker = false;
+        req.cache.should.be.a('object');
+        req.cacheKey.should.be.a('array');
+        res.set.should.be.called.once; /* jslint ignore:line */
+        res.set.should.be.calledWith({'Cache-Control':'private, max-age='+config.frontendCacheExpiry+''});
+        done();
+    });
 });

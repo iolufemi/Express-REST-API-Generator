@@ -8,6 +8,8 @@ module.exports = {
 	secret: process.env.SECRET || 'lakikihdgdfdjjjdgd67264664vdjhjdyncmxuei8336%%^#%gdvdhj????jjhdghduue',
 	mongoURL: process.env.MONGOLAB_URL || 'mongodb://192.168.99.100/snipe',
     noFrontendCaching: process.env.NO_CACHE || 'yes',
+    frontendCacheExpiry: process.env.FRONTEND_CACHE_EXPIRY || '90',
+    backendCacheExpiry: process.env.BACKEND_CACHE_EXPIRY || '90',
     rateLimit: process.env.RATE_LIMIT || '1800',
     rateLimitExpiry: process.env.RATE_LIMIT_EXPIRY || '3600000',
     redisURL: process.env.REDIS_URL || 'redis://192.168.99.100:6379/1',

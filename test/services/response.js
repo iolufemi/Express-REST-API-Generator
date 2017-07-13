@@ -57,11 +57,14 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('supertest');
+var router = require('../../routes');
 
 // Dummy App
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(response);
+app.use(router._APICache);
+
 
 app.get('/ok', function(req,res){
     res.ok('It worked!');
@@ -125,6 +128,20 @@ describe('#Response service test', function(){
         agent.
         get('/ok')
         .expect(200,done);
+    });
+
+    it('should be a cached response', function(done){
+        agent.
+        get('/ok')
+        .expect(200)
+        .then(function(res){
+            console.log(res.body);
+            res.body.cached.should.be.true; /* jslint ignore:line */
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
     });
 
     it('should be a badRequest', function(done){
