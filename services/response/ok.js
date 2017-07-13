@@ -41,7 +41,7 @@ module.exports = function(data, cache){
       log.info('Sending ok response: ', data);
       if(data){
         // Only cache GET calls
-        if(req.method === 'GET'){
+        if(req.method === 'GET' && config.noFrontendCaching !== 'yes'){
 
             // If this is a cached response, show response else cache the response and show response.
             if(cache){
