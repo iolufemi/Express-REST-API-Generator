@@ -9,7 +9,7 @@ var me = require('../package.json');
 var initialize = require('./initialize');
 var config = require('../config');
 var helmet = require('helmet');
-var redisClient = require('../services/database/redis');
+var redisClient = require('../services/database').redis;
 var limiter = require('express-limiter')(router, redisClient);
 var _ = require('lodash');
 var bodyParser = require('body-parser');
@@ -19,9 +19,10 @@ var contentLength = require('express-content-length-validator');
 var MAX_CONTENT_LENGTH_ACCEPTED = config.maxContentLength * 1;
 var url = require('url');
 var fnv = require('fnv-plus');
-var RequestLogs = require('../models/RequestLogs');
+var RequestLogs = require('../models').RequestLogs;
 var Cacheman = require('cacheman');
 var EngineRedis = require('cacheman-redis');
+var queue = require('../services/queue');
 
 router._sanitizeRequestUrl = function(req) {
   var requestUrl = url.format({
@@ -29,7 +30,7 @@ router._sanitizeRequestUrl = function(req) {
     host: req.hostname,
     pathname: req.originalUrl || req.url,
     query: req.query
-  });
+});
 
   return requestUrl.replace(/(password=).*?(&|$)/ig, '$1<hidden>$2');
 };
@@ -40,13 +41,13 @@ router._allRequestData = function(req,res,next){
     var newRequestData = _.assignIn(requestData, req.params, req.body, req.query);
     if(newRequestData[key]){
       return newRequestData[key];
-    }else if(defaultValue){
+  }else if(defaultValue){
       return defaultValue;
-    }else{
+  }else{
       return false;
-    }
-  };
-  next();
+  }
+};
+next();
 };
 
 router._enforceUserIdAndAppId = function(req,res,next){
@@ -54,13 +55,13 @@ router._enforceUserIdAndAppId = function(req,res,next){
   var appId = req.param('appId');
   if(!userId){
     return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
-  }else if(!appId){
+}else if(!appId){
     return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
-  }else{
+}else{
     req.userId = userId;
     req.appId = appId;
     next();
-  }
+}
 };
 
 router._APICache = function(req,res,next){
@@ -76,11 +77,11 @@ router._APICache = function(req,res,next){
   key.push(req.get('user-agent'));
   if(req.userId){
     key.push(req.userId);
-  }
-  if(req.appId){
+}
+if(req.appId){
     key.push(req.appId);
-  }
-  req.cacheKey = key;
+}
+req.cacheKey = key;
   // Remember to delete cache when you get a POST call
   // Only cache GET calls
   if(req.method === 'GET'){
@@ -90,23 +91,23 @@ router._APICache = function(req,res,next){
       if(!resp){
         // Will be set on successful response
         next();
-      }else{
+    }else{
         res.ok(resp, true);
-      }
-    })
+    }
+})
     .catch(function(err){
       log.error('Failed to get cached data: ', err);
       // Don't block the call because of this failure.
       next();
-    });
-  }else{
+  });
+}else{
     if(req.method === 'POST' || req.method === 'PUT' || req.method === 'PUSH'){
       req.cache.del(req.cacheKey)
       .then(); // No delays
-    }
-    next();
   }
-  
+  next();
+}
+
 };
 
 // Log requests here
@@ -125,15 +126,12 @@ router.use(function(req,res,next){
     user: req.userId,
     device: req.get('user-agent'),
     createdAt: new Date()
-  };
-// ToDo: Move this to a queue. Not good for performance
-RequestLogs.create(reqLog)
-.then(function(res){
-  return _.identity(res);
-})
-.catch(function(err){
-  log.error(err);
-});
+};
+
+// Dump it in the queue
+queue.create('logRequest', reqLog)
+.save();
+
 
   // persist RequestLog entry in the background; continue immediately
 
@@ -163,7 +161,7 @@ limiter({
   expire: config.rateLimitExpiry * 1,
   onRateLimited: function (req, res, next) {
     next({ message: 'Rate limit exceeded', statusCode: 429 });
-  }
+}
 });
 
 router.use(response);
@@ -207,4 +205,4 @@ router.use(log.errorHandler);
 
 module.exports = router;
 
-// ToDo: Implement a Queue system
+// ToDo: Implement API Generator

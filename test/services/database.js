@@ -56,18 +56,27 @@ req.method = '';
 
 // Testing database service
 
-var mongodb = require('../../services/database/mongo');
+var databases = require('../../services/database');
+describe('#Database Service test', function(){
+    it('should return an object', function(done){
+        databases.should.be.an('object');
+        done();
+    });
+});
 
-describe('#Database service test', function(){
+
+var mongodb = require('../../services/database').mongo;
+
+describe('#MongoDB database service test', function(){
     it('should exist as a function',function(done){
         mongodb.should.exist; /* jslint ignore:line */
         done();
     });
 });
 
-var redisdb = require('../../services/database/redis');
+var redisdb = require('../../services/database').redis;
 
-describe('#Database service test', function(){
+describe('#Redis database service test', function(){
     it('should exist as a function',function(done){
         redisdb.should.exist; /* jslint ignore:line */
         done();

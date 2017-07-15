@@ -1,6 +1,6 @@
 "use strict";
 
-var Users = require('../models/Users');
+var Users = require('../models').Users;
 
 var UsersController = {};
 

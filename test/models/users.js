@@ -19,6 +19,7 @@ describe('User Model',function(){
 
     before(function(){  /* jslint ignore:line */
         User = require('../../models/Users');
+        var workers = require('../../services/queue/workers');
     });
 
     describe('Test CRUDS', function(){
@@ -165,13 +166,20 @@ describe('User Model',function(){
         it('should tag database entries properly', function(done){
             var myuser = User.create({name: 'femi',someOtherStringData: 'random stuff'});
 
-            myuser.then(function(res){
-                res.tags.length.should.equal(2);/* jslint ignore:line */
-                done();
-            })
-            .catch(function(err){
-                done(err);
-            });
+            setTimeout(function(){
+                myuser.then(function(res){
+                    return User.findById(res._id);
+                })
+                .then(function(res){
+                    console.log(res);
+                    res.tags.length.should.equal(2);/* jslint ignore:line */
+                    done();
+                })
+                .catch(function(err){
+                    done(err);
+                });
+            },3000);
+            
         });
 
         it('should count returned records', function(done){

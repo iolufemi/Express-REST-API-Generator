@@ -16,5 +16,9 @@ module.exports = {
     letsencryptSSLVerificationURL: process.env.LETSENCRYPT_VERIFICATION_URL || '/.well-known/acme-challenge/xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8',
     letsencryptSSLVerificationBody: process.env.LETSENCRYPT_VERIFICATION_BODY || 'xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8._v6aFbaRYWeOmSebtlD-X4Ixf5tPsyULMsXM8HjsK-Q',
     maxContentLength: process.env.MAX_CONTENT_LENGTH || '9999',
-    enforceSSL: process.env.ENFORCE_SSL || 'no'
+    enforceSSL: process.env.ENFORCE_SSL || 'no',
+    gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '7cb5c1d28e92e8c1cf957d25b59e211f5a47edb0',
+    queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
+    queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
+    queueUIPort: process.env.QUEUE_UI_PORT || 3000
 };

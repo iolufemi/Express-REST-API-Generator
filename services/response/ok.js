@@ -3,23 +3,21 @@ var log = require('../logger');
 var config = require('../../config');
 var encryption = require('../encryption');
 var debug = require('debug')('response');
-var RequestLogs = require('../../models/RequestLogs');
+var RequestLogs = require('../../models').RequestLogs;
 var _ = require('lodash');
+var queue = require('../queue');
 
 module.exports = function(data, cache){
 	debug("sending ok response");
 	var req = this.req;
 	var res = this;
-    // ToDo: Move this to a queue. Not good for performance
-    RequestLogs.update({RequestId: req.requestId},{response: {status: 'success', data: data, cached: cache}})
-    .then(function(res){
-        return _.identity(res);
-    })
-    .catch(function(err){
-        log.error(err);
-    });
 
+    // Dump it in the queue
+    var response = {response: {status: 'success', data: data, cached: cache}};
+    response.requestId = req.requestId;
     
+    queue.create('logResponse', response)
+    .save();
 
     if(req.get('x-tag') && req.method === 'POST' && config.secureMode && data){
       debug("i want to encrypt");
@@ -29,14 +27,14 @@ module.exports = function(data, cache){
       debug("about to call encryption method");
       encryption.encrypt(text, key)
       .then(function(resp){
-         debug("got response from encryption method: ",resp);
-         log.info('Sending ok response: ', data);
-         res.status(200).json({status: 'success', data: resp, secure: true});
-     })
+       debug("got response from encryption method: ",resp);
+       log.info('Sending ok response: ', data);
+       res.status(200).json({status: 'success', data: resp, secure: true});
+   })
       .catch(function(err){
-         debug("got error from encryption method: ", err);
-         res.serverError(err,'Error encrypting response.');
-     });
+       debug("got error from encryption method: ", err);
+       res.serverError(err,'Error encrypting response.');
+   });
   }else{
       log.info('Sending ok response: ', data);
       if(data){
@@ -62,7 +60,7 @@ module.exports = function(data, cache){
             res.status(200).json({status: 'success', data: data});
         }
     }else{
-     res.status(200).json({status: 'success'});
- }
+       res.status(200).json({status: 'success'});
+   }
 }
 };

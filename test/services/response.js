@@ -112,6 +112,11 @@ var agent2 = request(app2);
 
 
 describe('#Response service test', function(){
+
+    before(function(){ /* jslint ignore:line */
+        var workers = require('../../services/queue/workers');
+    });
+
     it('should add property ok, badRequest, forbidden, notFound, serverError and unauthorized to res object', function(done){
         response(req,res,next);
         nextChecker = false; 
@@ -222,5 +227,3 @@ describe('#Response service test', function(){
     });
 
 });
-
-// ToDo: Test all responses and also encrypted responses

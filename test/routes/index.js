@@ -62,6 +62,10 @@ req.method = '';
 
 describe('Test rate limiting', function(){
 
+    before(function(){ /* jslint ignore:line */
+        var workers = require('../../services/queue/workers');
+    });
+
     it('should reach request rate limit', function(done){
         agent
         .get('/initialize')
@@ -139,7 +143,7 @@ it('should save rate limit error on request log', function(done){
         .catch(function(err){
             done(err);
         });
-    },1000);
+    },3000);
 
 });
 

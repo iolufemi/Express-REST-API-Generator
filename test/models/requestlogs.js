@@ -20,6 +20,7 @@ describe('RequestLog Model',function(){
 
     before(function(){  /* jslint ignore:line */
         RequestLog = require('../../models/RequestLogs');
+        var workers = require('../../services/queue/workers');
     });
 
     describe('Test CRUDS', function(){

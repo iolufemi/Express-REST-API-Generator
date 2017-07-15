@@ -1,12 +1,14 @@
 "use strict";
 
-var db = require('../services/database/mongo');
+var db = require('../services/database').mongo;
 
 var collection = 'RequestLogs';
 
 var service = 'Users';
 
 var debug = require('debug')(collection);
+
+var queue = require('../services/queue');
 
 var schemaObject = {
     RequestId: {
@@ -76,7 +78,8 @@ schemaObject.developer = {
 
 schemaObject.tags = {
     type: [String],
-    index: 'text'
+    index: 'text',
+    default:[]
 };
 
 // Let us define our schema
@@ -110,14 +113,14 @@ Schema.statics.search = function(string) {
 Schema.pre('save', function(next) {
     // Indexing for search
     var ourDoc = this._doc;
-    var split = [];
-    // ToDo: Move this to a queue and index only pure strings
-    for(var n in ourDoc){
-        if(typeof ourDoc[n] === 'string'){
-            split.push(ourDoc[n].split(' '));
-        }
-    }
-    this.tags = split;
+
+    ourDoc.model = collection;
+
+    // Dump it in the queue
+    queue.create('searchIndex', ourDoc)
+    .priority('high')
+    .save();
+    
     next();
 });
 
@@ -161,22 +164,21 @@ Schema.post('find', function(result) {
 });
 
 Schema.pre('update', function(next) {
-    // Adding updated date
-    
+
     // Indexing for search
     var ourDoc = this._update.$set;
-    var split = [];
-    // ToDo: Move this to a queue and index only pure strings
-    for(var n in ourDoc){
-        if(typeof ourDoc[n] === 'string'){
-            split.push(ourDoc[n].split(' '));
-        }
-    }
-
-    if(!split){
-        this.update(this._conditions,{ $set: { updatedAt: new Date()} });
+    ourDoc.model = collection;
+    ourDoc.update = true;
+    debug('what do we have here: ', ourDoc);
+    if(ourDoc.updatedAt || ourDoc.tags){
+        debug('updatedAt: ', ourDoc.updatedAt);
+        debug('tags: ', ourDoc.tags);
+        // Move along! Nothing to see here!!
     }else{
-        this.update(this._conditions,{ $set: { updatedAt: new Date()}, $addToSet: {tags: {$each: split}} });
+        // Dump it in the queue
+        queue.create('searchIndex', ourDoc)
+        .priority('high')
+        .save();
     }
     
     next();
