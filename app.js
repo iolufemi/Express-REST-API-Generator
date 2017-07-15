@@ -2,11 +2,11 @@
 var cluster = require('cluster');
 var config = require('./config');
 var log = require('./services/logger');
-var kue = require('kue');
 var basicAuth = require('basic-auth-connect');
 var express = require('express');
 
 if (cluster.isMaster && config.env === 'production') {
+    var kue = require('./services/queue').kue;
     var app = express();
     app.use(basicAuth(config.queueUIUsername, config.queueUIPassword));
     app.use(kue.app);

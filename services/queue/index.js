@@ -15,7 +15,7 @@ queue
 .on('job complete', function(id, result){
   kue.Job.get(id, function(err, job){
     if (err) {
-        throw new Error(err.message);
+        return false;
     }else{
         job.remove(function(err){
           if (err) {
@@ -55,3 +55,4 @@ queue.watchStuckJobs(1000);
 
 // Process Jobs Here
 module.exports = queue;
+module.exports.kue = kue;

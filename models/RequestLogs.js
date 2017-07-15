@@ -78,8 +78,7 @@ schemaObject.developer = {
 
 schemaObject.tags = {
     type: [String],
-    index: 'text',
-    default:[]
+    index: 'text'
 };
 
 // Let us define our schema
@@ -118,7 +117,6 @@ Schema.pre('save', function(next) {
 
     // Dump it in the queue
     queue.create('searchIndex', ourDoc)
-    .priority('high')
     .save();
     
     next();
@@ -177,7 +175,6 @@ Schema.pre('update', function(next) {
     }else{
         // Dump it in the queue
         queue.create('searchIndex', ourDoc)
-        .priority('high')
         .save();
     }
     

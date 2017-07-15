@@ -36,9 +36,9 @@ jobs.updateRequestLog = function(response, done){
 
 // Creates search tags for all db records
 jobs.createSearchTags = function(data, done){
- var model = data.model;
- var update = data.update ? true : false;
- if(data.update){
+   var model = data.model;
+   var update = data.update ? true : false;
+   if(data.update){
     delete data.update;
 }
 delete data.model;
