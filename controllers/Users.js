@@ -45,3 +45,6 @@ UsersController.restore = function(query){
 };
 
 module.exports = UsersController;
+
+// Todo: Finish users controller
+// Todo: Finish users route

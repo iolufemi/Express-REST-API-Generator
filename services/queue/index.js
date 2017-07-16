@@ -13,6 +13,7 @@ queue
   log.info( 'Job %s got queued of type %s', id, type );
 })
 .on('job complete', function(id, result){
+    log.info('ID: ',id,' Result: ',result);
   kue.Job.get(id, function(err, job){
     if (err) {
         return false;
@@ -56,3 +57,5 @@ queue.watchStuckJobs(1000);
 // Process Jobs Here
 module.exports = queue;
 module.exports.kue = kue;
+
+// ToDo: work on a clock functionality so kue can support scheduled jobs

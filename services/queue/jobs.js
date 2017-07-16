@@ -11,7 +11,7 @@ jobs.createRequestLog = function(request, done){
     log.info('logging API request: ',request.RequestId);
     models.RequestLogs.create(request)
     .then(function(res){
-      return done();
+      return done(false, res);
   })
     .catch(function(err){
       log.error(err);
@@ -23,10 +23,10 @@ jobs.createRequestLog = function(request, done){
 jobs.updateRequestLog = function(response, done){
     log.info('logging API response: ',response.requestId);
     var requestId = response.requestId;
-    delete response.RequestId;
+    delete response.requestId;
     models.RequestLogs.update({RequestId: requestId},response)
     .then(function(res){
-        return done();
+        return done(false, res);
     })
     .catch(function(err){
         log.error(err);
@@ -36,6 +36,7 @@ jobs.updateRequestLog = function(response, done){
 
 // Creates search tags for all db records
 jobs.createSearchTags = function(data, done){
+    log.info('Creating search index for: ', data._id);
    var model = data.model;
    var update = data.update ? true : false;
    if(data.update){
@@ -63,7 +64,7 @@ if(update){
 
 task
 .then(function(res){
-  return done();
+  return done(false, res);
 })
 .catch(function(err){
   log.error(err);
