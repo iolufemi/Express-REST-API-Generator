@@ -165,6 +165,7 @@ Schema.pre('update', function(next) {
 
     // Indexing for search
     var ourDoc = this._update.$set;
+    debug('What we are updating: ', ourDoc);
     ourDoc.model = collection;
     ourDoc.update = true;
     debug('what do we have here: ', ourDoc);

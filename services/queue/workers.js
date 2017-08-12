@@ -15,4 +15,6 @@ queue.process('logResponse',2, function(job, done){
     jobs.updateRequestLog(job.data, done);
 });
 
+// ToDo: Add Webhook worker here
+
 module.exports = queue;

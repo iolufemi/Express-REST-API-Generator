@@ -37,7 +37,7 @@ module.exports = {
         debug('our key: ', key);
         key = aesjs.utils.hex.toBytes(key);
         debug('in buffer: ', key);
-
+        // ToDo: Generate checksum here
         return q.Promise(function(resolve){
             debug('encrypting...');
             debug('our key: ', key);

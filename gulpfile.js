@@ -66,7 +66,7 @@ gulp.task('sanity',['lint','test','todo']);
 // Release
 
 gulp.task('changelog', function () {
-  return gulp.src('CHANGELOG.md', {
+  return gulp.src('./CHANGELOG.md', {
     buffer: false
   })
   .pipe(conventionalChangelog({
@@ -142,3 +142,5 @@ gulp.task('release', function (callback) {
       callback(error);
     });
 });
+
+// ToDo: Add gulp-banner to add GNU GPL nitice on every js file.

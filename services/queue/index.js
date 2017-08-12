@@ -57,5 +57,3 @@ queue.watchStuckJobs(1000);
 // Process Jobs Here
 module.exports = queue;
 module.exports.kue = kue;
-
-// ToDo: work on a clock functionality so kue can support scheduled jobs
