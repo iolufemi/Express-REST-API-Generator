@@ -143,4 +143,4 @@ gulp.task('release', function (callback) {
     });
 });
 
-// ToDo: Add gulp-banner to add GNU GPL nitice on every js file.
+// ToDo: Add gulp-banner to add GNU GPL notice on every js file.

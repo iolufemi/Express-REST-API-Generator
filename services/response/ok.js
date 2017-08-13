@@ -48,8 +48,8 @@ module.exports = function(data, cache, extraData){
   }else{
       log.info('Sending ok response: ', response.response);
       if(data){
-        // Only cache GET calls
-        if(req.method === 'GET' && config.noFrontendCaching !== 'yes'){
+            // Only cache GET calls
+            if(req.method === 'GET' && config.noFrontendCaching !== 'yes'){
 
             // If this is a cached response, show response else cache the response and show response.
             if(cache){
@@ -62,9 +62,9 @@ module.exports = function(data, cache, extraData){
                 })
                 .catch(function(err){
                     log.error('Failed to cache data: ', err);
-                // This error shouldn't stop our response
-                res.status(200).json(response.response);
-            });
+                    // This error shouldn't stop our response
+                    res.status(200).json(response.response);
+                });
             }
         }else{
             res.status(200).json(response.response);
