@@ -61,6 +61,7 @@ router._enforceUserIdAndAppId = function(req,res,next){
 }else{
     req.userId = userId;
     req.appId = appId;
+    req.developer = developer;
     req.body.client = appId;
     req.body.owner = userId;
     req.body.createdBy = userId;

@@ -1,7 +1,11 @@
 "use strict";
 
 var Users = require('../models').Users;
+var Trash = require('../models').Trash;
 var q = require('q');
+var queue = require('../services/queue');
+
+var service = 'Users';
 
 var UsersController = {};
 
@@ -190,29 +194,104 @@ UsersController.count = function(req,res,next){
     });
 };
 
-UsersController.delete = function(query){
+UsersController.delete = function(req,res,next){
+    var query = req.query;
     // Find match
-    // Push match to a queue for back up
-    // Delete matches
-    return Users.deleteMany(query);
+    Users.find(query)
+    .then(function(resp){
+        var num = resp.length;
+        var last = num - 1;
+        for(var n in resp){
+            if(typeof resp === 'object'){
+                // Backup data in Trash
+                var backupData = {};
+                backupData.service = service;
+                backupData.data = resp[n];
+                backupData.owner = req.userId;
+                backupData.deletedBy = req.userId;
+                backupData.client = req.appId;
+                backupData.developer = req.developer;
+
+                queue.create('saveToTrash', backupData)
+                .save();
+                if(n === last){
+                    return resp;
+                }
+            }else{
+                if(n === last){
+                    return resp;
+                }
+            }
+        }
+    })
+    .then(function(resp){
+        // Delete matches
+        return Users.deleteMany(query);
+    })
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.deleteOne = function(id){
+UsersController.deleteOne = function(req,res,next){
+    var id = req.query.id;
     // Find match
-    // Push match to a queue for back up
-    // Delete matches
-    return Users.findByIdAndRemove(id);
+    Users.findById(id)
+    .then(function(resp){
+        // Backup data in Trash
+        var backupData = {};
+        backupData.service = service;
+        backupData.data = resp;
+        backupData.owner = req.userId;
+        backupData.deletedBy = req.userId;
+        backupData.client = req.appId;
+        backupData.developer = req.developer;
+
+        queue.create('saveToTrash', backupData)
+        .save();
+        return [resp];
+    })
+    .then(function(resp){
+        // Delete match
+        return Users.findByIdAndRemove(id);
+    })
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.restore = function(query){
+UsersController.restore = function(req,res,next){
+    var id = req.query.id;
     // Find data by ID from trash 
-    // Restore to DB
-    // Delete from trash
-    return Users.count(query);
+    Trash.findById(id)
+    .then(function(resp){
+        if(resp.service === service){
+            // Restore to DB
+            return Users.create(resp.data);
+        }else{
+            throw new Error('This data does not belong to this service');
+        }
+    })
+    .then(function(resp){
+        // Delete from trash
+        return [Trash.findByIdAndRemove(id), resp];
+    })
+    .spread(function(trash, resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
 module.exports = UsersController;
 
-// Todo: Finish users controller
+// Todo: Test users controller
 // Todo: Finish users route
 // ToDo: Test that any deleted data is backed up
