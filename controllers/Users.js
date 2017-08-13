@@ -119,39 +119,95 @@ UsersController.find = function(req,res,next){
     }
 };
 
-UsersController.findOne = function(id,projection,options){
-    return Users.findById(id,projection,options);
+UsersController.findOne = function(req,res,next){
+    var id = req.query.id;
+    Users.findById(id)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.search = function(string){
-    return Users.search(string);
+UsersController.search = function(req,res,next){
+    var query = req.query.query;
+    Users.search(query)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.create = function(data){
-    return Users.create(data);
+UsersController.create = function(req,res,next){
+    var data  = req.body;
+    Users.create(data)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.update = function(query, data){
-    return Users.update(query,data);
+UsersController.update = function(req,res,next){
+    var query = req.query;
+    var data  = req.body;
+    Users.update(query,data)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
-UsersController.updateOne = function(id, data){
-    return Users.findByIdAndUpdate(id,data);
+UsersController.updateOne = function(req,res,next){
+    var id = req.query.id;
+    var data  = req.body;
+    Users.findByIdAndUpdate(id,data)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
+};
+
+UsersController.count = function(req,res,next){
+    var query = req.query;
+    if(!query){
+        query = {};
+    }
+    Users.count(query)
+    .then(function(resp){
+        res.ok(resp);
+    })
+    .catch(function(err){
+        next(err);
+    });
 };
 
 UsersController.delete = function(query){
+    // Find match
+    // Push match to a queue for back up
+    // Delete matches
     return Users.deleteMany(query);
 };
 
 UsersController.deleteOne = function(id){
+    // Find match
+    // Push match to a queue for back up
+    // Delete matches
     return Users.findByIdAndRemove(id);
 };
 
-UsersController.count = function(query){
-    return Users.count(query);
-};
-
 UsersController.restore = function(query){
+    // Find data by ID from trash 
+    // Restore to DB
+    // Delete from trash
     return Users.count(query);
 };
 
@@ -159,3 +215,4 @@ module.exports = UsersController;
 
 // Todo: Finish users controller
 // Todo: Finish users route
+// ToDo: Test that any deleted data is backed up

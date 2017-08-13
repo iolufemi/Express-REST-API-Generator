@@ -53,6 +53,7 @@ next();
 router._enforceUserIdAndAppId = function(req,res,next){
   var userId = req.param('userId');
   var appId = req.param('appId');
+  var developer = req.param('developer');
   if(!userId){
     return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
 }else if(!appId){
@@ -60,6 +61,10 @@ router._enforceUserIdAndAppId = function(req,res,next){
 }else{
     req.userId = userId;
     req.appId = appId;
+    req.body.client = appId;
+    req.body.owner = userId;
+    req.body.createdBy = userId;
+    req.body.developer = developer;
     next();
 }
 };
