@@ -177,7 +177,7 @@ router.use(expressValidator());
 if(config.noFrontendCaching === 'yes'){
   router.use(helmet.noCache());
 }else{
- router.use(router._APICache);
+   router.use(router._APICache);
 }
 
 router.get('/', function (req, res) {

@@ -16,9 +16,10 @@
 | controllers/Users.js | 297 | Test that any deleted data is backed up
 | routes/index.js | 214 | Implement API Generator
 | routes/initialize.js | 10 | Test initialize route
-| services/encryption/index.js | 40 | Generate checksum here
 | services/queue/clock.js | 11 | work on a clock functionality so kue can support scheduled jobs
 | services/queue/jobs.js | 80 | Test saveToTrash job
 | services/queue/jobs.js | 93 | Test Webhook Event
 | services/queue/jobs.js | 137 | Test Secure Webhooks
 | services/queue/jobs.js | 144 | Test Unsecure Webhooks
+| services/queue/jobs.js | 169 | Test sendHTTPRequest Job
+| services/encryption/index.js | 40 | Generate checksum here

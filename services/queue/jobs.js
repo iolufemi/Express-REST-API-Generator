@@ -162,4 +162,50 @@ jobs.sendWebhook = function(data, done){
     });
 };
 
+// Send HTTP Request
+// This is for jobs that can be configured from an admin dashboard. So an admin an configure the system to all an api at a particular time daily.
+// This can be used within the code too, to do some jobs.
+// Supports POST or GET
+// ToDo: Test sendHTTPRequest Job
+jobs.sendHTTPRequest = function(data, done){
+    log.info('Sending HTTP' +data.method+' request to '+data.url+' with data => '+data.data+' and headers => '+data.headers);
+    // Expected data
+    // {
+    // url: 'http://string.com',
+    // method: 'POST', // or any http method
+    // headers: {
+    // 'User-Agent': 'Request-Promise'
+    // },
+    // data: {
+    // someData: 'this',
+    // someOtherData: 'and this'
+    // }
+    // }
+    // 
+
+    var options = {
+        method: data.method,
+        uri: data.url,
+        body: data.data,
+        headers: data.headers,
+        json: true // Automatically parses the JSON string in the response
+    };
+
+    if(data.method === 'GET'){
+        options.qs = data.data;
+    }else if(data.method === 'POST'){
+        options.body = data.data;
+    }else{
+        options.qs = data.data;
+        options.body = data.data;
+    }
+    request(options)
+    .then(function(resp){
+        done(false, resp);
+    })
+    .catch(function(err){
+        done(new Error(err.message));
+    });
+};
+
 module.exports = jobs;

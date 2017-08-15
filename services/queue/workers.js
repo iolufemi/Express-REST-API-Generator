@@ -23,4 +23,8 @@ queue.process('sendWebhook', 2, function(job,done){
     jobs.sendWebhook(job.data, done);
 });
 
+queue.process('sendHTTPRequest', 2, function(job,done){
+    jobs.sendHTTPRequest(job.data, done);
+});
+
 module.exports = queue;
