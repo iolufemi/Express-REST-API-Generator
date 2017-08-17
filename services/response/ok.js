@@ -38,7 +38,8 @@ module.exports = function(data, cache, extraData){
          debug("got response from encryption method: ",resp);
          log.info('Sending ok response: ', response.response);
          response.response.secure = true;
-         response.response.data = resp;
+         response.response.data = resp.encryptedText;
+         response.response.truth = resp.truth;
          res.status(200).json(response.response);
      })
       .catch(function(err){

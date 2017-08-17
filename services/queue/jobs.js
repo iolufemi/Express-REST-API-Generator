@@ -117,11 +117,6 @@ jobs.sendWebhook = function(data, done){
         // Convert the Object to String
         var stringData = JSON.stringify(data.data);
 
-        // Generate Checksum
-        var checksum = crypto.createHash('sha512')
-        .update(stringData)
-        .digest('hex');
-        hookData.truth = checksum;
         // Encrypt Data
         var key;
         hookPromise = encryption.generateKey()
@@ -131,7 +126,8 @@ jobs.sendWebhook = function(data, done){
             return encryption.encrypt(stringData, key);
         })
         .then(function(resp){
-            hookData.data = resp;
+            hookData.data = resp.encryptedData;
+            hookData.truth = resp.truth;
             return hookData;
         });
         // ToDo: Test Secure Webhooks

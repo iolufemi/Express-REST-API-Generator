@@ -183,11 +183,11 @@ describe('#Response service test', function(){
             return encryption.encrypt(demoData, tag);
         })
         .then(function(res){
-            console.log('Our encrypted data: ', res);
+            console.log('Our encrypted data: ', res.encryptedText);
             return agent2.
             post('/secure')
             .set('x-tag', tag)
-            .send({truth: demoDataHash,secureData: res})
+            .send({truth: res.truth,secureData: res.encryptedText})
             .expect(200);
         })
         .then(function(res){

@@ -37,7 +37,9 @@ module.exports = {
         debug('our key: ', key);
         key = aesjs.utils.hex.toBytes(key);
         debug('in buffer: ', key);
-        // ToDo: Generate checksum here
+        var truth = crypto.createHash('sha512')
+        .update(text)
+        .digest('hex');
         return q.Promise(function(resolve){
             debug('encrypting...');
             debug('our key: ', key);
@@ -52,7 +54,7 @@ module.exports = {
             // Convert our bytes back into text
             var encryptedText = aesjs.utils.hex.fromBytes(encryptedBytes);
             debug('finished encryption');
-            resolve(encryptedText);
+            resolve({truth: truth, encryptedText: encryptedText});
         });
     },
 
@@ -95,44 +97,44 @@ module.exports = {
             }
             
         });
-    },
+},
 
-    interpreter: function(req, res, next){
-        var encryption = require('./');
-        if( req.get('x-tag') ){
-            res.set('x-tag', req.get('x-tag'));
-            res.set('Access-Control-Expose-Headers','x-tag');
+interpreter: function(req, res, next){
+    var encryption = require('./');
+    if( req.get('x-tag') ){
+        res.set('x-tag', req.get('x-tag'));
+        res.set('Access-Control-Expose-Headers','x-tag');
 
-            var key = req.get('x-tag');
+        var key = req.get('x-tag');
 
-            if(req.method === 'POST' && config.secureMode){
-                if(req.body.secureData){
-                    var truthHash = req.body.truth;
-                    encryption.decrypt(req.body.secureData, key, truthHash)
-                    .then(function(resp){
-                        if(typeof resp === 'object'){
-                            req.body = resp;
-                            next();
-                        }else{
-                            debug('decryptedText: ', resp);
-                            var parsedJSON = JSON.parse(resp);
-                            req.body = parsedJSON;
-                            next();
-                        }
-                    })
-                    .catch(function(err){
-                        next(new Error(err.message));
-                    });
-                }else{
-                    res.badRequest(false,'Expecting an encrypted data to be sent in the secureData body parameter.');
-                }
+        if(req.method === 'POST' && config.secureMode){
+            if(req.body.secureData){
+                var truthHash = req.body.truth;
+                encryption.decrypt(req.body.secureData, key, truthHash)
+                .then(function(resp){
+                    if(typeof resp === 'object'){
+                        req.body = resp;
+                        next();
+                    }else{
+                        debug('decryptedText: ', resp);
+                        var parsedJSON = JSON.parse(resp);
+                        req.body = parsedJSON;
+                        next();
+                    }
+                })
+                .catch(function(err){
+                    next(new Error(err.message));
+                });
             }else{
-                next();
+                res.badRequest(false,'Expecting an encrypted data to be sent in the secureData body parameter.');
             }
-        }else if(req.method !== 'POST'){
-            next();
         }else{
-            res.badRequest(false,'Please initialize and send the x-tag header in every request.');
+            next();
         }
+    }else if(req.method !== 'POST'){
+        next();
+    }else{
+        res.badRequest(false,'Please initialize and send the x-tag header in every request.');
     }
+}
 };

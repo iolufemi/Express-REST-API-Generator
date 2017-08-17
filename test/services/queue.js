@@ -47,10 +47,8 @@ describe('#Queue service', function(){
     it('should load processes', function() {
         var process = require('../../services/queue/workers');
         // We have configured queue to create 2 workers per job making a total of 6 workers for 3 jobs that we currently have
-        process.workers.length.should.equal(12);
+        process.workers.length.should.equal(6);
     });
-
-
 
     // Test Jobs
     describe('#Testing Jobs', function(){
