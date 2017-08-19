@@ -4,26 +4,36 @@ var Users = require('../models').Users;
 var Trash = require('../models').Trash;
 var q = require('q');
 var queue = require('../services/queue');
+var debug = require('debug')('usersController');
 
 var service = 'Users';
 
 var UsersController = {};
 
-UsersController.buildProjection = function(projection){
+UsersController.buildProjection = function(projections){
+    debug('starting build...');
+    var projection = projections.split(','); // Projection should be comma separated. eg. name,location
     // ToDo: Test buildProjection function
     return q.Promise(function(resolve,reject,notify){
+        debug('This is a promise...');
         var num = projection.length;
         var last = num - 1;
         var select = {};
         for(var n in projection){
             if(typeof projection[n] === 'string'){
+                debug('Processing...', projection[n]);
                 notify('Adding '+projection[n]+' to projection');
                 select[projection[n]] = 1;
-                if(n === last){
+                if(n * 1 === last){
+                    debug('Coming out of the loop...', select);
+                    notify('Ending Build.');
                     return resolve(select);
                 }
             }else{
-                if(n === last){
+                debug('Skiping...', projection[n]);
+                if(n * 1 === last){
+                    debug('Coming out of the loop......', select);
+                    notify('Ending Build..');
                     return resolve(select);
                 }
             }
@@ -34,7 +44,7 @@ UsersController.buildProjection = function(projection){
 UsersController.find = function(req,res,next){
     var query;
     if(req.query.search){
-        query = req.query.query;
+        query = req.query.search;
         Users.search(query)
         .then(function(resp){
             res.ok(resp);
@@ -45,26 +55,37 @@ UsersController.find = function(req,res,next){
         // ToDo: Test that search works
     }else{
         query = req.query;
-        var projection = query.projection.split(',');
+        var projection = query.projection; // Projection should be comma separated. eg. name,location
         var ourProjection;
-        query.createdAt = {};
+        
         if(projection){
             ourProjection = this.buildProjection(projection);
             delete query.projection;
         }
-        var limit = query.limit;
+        var limit = query.limit * 1;
         if(limit){
             delete query.limit;
         }
-        var to = query.to;
-        if(to){
-            delete query.to;
-        }
+        
         var from = query.from;
+        var to = query.to;
         if(from){
+            query.createdAt = {};
             query.createdAt.$gt = from;
             delete query.from;
-            if(!to){
+            if(to){
+                delete query.to;
+            }else{
+                to = new Date().toISOString();
+            }
+            query.createdAt.$lt = to;
+        }else{
+            query.createdAt = {};
+            query.createdAt.$gt = new Date('1989-03-15T00:00:00').toISOString();
+            delete query.from;
+            if(to){
+                delete query.to;
+            }else{
                 to = new Date().toISOString();
             }
             query.createdAt.$lt = to;
@@ -80,6 +101,9 @@ UsersController.find = function(req,res,next){
             delete query.sort;
         }
         var populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name referenece and only pick the firstname attribute
+        if(populate){
+            delete query.populate;
+        }
         var total = Users.count(query);
         var question = Users.find(query);
 
@@ -115,7 +139,12 @@ UsersController.find = function(req,res,next){
         }else{
             q.all([question,total])
             .spread(function(resp,total){
-                var ourLastId = resp[resp.length - 1]._id;
+                var ourLastId;
+                if(resp.length === 0){
+                    ourLastId = null;
+                }else{
+                    ourLastId = resp[resp.length - 1]._id;
+                }
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
@@ -203,11 +232,11 @@ UsersController.delete = function(req,res,next){
 
                 queue.create('saveToTrash', backupData)
                 .save();
-                if(n === last){
+                if(n * 1 === last){
                     return resp;
                 }
             }else{
-                if(n === last){
+                if(n * 1 === last){
                     return resp;
                 }
             }

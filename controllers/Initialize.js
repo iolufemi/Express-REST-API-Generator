@@ -14,5 +14,3 @@ module.exports = {
         });
     }
 };
-
-// Todo: Test initialize controller

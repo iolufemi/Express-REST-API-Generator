@@ -14,17 +14,21 @@ var schemaObject = {
     },
     someOtherStringData: {
         type: 'String'
+    },
+    toPop: {
+        type: db.Schema.Types.ObjectId,
+        ref: 'Users'
     }
 };
 
 schemaObject.createdAt = {
     type: 'Date',
-    default: Date.now
+    default: new Date().toISOString()
 };
 
 schemaObject.updatedAt = {
     type: 'Date'
-    // default: Date.now
+    // default: new Date().toISOString()
 };
 
 schemaObject.owner = {
