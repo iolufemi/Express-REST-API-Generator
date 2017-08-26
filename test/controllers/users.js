@@ -7,6 +7,8 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var users = require('../../controllers/Users.js');
 var workers = require('../../services/queue/workers');
+var workers2 = require('../../services/queue/workers');
+var workers3 = require('../../services/queue/workers');
 var _ = require('lodash');
 var db = require('../../models');
 
@@ -211,11 +213,11 @@ describe('Users controller', function(){
                     forDelete = _.map(data,function(value){
                         return value._id.toString();
                     });
-                    data.should.be.an.object; /* jslint ignore:line */
+                    data.length.should.be.above(0); /* jslint ignore:line */
                     done();
                 };
                 var req = {};
-                req.query = {_id: {$gt: lastId}};
+                req.query = {lastId: lastId.toString()};
                 users.find(req, res, next);
             };
             var req = {};

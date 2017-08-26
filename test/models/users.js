@@ -164,7 +164,7 @@ describe('User Model',function(){
         });
 
         it('should tag database entries properly', function(done){
-            var myuser = User.create({name: 'femi',someOtherStringData: 'random stuff'});
+            var myuser = User.create({name: 'femi',someOtherStringData: 'stuff'});
 
             setTimeout(function(){
                 myuser.then(function(res){

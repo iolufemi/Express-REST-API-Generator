@@ -59,6 +59,8 @@ jobs.createSearchTags = function(data, done){
         }
     }
 
+    split = _.flattenDeep(split);
+
     var task;
     if(update){
         task = models[model].update(data,{ $set: { updatedAt: new Date().toISOString() }, $addToSet: {tags: {$each: split}} });
@@ -77,7 +79,6 @@ jobs.createSearchTags = function(data, done){
 };
 
 // Backup Data to Trash
-// ToDo: Test saveToTrash job
 jobs.saveToTrash = function(data, done){
     log.info('Saving '+data.data._id+' to Trash...');
     models.Trash.create(data)
@@ -90,9 +91,8 @@ jobs.saveToTrash = function(data, done){
 };
 
 // Send Webhook Event
-// ToDo: Test Webhook Event
 jobs.sendWebhook = function(data, done){
-    log.info('Sending Webhook to '+data.url+' (Secure mode: '+ data.secure+') with data => '+data.data);
+    log.info('Sending Webhook to '+data.url+' (Secure mode: '+ data.secure+') with data => '+JSON.stringify(data.data));
     var hookData = {};
     // Expected data
     // {
@@ -126,18 +126,16 @@ jobs.sendWebhook = function(data, done){
             return encryption.encrypt(stringData, key);
         })
         .then(function(resp){
-            hookData.data = resp.encryptedData;
+            hookData.data = resp.encryptedText;
             hookData.truth = resp.truth;
             return hookData;
         });
-        // ToDo: Test Secure Webhooks
     }else{
         hookPromise = q.fcall(function(){
             hookData.secure = false;
             hookData.data = data.data;
             return hookData;
         });
-        // ToDo: Test Unsecure Webhooks
     }
 
     hookPromise
@@ -162,9 +160,9 @@ jobs.sendWebhook = function(data, done){
 // This is for jobs that can be configured from an admin dashboard. So an admin an configure the system to all an api at a particular time daily.
 // This can be used within the code too, to do some jobs.
 // Supports POST or GET
-// ToDo: Test sendHTTPRequest Job
+// Other methods not quaranteed 
 jobs.sendHTTPRequest = function(data, done){
-    log.info('Sending HTTP' +data.method+' request to '+data.url+' with data => '+data.data+' and headers => '+data.headers);
+    log.info('Sending HTTP ' +data.method+' request to '+data.url+' with data => '+JSON.stringify(data.data)+' and headers => '+JSON.stringify(data.headers));
     // Expected data
     // {
     // url: 'http://string.com',

@@ -65,6 +65,7 @@ describe('Test rate limiting', function(){
     before(function(){ /* jslint ignore:line */
         var workers = require('../../services/queue/workers');
         var workers2 = require('../../services/queue/workers');
+        var workers3 = require('../../services/queue/workers');
     });
 
     it('should reach request rate limit', function(done){
@@ -144,7 +145,7 @@ it('should save rate limit error on request log', function(done){
         .catch(function(err){
             done(err);
         });
-    },18000);
+    },5000);
 
 });
 
