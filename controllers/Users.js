@@ -13,7 +13,6 @@ var UsersController = {};
 UsersController.buildProjection = function(projections){
     debug('starting build...');
     var projection = projections.split(','); // Projection should be comma separated. eg. name,location
-    // ToDo: Test buildProjection function
     return q.Promise(function(resolve,reject,notify){
         debug('This is a promise...');
         var num = projection.length;
@@ -52,7 +51,6 @@ UsersController.find = function(req,res,next){
         .catch(function(err){
             next(err);
         });
-        // ToDo: Test that search works
     }else{
         query = req.query;
         var projection = query.projection; // Projection should be comma separated. eg. name,location
@@ -104,7 +102,8 @@ UsersController.find = function(req,res,next){
         if(populate){
             delete query.populate;
         }
-        var total = Users.count(query);
+        var totalResult = Users.count(query);
+        var total = Users.count({});
         var question = Users.find(query);
 
         if(limit){
@@ -121,15 +120,16 @@ UsersController.find = function(req,res,next){
         }
 
         if(projection){
-            q.all([ourProjection,total])
-            .spread(function(resp,total){
-                return [question.select(resp),total];
+            q.all([ourProjection,total,totalResult])
+            .spread(function(resp,total,totalResult){
+                return [question.select(resp),total,totalResult];
             })
-            .spread(function(resp,total){
+            .spread(function(resp,total,totalResult){
                 var ourLastId = resp[resp.length - 1]._id;
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
+                extraData.totalResult = totalResult;
                 extraData.lastId = ourLastId;
                 res.ok(resp, false, extraData);
             })
@@ -137,8 +137,8 @@ UsersController.find = function(req,res,next){
                 next(err);
             });
         }else{
-            q.all([question,total])
-            .spread(function(resp,total){
+            q.all([question,total,totalResult])
+            .spread(function(resp,total,totalResult){
                 var ourLastId;
                 if(resp.length === 0){
                     ourLastId = null;
@@ -149,18 +149,12 @@ UsersController.find = function(req,res,next){
                 extraData.limit = limit * 1;
                 extraData.total = total;
                 extraData.lastId = ourLastId;
+                extraData.totalResult = totalResult;
                 res.ok(resp, false, extraData);
             })
             .catch(function(err){
                 next(err);
             });
-            // ToDo: Test limiting
-            // ToDO: Test that response contains count of total record for the query
-            // ToDo: Test that the last document Id in the return array of documents is in the response
-            // ToDo: Test that sorting works
-            // ToDo: Test that projection works
-            // ToDo: Test that populating works
-            // ToDo: Test that date range works
         }
 
     }
@@ -244,9 +238,9 @@ UsersController.delete = function(req,res,next){
     })
     .then(function(resp){
         // Delete matches
-        return Users.deleteMany(query);
+        return [Users.deleteMany(query), resp];
     })
-    .then(function(resp){
+    .spread(function(deleted, resp){
         res.ok(resp);
     })
     .catch(function(err){
@@ -274,10 +268,10 @@ UsersController.deleteOne = function(req,res,next){
     })
     .then(function(resp){
         // Delete match
-        return Users.findByIdAndRemove(id);
+        return [Users.findByIdAndRemove(id),resp];
     })
-    .then(function(resp){
-        res.ok(resp);
+    .spread(function(deleted,resp){
+        res.ok(resp[0]);
     })
     .catch(function(err){
         next(err);
@@ -309,6 +303,3 @@ UsersController.restore = function(req,res,next){
 };
 
 module.exports = UsersController;
-
-// Todo: Test users controller
-// ToDo: Test that any deleted data is backed up

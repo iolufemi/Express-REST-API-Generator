@@ -7,10 +7,16 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var users = require('../../controllers/Users.js');
 var workers = require('../../services/queue/workers');
+var _ = require('lodash');
+var db = require('../../models');
 
 
 var userId;
 var userId2;
+var lastId;
+var forDelete;
+var trashId;
+var from = new Date(new Date().setMinutes(new Date().getMinutes() - 3)).toISOString();
 describe('Users controller', function(){
     it('should create documents', function(done){
         var next = function(err){
@@ -106,6 +112,7 @@ describe('Users controller', function(){
 
                 data.should.be.an.object; /* jslint ignore:line */
                 extraData.total.should.be.a.number; /* jslint ignore:line */
+                extraData.totalResult.should.be.a.number; /* jslint ignore:line */
                 done();
             };
             var req = {};
@@ -118,7 +125,7 @@ describe('Users controller', function(){
             };
             var res = {};
             res.ok = function(data, cache, extraData){
-
+                lastId = extraData.lastId;
                 data.should.be.an.object; /* jslint ignore:line */
                 extraData.lastId.should.be.a.string; /* jslint ignore:line */
                 done();
@@ -189,7 +196,80 @@ describe('Users controller', function(){
             req.query.populate = 'toPop';
             users.find(req, res, next);
         });
-    });
+
+        it('should load next page for pagination', function(done){
+            var next = function(err){
+                done(err);
+            };
+            var res = {};
+            res.ok = function(data){
+                var next = function(err){
+                    done(err);
+                };
+                var res = {};
+                res.ok = function(data, cache, extraData){
+                    forDelete = _.map(data,function(value){
+                        return value._id.toString();
+                    });
+                    data.should.be.an.object; /* jslint ignore:line */
+                    done();
+                };
+                var req = {};
+                req.query = {_id: {$gt: lastId}};
+                users.find(req, res, next);
+            };
+            var req = {};
+            req.body = [{
+                name: 'Femi2',
+                someOtherStringData: 'this is pizza'
+            },
+            {
+                name: 'Bolu2',
+                someOtherStringData: 'this is a meat'
+            },
+            {
+                name: 'Bayo2',
+                someOtherStringData: 'Meta'
+            }];
+            users.create(req, res, next);    
+        });
+
+it('should filter by date range', function(done){
+    var next = function(err){
+        done(err);
+    };
+    var res = {};
+    res.ok = function(data, cache, extraData){
+
+        data.should.be.an.object; /* jslint ignore:line */
+        data.length.should.be.above(0); /* jslint ignore:line */
+        done();
+    };
+    var req = {};
+    req.query = {};
+    req.query.from = from;
+    
+    req.query.to = new Date().toISOString();
+    users.find(req, res, next);
+});
+
+it('should filter by date range without setting the end date', function(done){
+    var next = function(err){
+        done(err);
+    };
+    var res = {};
+    res.ok = function(data, cache, extraData){
+
+        data.should.be.an.object; /* jslint ignore:line */
+        data.length.should.be.above(0); /* jslint ignore:line */
+        done();
+    };
+    var req = {};
+    req.query = {};
+    req.query.from = from;
+    users.find(req, res, next);
+});
+});
 
 it('should find one document', function(done){
     var next = function(err){
@@ -225,7 +305,7 @@ it('should update a document', function(done){
     };
     var res = {};
     res.ok = function(data, cache, extraData){
-        console.log('hhfhf', data);
+
         data.should.be.an('object'); /* jslint ignore:line */
         done();
     };
@@ -235,12 +315,74 @@ it('should update a document', function(done){
     users.updateOne(req, res, next);
 });
 describe('Delete', function(){
-    it('should delete multiple data');
-    it('should have back up multiple deleted data');
-    it('should delete one data');
-    it('should have backed up one data');
+    it('should delete multiple data', function(done){
+        var next = function(err){
+            done(err);
+        };
+        var res = {};
+        res.ok = function(data, cache, extraData){
+
+            data.length.should.be.above(0); /* jslint ignore:line */
+            done();
+        };
+        var req = {};
+        req.query = {_id: {$gt: lastId}};
+        users.delete(req, res, next);
+    });
+    it('should have backed up multiple deleted data', function(done){
+        setTimeout(function(){
+            db.Trash.find()
+            .where('data._id')
+            .in(forDelete)
+            .then(function(res){
+                res.length.should.be.above(0);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        },1000);
+    });
+    it('should delete one data', function(done){
+        var next = function(err){
+            done(err);
+        };
+        var res = {};
+        res.ok = function(data, cache, extraData){
+            data.should.be.an('object'); /* jslint ignore:line */
+            done();
+        };
+        var req = {};
+        req.params = {id: lastId};
+        users.deleteOne(req, res, next);
+    });
+    it('should have backed up one data', function(done){
+        setTimeout(function(){
+            db.Trash.find({'data._id':lastId.toString()})
+            .then(function(resp){
+                trashId = resp[0]._id;
+                resp.length.should.be.above(0);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        },1000);
+    });
 });
 describe('Restore', function(){
-    it('should restore a previously deleted data');
+    it('should restore a previously deleted data', function(done){
+        var next = function(err){
+            done(err);
+        };
+        var res = {};
+        res.ok = function(data, cache, extraData){
+            data.should.be.an('object'); /* jslint ignore:line */
+            done();
+        };
+        var req = {};
+        req.params = {id: trashId};
+        users.restore(req, res, next);
+    });
 });
 });

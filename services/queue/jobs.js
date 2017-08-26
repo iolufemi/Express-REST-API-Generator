@@ -61,7 +61,7 @@ jobs.createSearchTags = function(data, done){
 
     var task;
     if(update){
-        task = models[model].update(data,{ $set: { updatedAt: new Date()}, $addToSet: {tags: {$each: split}} });
+        task = models[model].update(data,{ $set: { updatedAt: new Date().toISOString() }, $addToSet: {tags: {$each: split}} });
     }else{
         task = models[model].update(data,{ $set: { tags: split} });
     }
@@ -79,7 +79,7 @@ jobs.createSearchTags = function(data, done){
 // Backup Data to Trash
 // ToDo: Test saveToTrash job
 jobs.saveToTrash = function(data, done){
-    log.info('Saving '+data._id+' to Trash...');
+    log.info('Saving '+data.data._id+' to Trash...');
     models.Trash.create(data)
     .then(function(res){
         done(false, res);
