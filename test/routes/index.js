@@ -143,7 +143,7 @@ it('should save rate limit error on request log', function(done){
         .catch(function(err){
             done(err);
         });
-    },14000);
+    },20000);
 
 });
 
