@@ -9,6 +9,7 @@ var collection = 'Users';
 var debug = require('debug')(collection);
 
 var schemaObject = {
+    // ++++++++++++++ Modify to your own schema ++++++++++++++++++
     name: {
         type: 'String'
     },
@@ -19,6 +20,8 @@ var schemaObject = {
         type: db.Schema.Types.ObjectId,
         ref: 'Users'
     }
+
+    // ++++++++++++++ Modify to your own schema ++++++++++++++++++
 };
 
 schemaObject.createdAt = {

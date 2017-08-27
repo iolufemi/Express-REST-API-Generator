@@ -58,6 +58,8 @@ router._enforceUserIdAndAppId = function(req,res,next){
     return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
 }else if(!appId){
     return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
+}else if(!developer){
+    return res.badRequest(false,'No developer parameter was passed in the payload of this request. Please pass a developer id.');
 }else{
     req.userId = userId;
     req.appId = appId;
@@ -152,6 +154,9 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(bodyParser.raw());
 router.use(bodyParser.text());
+// load response handlers
+router.use(response);
+// Watch for encrypted requests
 router.use(encryption.interpreter);
 router.use(hpp());
 router.use(contentLength.validateMax({max: MAX_CONTENT_LENGTH_ACCEPTED, status: 400, message: "Stop! Maximum content length exceeded."})); // max size accepted for the content-length
@@ -170,14 +175,14 @@ limiter({
 }
 });
 
-router.use(response);
+
 router.use(expressValidator());
 
 // no client side caching
 if(config.noFrontendCaching === 'yes'){
   router.use(helmet.noCache());
 }else{
-   router.use(router._APICache);
+ router.use(router._APICache);
 }
 
 router.get('/', function (req, res) {
@@ -199,9 +204,18 @@ router.use('/', initialize);
 // Make userId compolsory in every request
 router.use(router._enforceUserIdAndAppId);
 
+// Should automatically load routes
 // Other routes here
-// 
-// 
+var ourRoutes = {};
+var normalizedPath = require("path").join(__dirname, "./");
+
+require("fs").readdirSync(normalizedPath).forEach(function(file) {
+    var splitFileName = file.split('.');
+    if(splitFileName[0] !== 'index' && splitFileName[0] !== 'initialize'){
+        ourRoutes[splitFileName[0]] = require('./'+splitFileName[0]);
+        router.use('/', ourRoutes[splitFileName[0]]);
+    }
+});
 
 router.use(function(req, res, next) { // jshint ignore:line
   res.notFound();

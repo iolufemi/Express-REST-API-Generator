@@ -53,6 +53,10 @@ UsersController.find = function(req,res,next){
         });
     }else{
         query = req.query;
+        // Clean appId and userId
+        delete query.appId;
+        delete query.userId;
+        delete query.developer;
         var projection = query.projection; // Projection should be comma separated. eg. name,location
         var ourProjection;
         
@@ -107,10 +111,12 @@ UsersController.find = function(req,res,next){
         var question = Users.find(query);
 
         if(limit){
-            var ourLimit = limit * 1;
+            totalResult = totalResult.limit(limit);
             question = question.limit(limit);
         }else{
-            limit = 0;
+            limit = 50;
+            totalResult = totalResult.limit(limit);
+            question = question.limit(limit);
         }
         if(sort){
             question = question.sort(sort);
@@ -131,6 +137,7 @@ UsersController.find = function(req,res,next){
                 extraData.total = total;
                 extraData.totalResult = totalResult;
                 extraData.lastId = ourLastId;
+                extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
             })
             .catch(function(err){
@@ -150,6 +157,7 @@ UsersController.find = function(req,res,next){
                 extraData.total = total;
                 extraData.lastId = ourLastId;
                 extraData.totalResult = totalResult;
+                extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
             })
             .catch(function(err){

@@ -7,4 +7,3 @@ var initializeController = require('../controllers/Initialize');
 router.get('/initialize', initializeController.init);
 
 module.exports = router;
-// Todo: Test initialize route

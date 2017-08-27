@@ -89,7 +89,7 @@ describe('Users controller', function(){
             req.query.search = 'i like pizza';
             users.find(req, res, next);
         });
-        it('should limit the number of returned documents', function(done){
+        it('should limit the number of returned documents and check if it is the last page', function(done){
             var next = function(err){
                 done(err);
             };
@@ -97,6 +97,7 @@ describe('Users controller', function(){
             res.ok = function(data, cache, extraData){
 
                 data.should.be.an.object; /* jslint ignore:line */
+                extraData.isLastPage.should.exist; /* jslint ignore:line */
                 data.length.should.equal(2);
                 done();
             };
@@ -105,7 +106,7 @@ describe('Users controller', function(){
             req.query.limit = 2;
             users.find(req, res, next);
         });
-        it('should contains count of total record for the query', function(done){
+        it('should contain count of total record for the query', function(done){
             var next = function(err){
                 done(err);
             };

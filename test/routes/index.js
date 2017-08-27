@@ -171,7 +171,12 @@ it('should enforce UserId', function(done){
     nextChecker.should.be.false; /* jslint ignore:line */
     req.body.appId = 'jdjdjdjd';
     router._enforceUserIdAndAppId(req, res, next);
-    res.badRequest.should.be.called.twice; /* jslint ignore:line */
+    res.badRequest.should.be.callCount(3); /* jslint ignore:line */
+    res.badRequest.should.be.calledWith(false, 'No developer parameter was passed in the payload of this request. Please pass a developer id.');
+    nextChecker.should.be.false; /* jslint ignore:line */
+    req.body.developer = 'jdjdjdjd';
+    router._enforceUserIdAndAppId(req, res, next);
+    res.badRequest.should.be.callCount(3); /* jslint ignore:line */
     nextChecker.should.be.true; /* jslint ignore:line */
     done();
 });

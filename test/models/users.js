@@ -20,6 +20,9 @@ describe('User Model',function(){
     before(function(){  /* jslint ignore:line */
         User = require('../../models/Users');
         var workers = require('../../services/queue/workers');
+        var workers1 = require('../../services/queue/workers');
+        var workers2 = require('../../services/queue/workers');
+        var workers3 = require('../../services/queue/workers');
     });
 
     describe('Test CRUDS', function(){
