@@ -20,5 +20,6 @@ module.exports = {
     gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '2207558a1d72eefa8d836404e4dc2dc07bc46772',
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
-    queueUIPort: process.env.QUEUE_UI_PORT || 3000
+    queueUIPort: process.env.QUEUE_UI_PORT || 3000,
+    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'yes'
 };
