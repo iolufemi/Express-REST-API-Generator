@@ -17,7 +17,7 @@ module.exports = {
     letsencryptSSLVerificationBody: process.env.LETSENCRYPT_VERIFICATION_BODY || 'xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8._v6aFbaRYWeOmSebtlD-X4Ixf5tPsyULMsXM8HjsK-Q',
     maxContentLength: process.env.MAX_CONTENT_LENGTH || '9999',
     enforceSSL: process.env.ENFORCE_SSL || 'no',
-    gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '934d2a317f579fbd0bbe187d34a85fd4981b0873',
+    gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '6870f32edf6a34aaca7f193f456fae50f8ad5a94',
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
     queueUIPort: process.env.QUEUE_UI_PORT || 3000,
