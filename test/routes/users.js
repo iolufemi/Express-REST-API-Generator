@@ -9,13 +9,13 @@ var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 var mongoose = require('mongoose');
 chai.use(sinonChai);
+var _ = require('lodash');
 
 var response = require('../../services/response');
 
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var router = require('../../routes/users');
 var initRouter = require('../../routes/initialize');
 var routers = require('../../routes');
 
@@ -23,14 +23,8 @@ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(routers._APICache);
 app.use(response);
-
-
-
-
-app.use('/',router);
-app.use('/',initRouter);
+app.use(routers);
 
 
 var agent = request.agent(app);
@@ -76,9 +70,13 @@ header.set = function(data){
 req.method = '';
 
 var tag;
-var objId1 = mongoose.Types.ObjectId();
-var objId2 = mongoose.Types.ObjectId();
-var objId3 = mongoose.Types.ObjectId();
+var objId1 = mongoose.Types.ObjectId('59abab38ead925031a71496d');
+var objId2 = mongoose.Types.ObjectId('59abab38ead925031a71496e');
+var objId3 = mongoose.Types.ObjectId('59abab38ead925031a71496c');
+var last;
+var oneId;
+var oneId2;
+var from = new Date(new Date().setMinutes(new Date().getMinutes() - 3)).toISOString();
 describe('/users', function(){
 
     before(function(done){ /* jslint ignore:line */
@@ -87,9 +85,29 @@ describe('/users', function(){
         var workers3 = require('../../services/queue/workers');
 
         agent
-        .get('/initialize')
+        .get('/initialize?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
         .then(function(resp){
+
             tag = resp.body.data['x-tag'];
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
+    });
+
+    it('should create a document', function(done){
+        agent
+        .post('/users?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+        .set('x-tag',tag)
+        .send({name: 'femi2'})
+        .then(function(resp){
+            console.log(resp.body.data);
+            oneId = resp.body.data._id;
+            resp.body.data.should.have.property('client');
+            resp.body.data.should.have.property('owner');
+            resp.body.data.should.have.property('createdBy');
+            resp.body.data.should.have.property('developer');
             done();
         })
         .catch(function(err){
@@ -101,37 +119,235 @@ describe('/users', function(){
         agent
         .post('/users?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
         .set('x-tag',tag)
-        .send([{name: 'femi'},{name: 'tolu'},{name: 'bayo'},{name: 'bola'}])
-        .expect(200, done);
+        .send([{name: 'femi',toPop: oneId},{name: 'tolu',toPop: oneId},{name: 'femi2',toPop: oneId},{name: 'bola',toPop: oneId}])
+        .then(function(resp){
+            oneId2 = resp.body.data[0]._id;
+            resp.body.data.length.should.be.above(0);
+            _.map(resp.body.data, function(val){
+                val.should.have.property('client');
+                val.should.have.property('owner');
+                val.should.have.property('createdBy');
+                val.should.have.property('developer');
+                return val;
+            });
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
     });
-    it('should create a document');
+    
 
     describe('Find', function(){
-        it('should search for matching documents for a given string');
-        it('should limit the number of returned documents');
-        it('should contain count of total record for the query');
-        it('should return the last document Id in the array of documents returned from a query');
-        it('should sort documents in ascending order');
-        it('should sort documents in descending order');
-        it('should select just few parameters from the documents');
-        it('should populate data of a references');
-        it('should load next page for pagination');
-        it('should filter by date range');
-        it('should filter by date range without setting the end date');
+        it('should search for matching documents for a given string', function(done){
+            agent
+            .get('/users?search=femi&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .expect(200, done);
+        });
+        it('should limit the number of returned documents',function(done){
+            agent
+            .get('/users?limit=2&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                resp.body.data.length.should.equal(2);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+        it('should contain count of total record for the query', function(done){
+            agent
+            .get('/users?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                resp.body.total.should.exist; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+        it('should return the last document Id in the array of documents returned from a query', function(done){
+            agent
+            .get('/users?limit=2&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                console.log('>>>>>>>>>>>>>>>>',resp.body);
+                last = resp.body.lastId;
+                resp.body.lastId.should.exist; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+        it('should sort documents in ascending order', function(done){
+            agent
+            .get('/users?sort=name&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .expect(200,done);
+        });
+        it('should sort documents in descending order', function(done){
+            agent
+            .get('/users?sort=-name&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .expect(200,done);
+        });
+        it('should select just few parameters from the documents', function(done){
+            agent
+            .get('/users?select=name&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .expect(200,done);
+        });
+        it('should populate data of a reference for multiple data', function(done){
+            agent
+            .get('/users?populate=toPop&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                _.forEach(resp.body.data, function(value){
+                    if(value._id === oneId2){
+                        value.toPop.should.be.an('object');
+                    }
+                });
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should populate data of a reference for single data', function(done){
+            agent
+            .get('/users/'+oneId2+'?populate=toPop&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                resp.body.data.toPop.should.be.an('object');
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should load next page for pagination', function(done){
+            agent
+            .get('/users?lastId='+last+'&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .expect(200,done);
+        });
+        it('should filter by date range', function(done){
+            agent
+            .get('/users?from='+from+'&to='+new Date().toISOString()+'&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                resp.body.data.length.should.be.above(0);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+        it('should filter by date range without setting the end date', function(done){
+            agent
+            .get('/users?from='+from+'&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag)
+            .then(function(resp){
+                resp.body.data.length.should.be.above(0);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
     });
 
-    it('should find one document');
-    it('should update documents');
-    it('should update a document');
+it('should find one document', function(done){
+    agent
+    .get('/users/'+oneId+'?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+    .set('x-tag',tag)
+    .then(function(resp){
+        resp.body.data.should.be.an('object');
+        done();
+    })
+    .catch(function(err){
+        done(err);
+    });
+});
+it('should update documents', function(done){
+    agent
+    .put('/users?name=femi&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+    .set('x-tag',tag)
+    .send({name: 'Bukola'})
+    .then(function(resp){
+        resp.body.data.should.be.an('object');
+        done();
+    })
+    .catch(function(err){
+        done(err);
+    });
+});
+it('should update a document', function(done){
+    agent
+    .patch('/users/'+oneId+'?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+    .set('x-tag',tag)
+    .send({name: 'Bukola'})
+    .then(function(resp){
+        resp.body.data.should.be.an('object');
+        done();
+    })
+    .catch(function(err){
+        done(err);
+    });
+});
 
-    describe('Delete', function(){
-        it('should delete multiple data');
-        it('should delete one data');
+describe('Delete', function(){
+
+    it('should delete multiple data', function(done){
+        agent
+        .delete('/users?name=femi2&userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+        .set('x-tag',tag)
+        .then(function(resp){
+
+            resp.body.data.should.be.an('array');
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
     });
 
-    describe('Restore', function(){
-        it('should restore a previously deleted data');
+    it('should delete one data', function(done){
+        agent
+        .delete('/users/'+oneId+'?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+        .set('x-tag',tag)
+        .then(function(resp){
+            resp.body.data.should.be.an('object');
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
     });
+});
 
-
+describe('Restore', function(){
+    it('should restore a previously deleted data', function(done){
+        var Trash = require('../../models').Trash;
+        Trash.findOne()
+        .then(function(resp){
+            return agent
+            .post('/users/'+resp._id+'/restore?userId='+objId1.toString()+'&appId='+objId2.toString()+'&developer='+objId3.toString())
+            .set('x-tag',tag);
+        })
+        .then(function(resp){
+            resp.body.data.should.be.an('object');
+            done();
+        })
+        .catch(function(err){
+            done(err);
+        });
+    });
+});
 });

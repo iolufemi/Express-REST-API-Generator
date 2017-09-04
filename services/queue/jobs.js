@@ -27,7 +27,10 @@ jobs.createRequestLog = function(request, done){
 jobs.updateRequestLog = function(response, done){
     log.info('logging API response: ',response.requestId);
     var requestId = response.requestId;
-    delete response.requestId;
+    if(response && response.requestId){
+        delete response.requestId;
+    }
+    
     models.RequestLogs.update({RequestId: requestId},response)
     .then(function(res){
         return done(false, res);
@@ -43,16 +46,31 @@ jobs.createSearchTags = function(data, done){
     log.info('Creating search index for: ', data._id);
     var model = data.model;
     var update = data.update ? true : false;
-    if(data.update){
+    if(data && data.update){
         delete data.update;
     }
-    delete data.model;
+    if(data && data.model){
+        delete data.model;
+    }
+    
     var ourDoc = data;
     var split = [];
-    delete ourDoc._id;
-    delete ourDoc.createdAt;
-    delete ourDoc.updatedAt;
-    delete ourDoc.tags;
+    if(ourDoc && ourDoc._id){
+        delete ourDoc._id;
+    }
+
+    if(ourDoc && ourDoc.createdAt){
+        delete ourDoc.createdAt;
+    }
+
+    if(ourDoc && ourDoc.updatedAt){
+        delete ourDoc.updatedAt;
+    }
+
+    if(ourDoc && ourDoc.tags){
+        delete ourDoc.tags;
+    }
+    
     for(var n in ourDoc){
         if(typeof ourDoc[n] === 'string'){
             split.push(ourDoc[n].split(' '));

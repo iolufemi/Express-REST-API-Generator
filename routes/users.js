@@ -25,10 +25,10 @@ router.get('/'+service+'/:id', usersController.findOne);
 router.post('/'+service, usersController.create);
 
 // update all records that matches the query
-router.put('/'+service, usersController.updateOne);
+router.put('/'+service, usersController.update);
 
 // update a single record
-router.put('/'+service+'/:id', usersController.findOne);
+router.patch('/'+service+'/:id', usersController.updateOne);
 
 // delete all records that matches the query
 router.delete('/'+service, usersController.delete);
@@ -40,4 +40,3 @@ router.delete('/'+service+'/:id', usersController.deleteOne);
 router.post('/'+service+'/:id/restore', usersController.restore);
 
 module.exports = router;
-// Todo: Test users route

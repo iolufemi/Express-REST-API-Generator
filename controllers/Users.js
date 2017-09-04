@@ -44,6 +44,14 @@ UsersController.find = function(req,res,next){
     var query;
     if(req.query.search){
         query = req.query.search;
+        // Clean appId and userId
+        if(query && query.appId){
+            delete query.appId;
+        }
+        if(query && query.userId){
+            delete query.userId;
+        }
+        
         Users.search(query)
         .then(function(resp){
             res.ok(resp);
@@ -54,15 +62,18 @@ UsersController.find = function(req,res,next){
     }else{
         query = req.query;
         // Clean appId and userId
-        delete query.appId;
-        delete query.userId;
-        delete query.developer;
-        var projection = query.projection; // Projection should be comma separated. eg. name,location
+        if(query && query.appId){
+            delete query.appId;
+        }
+        if(query && query.userId){
+            delete query.userId;
+        }
+        var projection = query.select; // Projection should be comma separated. eg. name,location
         var ourProjection;
         
         if(projection){
-            ourProjection = this.buildProjection(projection);
-            delete query.projection;
+            ourProjection = UsersController.buildProjection(projection);
+            delete query.select;
         }
         var limit = query.limit * 1;
         if(limit){
@@ -84,7 +95,6 @@ UsersController.find = function(req,res,next){
         }else{
             query.createdAt = {};
             query.createdAt.$gt = new Date('1989-03-15T00:00:00').toISOString();
-            delete query.from;
             if(to){
                 delete query.to;
             }else{
@@ -106,6 +116,8 @@ UsersController.find = function(req,res,next){
         if(populate){
             delete query.populate;
         }
+
+        console.log('our query: >>>>>>>>>>>',query);
         var totalResult = Users.count(query);
         var total = Users.count({});
         var question = Users.find(query);
@@ -131,7 +143,12 @@ UsersController.find = function(req,res,next){
                 return [question.select(resp),total,totalResult];
             })
             .spread(function(resp,total,totalResult){
-                var ourLastId = resp[resp.length - 1]._id;
+                var ourLastId;
+                if(resp.length === 0){
+                    ourLastId = null;
+                }else{
+                    ourLastId = resp[resp.length - 1]._id;
+                }
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
@@ -170,7 +187,18 @@ UsersController.find = function(req,res,next){
 
 UsersController.findOne = function(req,res,next){
     var id = req.params.id;
-    Users.findById(id)
+    var query = req.query;
+    var populate;
+    if(query){
+        populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name referenece and only pick the firstname attribute
+    }
+    var question = Users.findById(id);
+    if(populate){
+        delete query.populate;
+        question = question.populate(populate);
+    }
+
+    question
     .then(function(resp){
         res.ok(resp);
     })
@@ -181,6 +209,9 @@ UsersController.findOne = function(req,res,next){
 
 UsersController.create = function(req,res,next){
     var data  = req.body;
+    if(data && data.secure){
+        delete data.secure;
+    }
     Users.create(data)
     .then(function(resp){
         res.ok(resp);
@@ -192,7 +223,17 @@ UsersController.create = function(req,res,next){
 
 UsersController.update = function(req,res,next){
     var query = req.query;
+    // Clean appId and userId
+    if(query && query.appId){
+        delete query.appId;
+    }
+    if(query && query.userId){
+        delete query.userId;
+    }
     var data  = req.body;
+    if(data && data.secure){
+        delete data.secure;
+    }
     Users.updateMany(query,data)
     .then(function(resp){
         res.ok(resp);
@@ -205,6 +246,10 @@ UsersController.update = function(req,res,next){
 UsersController.updateOne = function(req,res,next){
     var id = req.params.id;
     var data  = req.body;
+    if(data && data.secure){
+        delete data.secure;
+    }
+    
     Users.findByIdAndUpdate(id,data)
     .then(function(resp){
         res.ok(resp);
@@ -216,6 +261,13 @@ UsersController.updateOne = function(req,res,next){
 
 UsersController.delete = function(req,res,next){
     var query = req.query;
+    // Clean appId and userId
+    if(query && query.appId){
+        delete query.appId;
+    }
+    if(query && query.userId){
+        delete query.userId;
+    }
     // Find match
     Users.find(query)
     .then(function(resp){

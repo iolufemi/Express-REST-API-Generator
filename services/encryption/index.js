@@ -107,7 +107,7 @@ interpreter: function(req, res, next){
 
         var key = req.get('x-tag');
 
-        if(req.method === 'POST' && config.secureMode){
+        if(req.method === 'POST' && config.secureMode && req.body.secure === true){
             if(req.body.secureData){
                 var truthHash = req.body.truth;
                 encryption.decrypt(req.body.secureData, key, truthHash)
@@ -119,6 +119,7 @@ interpreter: function(req, res, next){
                         debug('decryptedText: ', resp);
                         var parsedJSON = JSON.parse(resp);
                         req.body = parsedJSON;
+                        req.body.secure = true;
                         next();
                     }
                 })

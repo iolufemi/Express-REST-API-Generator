@@ -10,7 +10,7 @@ var initialize = require('./initialize');
 var config = require('../config');
 var helmet = require('helmet');
 var redisClient = require('../services/database').redis;
-var limiter = require('express-limiter')(router, redisClient);
+// var limiter = require('express-limiter')(router, redisClient);
 var _ = require('lodash');
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -64,11 +64,22 @@ router._enforceUserIdAndAppId = function(req,res,next){
     req.userId = userId;
     req.appId = appId;
     req.developer = developer;
-    req.body.client = appId;
-    req.body.owner = userId;
-    req.body.createdBy = userId;
-    req.body.developer = developer;
-    next();
+    if(req.body.length){
+      req.body = _.map(req.body,function(value){
+        value.client = appId;
+        value.owner = userId;
+        value.createdBy = userId;
+        value.developer = developer;
+        return value;
+      });
+      next();
+    }else{
+      req.body.client = appId;
+      req.body.owner = userId;
+      req.body.createdBy = userId;
+      req.body.developer = developer;
+      next();
+    }
   }
 };
 
@@ -164,16 +175,16 @@ router.use(contentLength.validateMax({max: MAX_CONTENT_LENGTH_ACCEPTED, status: 
 router.use(router._allRequestData);
 
 // API Rate limiter
-limiter({
-  path: '*',
-  method: 'all',
-  lookup: ['ip','userId','appId'],
-  total: config.rateLimit * 1,
-  expire: config.rateLimitExpiry * 1,
-  onRateLimited: function (req, res, next) {
-    next({ message: 'Rate limit exceeded', statusCode: 429 });
-  }
-});
+// limiter({
+//   path: '*',
+//   method: 'all',
+//   lookup: ['ip','userId','appId','developer'],
+//   total: config.rateLimit * 1,
+//   expire: config.rateLimitExpiry * 1,
+//   onRateLimited: function (req, res, next) {
+//     next({ message: 'Rate limit exceeded', statusCode: 429 });
+//   }
+// });
 
 
 router.use(expressValidator());

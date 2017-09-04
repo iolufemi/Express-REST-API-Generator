@@ -11,6 +11,9 @@ var workers = require('../../services/queue/workers');
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
+var fnv = require('fnv-plus');
+var mongoose = require('mongoose');
+
 
 // Test Index
 var jobs;
@@ -18,6 +21,18 @@ describe('#Queue service', function(){
     before(function() { /* jslint ignore:line */
         queue.testMode.enter();
         jobs = require('../../services/queue/jobs');
+        // Mock Server
+        var express = require('express');
+        var app = express();
+        app.all('/',function(req,res,next){
+            res.json({status: 'ok'});
+        });
+
+        var server = app.listen('8080',function () {
+            var host = server.address().address;
+            var port = server.address().port;
+            console.log('API server listening on host '+host+', port '+port+'!');
+        });
     });
 
     afterEach(function() { /* jslint ignore:line */
@@ -52,9 +67,10 @@ describe('#Queue service', function(){
 
     // Test Jobs
     describe('#Testing Jobs', function(){
+
         it('should run createRequestLog successfully', function(done){
           var myrequestlog = {
-            RequestId: 'gdfd6563',
+            RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714967', 128).str(),
             ipAddress: '192.168.90.9',
             url: 'http://google.com',
             method: 'POST',
@@ -66,7 +82,7 @@ describe('#Queue service', function(){
 
         it('should run updateRequestLog successfully', function(done){
           var myrequestlog = {
-            requestId: 'gdfd6563',
+            requestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714966', 128).str(),
             response: {
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
@@ -79,7 +95,7 @@ describe('#Queue service', function(){
     });
         it('should run createSearchTags successfully for saving data', function(done){
             var myrequestlog = {
-                RequestId: 'gdfd6563',
+                RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714969', 128).str(),
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
@@ -93,7 +109,7 @@ describe('#Queue service', function(){
 
         it('should run createSearchTags successfully for updating data', function(done){
             var myrequestlog = {
-                RequestId: 'gdfd6563',
+                RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714968', 128).str(),
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
@@ -109,7 +125,7 @@ describe('#Queue service', function(){
         it('should run saveToTrash successfully for backing up data', function(done){
             var backup = {
                 data: {
-                    _id: '789878',
+                    _id: mongoose.Types.ObjectId('59abab38ead925031a71496e'),
                     name: 'foo'
                 }
             };
@@ -119,7 +135,7 @@ describe('#Queue service', function(){
 
         it('should run sendWebhook successfully for sending realtime HTTP notifications', function(done){
             var data =  {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 secure: false, // true or false
                 data: {
                     someData: 'this',
@@ -132,7 +148,7 @@ describe('#Queue service', function(){
 
         it('should run sendWebhook successfully for sending realtime HTTP notifications securely', function(done){
             var data =  {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 secure: true, // true or false
                 data: {
                     someData: 'this',
@@ -145,7 +161,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with POST method', function(done){
             var data =      {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 method: 'POST', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -161,7 +177,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with GET method', function(done){
             var data =      {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 method: 'GET', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -177,7 +193,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with PUT method', function(done){
             var data =      {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 method: 'PUT', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -193,7 +209,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with DELETE method', function(done){
             var data =      {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 method: 'DELETE', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -209,7 +225,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with PATCH method', function(done){
             var data =      {
-                url: 'https://httpbin.org/anything',
+                url: 'http://localhost:8080',
                 method: 'PATCH', // or any http method
                 headers: {
                     'User-Agent': 'Femi'

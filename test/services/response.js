@@ -135,19 +135,22 @@ describe('#Response service test', function(){
         .expect(200,done);
     });
 
-    it('should be a cached response', function(done){
-        agent.
-        get('/ok')
-        .expect(200)
-        .then(function(res){
-            console.log(res.body);
-            res.body.cached.should.be.true; /* jslint ignore:line */
-            done();
-        })
-        .catch(function(err){
-            done(err);
+    console.log(process.env.NO_CACHE);
+    if(config.noFrontendCaching !== 'yes'){
+        it('should be a cached response', function(done){
+            agent.
+            get('/ok')
+            .expect(200)
+            .then(function(res){
+                console.log(res.body);
+                res.body.cached.should.be.true; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
         });
-    });
+    }
 
     it('should be a badRequest', function(done){
         agent.
@@ -187,7 +190,7 @@ describe('#Response service test', function(){
             return agent2.
             post('/secure')
             .set('x-tag', tag)
-            .send({truth: res.truth,secureData: res.encryptedText})
+            .send({truth: res.truth,secureData: res.encryptedText, secure: true})
             .expect(200);
         })
         .then(function(res){
@@ -206,7 +209,7 @@ describe('#Response service test', function(){
         encryption.generateKey()
         .then(function(res){
             tag = res;
-            var demoData2 = '{"escribimos": "silencio es dorado"}';
+            var demoData2 = '{"escribimos": "silencios es dorado"}';
             return encryption.encrypt(demoData2, tag);
         })
         .then(function(res){
@@ -214,7 +217,7 @@ describe('#Response service test', function(){
             return agent2.
             post('/secure')
             .set('x-tag', tag)
-            .send({truth: demoDataHash,secureData: res})
+            .send({truth: demoDataHash,secureData: res.encryptedText, secure: true})
             .expect(500);
         })
         .then(function(res){

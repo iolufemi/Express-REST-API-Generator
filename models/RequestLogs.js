@@ -12,7 +12,8 @@ var queue = require('../services/queue');
 
 var schemaObject = {
     RequestId: {
-        type: 'String'
+        type: 'String',
+        unique: true
     },
     ipAddress: {
         type: 'String'

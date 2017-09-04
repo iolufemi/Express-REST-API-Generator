@@ -19,6 +19,7 @@ var lastId;
 var forDelete;
 var trashId;
 var from = new Date(new Date().setMinutes(new Date().getMinutes() - 3)).toISOString();
+var objId1 = db.Users._mongoose.Types.ObjectId();
 describe('Users controller', function(){
     it('should create documents', function(done){
         var next = function(err){
@@ -33,15 +34,18 @@ describe('Users controller', function(){
         var req = {};
         req.body = [{
             name: 'Femi',
-            someOtherStringData: 'this is pizza'
+            someOtherStringData: 'this is pizza',
+            developer: objId1
         },
         {
             name: 'Bolu',
-            someOtherStringData: 'this is a meat'
+            someOtherStringData: 'this is a meat',
+            developer: objId1
         },
         {
             name: 'Bayo',
-            someOtherStringData: 'Meta'
+            someOtherStringData: 'Meta',
+            developer: objId1
         }];
         users.create(req, res, next);
     });
@@ -61,7 +65,8 @@ describe('Users controller', function(){
         req.body = {
             name: 'Femi Olanipekun',
             someOtherStringData: 'FooFoo Tahh',
-            toPop: userId2
+            toPop: userId2,
+            developer: objId1
         };
         users.create(req, res, next);
     });
@@ -174,14 +179,15 @@ describe('Users controller', function(){
             var res = {};
             res.ok = function(data, cache, extraData){
 
-                data.should.be.an.object; /* jslint ignore:line */
-
+                data.should.be.an('array'); /* jslint ignore:line */
+                console.log(data);
                 expect(data[0].someOtherStringData).to.be.undefined; /* jslint ignore:line */
                 done();
             };
             var req = {};
             req.query = {};
-            req.query.projection = 'name';
+            req.query.select = 'name';
+            req.query.developer = objId1;
             users.find(req, res, next);
         });
 
