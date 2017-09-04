@@ -10,8 +10,13 @@ var mongooseMock = require('mongoose-mock');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
+var fnv = require('fnv-plus');
 
 var RequestLog;
+var objId1 = fnv.hash(new Date().valueOf() + '59abab38ead925031a714961', 128).str();
+var objId2 = fnv.hash(new Date().valueOf() + '59abab38ead925031a714962', 128).str();
+var objId3 = fnv.hash(new Date().valueOf() + '59abab38ead925031a714963', 128).str();
+var objId4 = fnv.hash(new Date().valueOf() + '59abab38ead925031a714964', 128).str();
 // Testing The RequestLogs Model
 describe('RequestLog Model',function(){
 
@@ -20,12 +25,13 @@ describe('RequestLog Model',function(){
 
     before(function(){  /* jslint ignore:line */
         RequestLog = require('../../models/RequestLogs');
+        var workers = require('../../services/queue/workers');
     });
 
     describe('Test CRUDS', function(){
         it('should save data', function(done){
             var myrequestlog = RequestLog.create({
-                RequestId: 'gdfd6563',
+                RequestId: objId1,
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
@@ -43,7 +49,7 @@ describe('RequestLog Model',function(){
         });
 
         it('should read data', function(done){
-            var myrequestlog = RequestLog.findOne({RequestId: 'gdfd6563'});
+            var myrequestlog = RequestLog.findOne({RequestId: objId1});
 
             myrequestlog.then(function(res){
                 res.should.be.an.object; /* jslint ignore:line */
@@ -68,7 +74,7 @@ describe('RequestLog Model',function(){
 
         it('should update data', function(done){
             var cb = sinon.spy();
-            var myrequestlog = RequestLog.update({RequestId: 'gdfd6563'},{RequestId: 'gfdvdt09876543456789'});
+            var myrequestlog = RequestLog.update({RequestId: objId1},{RequestId: objId2});
 
             myrequestlog.then(function(res){
                 cb();
@@ -82,7 +88,7 @@ describe('RequestLog Model',function(){
 
         it('should update many data', function(done){
             var cb = sinon.spy();
-            var myrequestlog = RequestLog.updateMany({RequestId: 'gfdvdt09876543456789'},{RequestId: 'gftgd'});
+            var myrequestlog = RequestLog.updateMany({RequestId: objId2},{RequestId: objId3});
 
             myrequestlog.then(function(res){
                 cb();
@@ -110,28 +116,21 @@ describe('RequestLog Model',function(){
         it('should delete data', function(done){
             var cb2 = sinon.spy();
             var ourrequestlog = RequestLog.create([{
-                RequestId: 'gdfd6563',
+                RequestId: objId2,
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
                 body: {name: 'femi'},
                 createdAt: new Date()
             },{
-                RequestId: 'gdfd6524242463',
+                RequestId: objId1,
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
                 body: {name: 'fqwwemi'},
                 createdAt: new Date()
-            },{
-                RequestId: 'gdfd6534235263',
-                ipAddress: '192.168.90.9',
-                url: 'http://google.com',
-                method: 'POST',
-                body: {name: 'fem3i'},
-                createdAt: new Date()
             }]);
-            var myrequestlog = RequestLog.deleteOne({RequestId: 'gdfd6534235263'});
+            var myrequestlog = RequestLog.deleteOne({RequestId: objId1});
 
             ourrequestlog.then(function(res){
                 res.should.be.an.object; /* jslint ignore:line */
@@ -148,7 +147,7 @@ describe('RequestLog Model',function(){
 
 it('should delete many data', function(done){
     var cb = sinon.spy();
-    var myrequestlog = RequestLog.deleteMany({RequestId: 'gdfd6524242463'});
+    var myrequestlog = RequestLog.deleteMany({RequestId: objId2});
 
     myrequestlog.then(function(res){
         cb();
@@ -161,7 +160,7 @@ it('should delete many data', function(done){
 });
 
 it('should add createdAt', function(done){
-    var myrequestlog = RequestLog.create({RequestId: 'gdfd6563'});
+    var myrequestlog = RequestLog.create({RequestId: objId2});
 
     myrequestlog.then(function(res){
         id = res._id;
@@ -174,10 +173,10 @@ it('should add createdAt', function(done){
 });
 
 it('should add updatedAt', function(done){
-    var myrequestlog = RequestLog.create({RequestId: 'gdfd6563'});
+    var myrequestlog = RequestLog.create({RequestId: objId1});
     myrequestlog.then(function(res){
         id2 = res._id;
-        return RequestLog.update({_id: id},{RequestId: 'gdfd65635555555'});
+        return RequestLog.update({_id: id},{RequestId: objId4});
     })
     .then(function(res){
         return RequestLog.findOne({_id: id});
@@ -192,7 +191,7 @@ it('should add updatedAt', function(done){
 });
 
 it('should count returned records', function(done){
-    var myrequestlog = RequestLog.count({RequestId: 'gdfd65635555555'});
+    var myrequestlog = RequestLog.count({RequestId: objId2});
 
     myrequestlog.then(function(res){
         res.should.be.a.number; /* jslint ignore:line */
@@ -240,7 +239,7 @@ it('should find a record by id and update', function(done){
 });
 
 it('should find the first match from a query', function(done){
-    var myrequestlog = RequestLog.findOne({RequestId: 'gdfd65635555555'});
+    var myrequestlog = RequestLog.findOne({RequestId: objId4});
 
     myrequestlog.then(function(res){
         res.should.be.an.object; /* jslint ignore:line */
@@ -252,7 +251,7 @@ it('should find the first match from a query', function(done){
 });
 
 it('should find the first match from a query and update', function(done){
-    var myrequestlog = RequestLog.findOneAndUpdate({RequestId: 'gdfd65635555555'},{RequestId: 'gdfd65630987655555555'});
+    var myrequestlog = RequestLog.findOneAndUpdate({RequestId: objId4},{RequestId: objId1});
 
     myrequestlog.then(function(res){
         res.should.be.an.object; /* jslint ignore:line */
@@ -264,7 +263,7 @@ it('should find the first match from a query and update', function(done){
 });
 
 it('should find the first match from a query and delete', function(done){
-    var myrequestlog = RequestLog.findOneAndRemove({RequestId: 'gdfd65630987655555555'});
+    var myrequestlog = RequestLog.findOneAndRemove({RequestId: objId1});
 
     myrequestlog.then(function(res){
         res.should.be.an.object; /* jslint ignore:line */

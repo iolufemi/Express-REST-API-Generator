@@ -2,8 +2,19 @@
 var cluster = require('cluster');
 var config = require('./config');
 var log = require('./services/logger');
+var basicAuth = require('basic-auth-connect');
+var express = require('express');
 
 if (cluster.isMaster && config.env === 'production') {
+    var kue = require('./services/queue').kue;
+    var app = express();
+    app.use(basicAuth(config.queueUIUsername, config.queueUIPassword));
+    app.use(kue.app);
+    var server = app.listen(config.queueUIPort, function () {
+        var host = server.address().address;
+        var port = server.address().port;
+        log.info('Queue UI listening on host '+host+', port '+port+'!');
+    });
 	// Count the machine's CPUs
 	var cpuCount = require('os').cpus().length;
 
@@ -21,10 +32,10 @@ if (cluster.isMaster && config.env === 'production') {
     });
 
 } else {
-	var express = require('express');
 	var app = express();
 	var router = require('./routes');
     var express_enforces_ssl = require('express-enforces-ssl');
+    var workers = require('./services/queue/workers');
 
     if(config.trustProxy === 'yes'){
       app.enable('trust proxy');
@@ -44,7 +55,7 @@ if(config.env === 'production'){
 var server = app.listen(config.port, function () {
     var host = server.address().address;
     var port = server.address().port;
-    log.info('listening on host '+host+', port '+port+'!');
+    log.info('API server listening on host '+host+', port '+port+'!');
 });
 
 }

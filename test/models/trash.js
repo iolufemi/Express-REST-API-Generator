@@ -20,6 +20,7 @@ describe('Trash Model',function(){
 
     before(function(){  /* jslint ignore:line */
         Trash = require('../../models/Trash');
+        var workers = require('../../services/queue/workers');
     });
 
     describe('Test CRUDS', function(){

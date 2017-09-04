@@ -81,8 +81,9 @@ describe('#Encryption service test', function(){
         })
         .then(function(resp){
             console.log("encrypted data: ", resp);
-            res.set('encryptedData', resp);
-            return encryption.decrypt(resp, req.get('x-tag'), demoDataHash);
+            res.set('encryptedData', resp.encryptedText);
+            console.log('hash: ', demoDataHash, 'generated hash: ', resp.truth);
+            return encryption.decrypt(resp.encryptedText, req.get('x-tag'), resp.truth);
         })
         .then(function(resp){
             console.log("decrypted data: ", resp);

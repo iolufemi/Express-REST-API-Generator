@@ -57,11 +57,14 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('supertest');
+var router = require('../../routes');
 
 // Dummy App
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(response);
+app.use(router._APICache);
+
 
 app.get('/ok', function(req,res){
     res.ok('It worked!');
@@ -109,6 +112,11 @@ var agent2 = request(app2);
 
 
 describe('#Response service test', function(){
+
+    before(function(){ /* jslint ignore:line */
+        var workers = require('../../services/queue/workers');
+    });
+
     it('should add property ok, badRequest, forbidden, notFound, serverError and unauthorized to res object', function(done){
         response(req,res,next);
         nextChecker = false; 
@@ -126,6 +134,23 @@ describe('#Response service test', function(){
         get('/ok')
         .expect(200,done);
     });
+
+    console.log(process.env.NO_CACHE);
+    if(config.noFrontendCaching !== 'yes'){
+        it('should be a cached response', function(done){
+            agent.
+            get('/ok')
+            .expect(200)
+            .then(function(res){
+                console.log(res.body);
+                res.body.cached.should.be.true; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+    }
 
     it('should be a badRequest', function(done){
         agent.
@@ -161,11 +186,11 @@ describe('#Response service test', function(){
             return encryption.encrypt(demoData, tag);
         })
         .then(function(res){
-            console.log('Our encrypted data: ', res);
+            console.log('Our encrypted data: ', res.encryptedText);
             return agent2.
             post('/secure')
             .set('x-tag', tag)
-            .send({truth: demoDataHash,secureData: res})
+            .send({truth: res.truth,secureData: res.encryptedText, secure: true})
             .expect(200);
         })
         .then(function(res){
@@ -184,7 +209,7 @@ describe('#Response service test', function(){
         encryption.generateKey()
         .then(function(res){
             tag = res;
-            var demoData2 = '{"escribimos": "silencio es dorado"}';
+            var demoData2 = '{"escribimos": "silencios es dorado"}';
             return encryption.encrypt(demoData2, tag);
         })
         .then(function(res){
@@ -192,7 +217,7 @@ describe('#Response service test', function(){
             return agent2.
             post('/secure')
             .set('x-tag', tag)
-            .send({truth: demoDataHash,secureData: res})
+            .send({truth: demoDataHash,secureData: res.encryptedText, secure: true})
             .expect(500);
         })
         .then(function(res){
@@ -205,5 +230,3 @@ describe('#Response service test', function(){
     });
 
 });
-
-// ToDo: Test all responses and also encrypted responses

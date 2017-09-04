@@ -1,20 +1,20 @@
 "use strict";
 var log = require('../logger');
-var RequestLogs = require('../../models/RequestLogs');
+var RequestLogs = require('../../models').RequestLogs;
 var _ = require('lodash');
+var queue = require('../queue');
 
 module.exports = function(){
 	log.warn('Sending 404 response: '+'not found');
     var req = this.req;
     var res = this;
-    // ToDo: Move this to a queue. Not good for performance
-    RequestLogs.update({RequestId: req.requestId},{response: {status: 'error', message: 'not found'}})
-    .then(function(res){
-        return _.identity(res);
-    })
-    .catch(function(err){
-        log.error(err);
-    });
 
-	this.status(404).json({status: 'error', message: 'not found'});
+    // Dump it in the queue
+    var response = {response: {status: 'error', message: 'not found'}};
+    response.requestId = req.requestId;
+    
+    queue.create('logResponse', response)
+    .save();
+
+    this.status(404).json({status: 'error', message: 'not found'});
 };
