@@ -27,7 +27,6 @@ module.exports = function(data, cache, extraData){
     
     response.requestId = req.requestId;
     // Encrypt response here
-    console.log('bodddy: ',req.body,req.get('x-tag'),req.method,config.secureMode);
     if(req.get('x-tag') && req.method === 'POST' && config.secureMode && req.body.secure === true && data){
       debug("i want to encrypt");
       var key = req.get('x-tag');

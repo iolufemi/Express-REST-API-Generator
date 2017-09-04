@@ -116,8 +116,6 @@ UsersController.find = function(req,res,next){
         if(populate){
             delete query.populate;
         }
-
-        console.log('our query: >>>>>>>>>>>',query);
         var totalResult = Users.count(query);
         var total = Users.count({});
         var question = Users.find(query);
