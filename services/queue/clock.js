@@ -9,3 +9,4 @@
 // }
 
 // ToDo: work on a clock functionality so kue can support scheduled jobs
+// Todo: Use the cron package here https://www.npmjs.com/package/cron for timer

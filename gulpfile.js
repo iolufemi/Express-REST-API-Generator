@@ -6,6 +6,7 @@ var nodemon = require('gulp-nodemon');
 var debug = require('debug')('gulp');
 var todo = require('gulp-todo');
 var mocha = require('gulp-mocha');
+var _ = require('lodash');
 
 var runSequence = require('run-sequence');
 var conventionalChangelog = require('gulp-conventional-changelog');
@@ -20,7 +21,7 @@ var argv = require('minimist');
 
 
 gulp.task('lint', function() {
-  return gulp.src(['./*.js','./**/*.js','!./node_modules/**','!./node_modules/*.js'])
+  return gulp.src(['./*.js','./**/*.js','!./node_modules/**','!./node_modules/*.js','!./template/*.js'])
   .pipe(jshint())
   .pipe(jshint.reporter(stylish));
 });
@@ -40,7 +41,7 @@ gulp.task('default', function(){
 
 gulp.task('test', function() {
     // Override RATE LIMIT HERE FOR UNIT TEST
-    process.env.RATE_LIMIT = 10;
+    // process.env.RATE_LIMIT = 10;
     process.env.SECURE_MODE = true;
     process.env.NO_CACHE = 'no';
     process.env.NODE_ENV = 'test';
@@ -52,7 +53,120 @@ gulp.task('test', function() {
     }
     );
 
-gulp.task('create', function(){
+// Remember to pass argument '--name TheServiceName' or '-n TheServiceName' to the service creation command
+// Note that the name must be singular
+gulp.task('service', function(){
+    var args = argv(process.argv.slice(2));
+    var name;
+    name = args.name;
+    if(!name){
+        name = args.n;
+    }
+
+    if(!name){
+        throw new Error('Please, pass the service name using the "-n" argument or "--name" argument');
+    }
+
+    var namePlural = _.lowerCase(name)+'s';
+    var nameCapitalise = _.capitalize(name);
+    var nameCapitalisePlural = _.capitalize(name)+'s';
+    var nameLowerCase = _.lowerCase(name);
+
+    // Create the Route
+    fs.readFile('./template/route.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./routes/'+namePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Route created at ./routes/'+namePlural+'.js');
+    });
+});
+    
+    // Create the Route Unit Test
+    fs.readFile('./template/route_test.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./test/routes/'+namePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Route unit test created at ./test/routes/'+namePlural+'.js');
+    });
+});
+    
+    // Create the Model
+    fs.readFile('./template/model.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./models/'+nameCapitalisePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Model created at ./models/'+nameCapitalisePlural+'.js');
+    });
+});
+    
+    // Create the Model Unit Test
+    fs.readFile('./template/model_test.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./test/models/'+namePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Model unit test created at ./test/models/'+namePlural+'.js');
+    });
+});
+    
+    // Create the controller
+    fs.readFile('./template/controller.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./controllers/'+nameCapitalisePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Controller created at ./controllers/'+nameCapitalisePlural+'.js');
+    });
+});
+    
+    // Create the controller Unit test
+    fs.readFile('./template/controller_test.js', function(err, data){
+      if (err){
+        throw err;
+    } 
+    var tpl = _.template(data);
+    var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+    fs.writeFile('./test/controllers/'+namePlural+'.js', result, function(err){
+        if (err){
+            throw err;
+        } 
+        console.log('Controller unit test created at ./test/controllers/'+namePlural+'.js');
+    });
+});
 
 });
 
