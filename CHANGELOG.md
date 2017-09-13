@@ -1,3 +1,13 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/EnsembleLab/api-template/compare/0.2.0...v0.3.0) (2017-09-13)
+
+
+### Features
+
+* **API Generator:** added the ability to generate API routes ([5eefc72](https://github.com/EnsembleLab/api-template/commit/5eefc72))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/EnsembleLab/api-template/compare/0.1.1...v0.2.0) (2017-09-04)
 

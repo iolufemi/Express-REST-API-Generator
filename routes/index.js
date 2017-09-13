@@ -10,7 +10,7 @@ var initialize = require('./initialize');
 var config = require('../config');
 var helmet = require('helmet');
 var redisClient = require('../services/database').redis;
-// var limiter = require('express-limiter')(router, redisClient);
+var limiter = require('express-limiter')(router, redisClient);
 var _ = require('lodash');
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -23,6 +23,59 @@ var RequestLogs = require('../models').RequestLogs;
 var Cacheman = require('cacheman');
 var EngineRedis = require('cacheman-redis');
 var queue = require('../services/queue');
+var fileSystem = require("fs");
+
+// load routes. Comes with versioning. unversioned routes should be named like 'user.js'
+// versioned files or routes should be named as user.v1.js. 
+// The versioned routes will be available at /v1/routename or as the route version reads
+// The latest version will also be loaded on the default route /routename
+router._loadRoutes = function(routeFiles){
+    var versions = [];
+    var ourRoutes = {};
+    // Number of routes, removing index and initialize
+    var currentRoute = 0;
+    var routeNum = routeFiles.length * 1;
+
+    // Comes with endpoint versioning 
+    routeFiles.forEach(function(file) {
+        currentRoute = currentRoute + 1;
+        var splitFileName = file.split('.');
+        if(splitFileName[0] !== 'index' && splitFileName[0] !== 'initialize'){
+
+            if(splitFileName.length === 3){
+                ourRoutes[splitFileName[0]+'.'+splitFileName[1]] = require('./'+splitFileName[0]+'.'+splitFileName[1]);
+                router.use('/'+splitFileName[1], ourRoutes[splitFileName[0]+'.'+splitFileName[1]]);
+                var splitVersion = splitFileName[1].split('v');
+                var versionMap = {};
+                versionMap[splitFileName[0]] = splitVersion[1];
+                versions.push(versionMap);
+            }else{
+                ourRoutes[splitFileName[0]] = require('./'+splitFileName[0]+'.'+splitFileName[1]);
+                router.use('/', ourRoutes[splitFileName[0]]);
+            }
+
+        }
+        if(currentRoute === routeNum){
+            var finalVersions = {};
+            _.forEach(versions, function(value){
+                _.forOwn(value, function(value, key){
+                    if(_.has(finalVersions, key)){
+                        finalVersions[key].push(value);
+                    }else{
+                        finalVersions[key] = [];
+                        finalVersions[key].push(value);
+                    }
+                });   
+            });
+            _.forOwn(finalVersions, function(value, key){
+                var sorted = value.sort();
+                var sortedlength = sorted.length * 1;
+                router.use('/', ourRoutes[key+'.v'+sortedlength]);
+            });
+        } 
+    });
+return ourRoutes;
+};
 
 router._sanitizeRequestUrl = function(req) {
   var requestUrl = url.format({
@@ -30,7 +83,7 @@ router._sanitizeRequestUrl = function(req) {
     host: req.hostname,
     pathname: req.originalUrl || req.url,
     query: req.query
-  });
+});
 
   return requestUrl.replace(/(password=).*?(&|$)/ig, '$1<hidden>$2');
 };
@@ -41,13 +94,13 @@ router._allRequestData = function(req,res,next){
     var newRequestData = _.assignIn(requestData, req.params, req.body, req.query);
     if(newRequestData[key]){
       return newRequestData[key];
-    }else if(defaultValue){
+  }else if(defaultValue){
       return defaultValue;
-    }else{
+  }else{
       return false;
-    }
-  };
-  next();
+  }
+};
+next();
 };
 
 router._enforceUserIdAndAppId = function(req,res,next){
@@ -56,11 +109,11 @@ router._enforceUserIdAndAppId = function(req,res,next){
   var developer = req.param('developer');
   if(!userId){
     return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
-  }else if(!appId){
+}else if(!appId){
     return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
-  }else if(!developer){
+}else if(!developer){
     return res.badRequest(false,'No developer parameter was passed in the payload of this request. Please pass a developer id.');
-  }else{
+}else{
     req.userId = userId;
     req.appId = appId;
     req.developer = developer;
@@ -71,16 +124,16 @@ router._enforceUserIdAndAppId = function(req,res,next){
         value.createdBy = userId;
         value.developer = developer;
         return value;
-      });
+    });
       next();
-    }else{
+  }else{
       req.body.client = appId;
       req.body.owner = userId;
       req.body.createdBy = userId;
       req.body.developer = developer;
       next();
-    }
   }
+}
 };
 
 router._APICache = function(req,res,next){
@@ -96,11 +149,11 @@ router._APICache = function(req,res,next){
   key.push(req.get('user-agent'));
   if(req.userId){
     key.push(req.userId);
-  }
-  if(req.appId){
+}
+if(req.appId){
     key.push(req.appId);
-  }
-  req.cacheKey = key;
+}
+req.cacheKey = key;
   // Remember to delete cache when you get a POST call
   // Only cache GET calls
   if(req.method === 'GET'){
@@ -110,22 +163,22 @@ router._APICache = function(req,res,next){
       if(!resp){
         // Will be set on successful response
         next();
-      }else{
+    }else{
         res.ok(resp, true);
-      }
-    })
+    }
+})
     .catch(function(err){
       log.error('Failed to get cached data: ', err);
       // Don't block the call because of this failure.
       next();
-    });
-  }else{
+  });
+}else{
     if(req.method === 'POST' || req.method === 'PUT' || req.method === 'PUSH'){
       req.cache.del(req.cacheKey)
       .then(); // No delays
-    }
-    next();
   }
+  next();
+}
 
 };
 
@@ -145,7 +198,7 @@ router.use(function(req,res,next){
     user: req.userId,
     device: req.get('user-agent'),
     createdAt: new Date()
-  };
+};
 
 // Dump it in the queue
 queue.create('logRequest', reqLog)
@@ -175,16 +228,16 @@ router.use(contentLength.validateMax({max: MAX_CONTENT_LENGTH_ACCEPTED, status: 
 router.use(router._allRequestData);
 
 // API Rate limiter
-// limiter({
-//   path: '*',
-//   method: 'all',
-//   lookup: ['ip','userId','appId','developer'],
-//   total: config.rateLimit * 1,
-//   expire: config.rateLimitExpiry * 1,
-//   onRateLimited: function (req, res, next) {
-//     next({ message: 'Rate limit exceeded', statusCode: 429 });
-//   }
-// });
+limiter({
+  path: '*',
+  method: 'all',
+  lookup: ['ip','userId','appId','developer'],
+  total: config.rateLimit * 1,
+  expire: config.rateLimitExpiry * 1,
+  onRateLimited: function (req, res, next) {
+    next({ message: 'Rate limit exceeded', statusCode: 429 });
+}
+});
 
 
 router.use(expressValidator());
@@ -193,7 +246,7 @@ router.use(expressValidator());
 if(config.noFrontendCaching === 'yes'){
   router.use(helmet.noCache());
 }else{
- router.use(router._APICache);
+   router.use(router._APICache);
 }
 
 router.get('/', function (req, res) {
@@ -207,10 +260,11 @@ router.get(config.letsencryptSSLVerificationURL, function(req,res){
 
 router.use('/', initialize);
 
-// Publicly available routes here
-// 
-// 
+// Publicly available routes here, IE. routes that should work with out requiring userid, appid and developer.
 
+
+
+// The routes after this line will require userid, appid and developer.
 if(config.enforceUserIdAppIdDeveloperId === 'yes'){
   // Make userId compolsory in every request
   router.use(router._enforceUserIdAndAppId);
@@ -218,16 +272,13 @@ if(config.enforceUserIdAppIdDeveloperId === 'yes'){
 
 // Should automatically load routes
 // Other routes here
-var ourRoutes = {};
-var normalizedPath = require("path").join(__dirname, "./");
 
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
-  var splitFileName = file.split('.');
-  if(splitFileName[0] !== 'index' && splitFileName[0] !== 'initialize'){
-    ourRoutes[splitFileName[0]] = require('./'+splitFileName[0]);
-    router.use('/', ourRoutes[splitFileName[0]]);
-  }
-});
+var normalizedPath = require("path").join(__dirname, "./");
+var routeFiles = fileSystem.readdirSync(normalizedPath);
+
+router._loadRoutes(routeFiles);
+
+// Finished loading routes
 
 router.use(function(req, res, next) { // jshint ignore:line
   res.notFound();
@@ -237,4 +288,7 @@ router.use(log.errorHandler);
 
 module.exports = router;
 
-// ToDo: Implement API Generator
+// ToDo: Test API versioning
+// ToDo: Test rate limiting
+// ToDo: Develop the route loader into a separate node module to be publish on npm 
+// ToDo: Develop all services onto separate node module to be publish on npm 
