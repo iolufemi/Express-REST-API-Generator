@@ -73,7 +73,7 @@ gulp.task('service', function(){
     var nameLowerCase = _.lowerCase(name);
 
     // Create the Route
-    fs.readFile('./template/route.js', function(err, data){
+    fs.readFile('./template/route.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -89,7 +89,7 @@ gulp.task('service', function(){
 });
     
     // Create the Route Unit Test
-    fs.readFile('./template/route_test.js', function(err, data){
+    fs.readFile('./template/route_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -105,7 +105,7 @@ gulp.task('service', function(){
 });
     
     // Create the Model
-    fs.readFile('./template/model.js', function(err, data){
+    fs.readFile('./template/model.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -121,7 +121,7 @@ gulp.task('service', function(){
 });
     
     // Create the Model Unit Test
-    fs.readFile('./template/model_test.js', function(err, data){
+    fs.readFile('./template/model_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -137,7 +137,7 @@ gulp.task('service', function(){
 });
     
     // Create the controller
-    fs.readFile('./template/controller.js', function(err, data){
+    fs.readFile('./template/controller.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -153,7 +153,7 @@ gulp.task('service', function(){
 });
     
     // Create the controller Unit test
-    fs.readFile('./template/controller_test.js', function(err, data){
+    fs.readFile('./template/controller_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 

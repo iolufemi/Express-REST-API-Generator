@@ -290,5 +290,10 @@ module.exports = router;
 
 // ToDo: Test API versioning
 // ToDo: Test rate limiting
+// ToDo: Test complete route Loader test
+// ToDo: Test _sanitizeRequestUrl middleware function
+// ToDo: Test _allRequestData middleware function for default value scenario
+// ToDo: Test _enforceUserIdAndAppId middle function for when req.body is an array
+// ToDo: Make Log requests testable and write unit tests for it
 // ToDo: Develop the route loader into a separate node module to be publish on npm 
 // ToDo: Develop all services onto separate node module to be publish on npm 

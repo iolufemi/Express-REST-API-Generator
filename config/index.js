@@ -9,3 +9,4 @@ if(process.env.NODE_ENV === 'development'){
 }else{
 	module.exports = development;
 }
+// ToDo: Test for production and development senarios
