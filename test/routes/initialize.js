@@ -5,7 +5,6 @@ var config = require('../../config');
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var request = require('supertest');
-var express = require('express');
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 chai.use(sinonChai);
@@ -14,7 +13,6 @@ chai.use(sinonChai);
 var response = require('../../services/response');
 
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var router = require('../../routes/initialize');
 var routers = require('../../routes');
