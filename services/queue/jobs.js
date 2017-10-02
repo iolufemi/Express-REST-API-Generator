@@ -55,45 +55,42 @@ jobs.createSearchTags = function(data, done){
     
     var ourDoc = data;
     var split = [];
-    if(ourDoc && ourDoc._id){
-        delete ourDoc._id;
-    }
-
-    if(ourDoc && ourDoc.createdAt){
-        delete ourDoc.createdAt;
-    }
-
-    if(ourDoc && ourDoc.updatedAt){
-        delete ourDoc.updatedAt;
-    }
-
-    if(ourDoc && ourDoc.tags){
-        delete ourDoc.tags;
-    }
     
     for(var n in ourDoc){
-        if(typeof ourDoc[n] === 'string'){
-            split.push(ourDoc[n].split(' '));
+        if(ourDoc[n] === ourDoc._id){ /* jslint ignore:line */
+            // Skip
+        }else if(ourDoc[n] === ourDoc.createdAt){ /* jslint ignore:line */
+            // Skip
+        }else if(ourDoc[n] === ourDoc.updatedAt){ /* jslint ignore:line */
+            // Skip
+        }else if(ourDoc[n] === ourDoc.tags){ /* jslint ignore:line */
+            // Skip
+        }else{
+            if(typeof ourDoc[n] === 'string'){
+                split.push(ourDoc[n].split(' '));
+            }else{ /* jslint ignore:line */
+            // Move on nothing to see here
         }
     }
 
-    split = _.flattenDeep(split);
+}
+split = _.flattenDeep(split);
 
-    var task;
-    if(update){
-        task = models[model].update(data,{ $set: { updatedAt: new Date().toISOString() }, $addToSet: {tags: {$each: split}} });
-    }else{
-        task = models[model].update(data,{ $set: { tags: split} });
-    }
+var task;
+if(update){
+    task = models[model].update(data,{ $set: { updatedAt: new Date().toISOString() }, $addToSet: {tags: {$each: split}} });
+}else{
+    task = models[model].update(data,{ $set: { tags: split} });
+}
 
-    task
-    .then(function(res){
-      return done(false, res);
-  })
-    .catch(function(err){
-      log.error(err);
-      return done(new Error(err.message));
-  });
+task
+.then(function(res){
+  return done(false, res);
+})
+.catch(function(err){
+  log.error(err);
+  return done(new Error(err.message));
+});
 };
 
 // Backup Data to Trash
