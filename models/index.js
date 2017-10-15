@@ -12,4 +12,4 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 
 module.exports = models;
 // Todo: Automatically generate tests with the schema structure
-// Todo: Move request logging to file system, not db for performance sake
+// Add the option of elasticsearch for API search

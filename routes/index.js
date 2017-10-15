@@ -107,31 +107,59 @@ router._enforceUserIdAndAppId = function(req,res,next){
   var userId = req.param('userId');
   var appId = req.param('appId');
   var developer = req.param('developer');
-  if(!userId){
-    return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
-}else if(!appId){
-    return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
-}else if(!developer){
-    return res.badRequest(false,'No developer parameter was passed in the payload of this request. Please pass a developer id.');
+  // The routes after this line will require userid, appid and developer.
+  if(config.enforceUserIdAppIdDeveloperId === 'yes'){
+    // Make userId compolsory in every request
+    if(!userId){
+        return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
+    }else if(!appId){
+        return res.badRequest(false,'No appId parameter was passed in the payload of this request. Please pass an appId.');
+    }else if(!developer){
+        return res.badRequest(false,'No developer parameter was passed in the payload of this request. Please pass a developer id.');
+    }else{
+        req.userId = userId;
+        req.appId = appId;
+        req.developer = developer;
+        if(req.body){
+            if(req.body && req.body.length){
+              req.body = _.map(req.body,function(value){
+                value.client = appId;
+                value.owner = userId;
+                value.createdBy = userId;
+                value.developer = developer;
+                return value;
+            });
+              next();
+          }else{
+              req.body.client = appId;
+              req.body.owner = userId;
+              req.body.createdBy = userId;
+              req.body.developer = developer;
+              next();
+          }
+      } 
+  }
 }else{
     req.userId = userId;
     req.appId = appId;
     req.developer = developer;
-    if(req.body.length){
-      req.body = _.map(req.body,function(value){
-        value.client = appId;
-        value.owner = userId;
-        value.createdBy = userId;
-        value.developer = developer;
-        return value;
-    });
-      next();
-  }else{
-      req.body.client = appId;
-      req.body.owner = userId;
-      req.body.createdBy = userId;
-      req.body.developer = developer;
-      next();
+    if(req.body){
+        if(req.body && req.body.length){
+          req.body = _.map(req.body,function(value){
+            value.client = appId;
+            value.owner = userId;
+            value.createdBy = userId;
+            value.developer = developer;
+            return value;
+        });
+          next();
+      }else{
+          req.body.client = appId;
+          req.body.owner = userId;
+          req.body.createdBy = userId;
+          req.body.developer = developer;
+          next();
+      }
   }
 }
 };
@@ -258,17 +286,12 @@ router.get(config.letsencryptSSLVerificationURL, function(req,res){
   res.send(config.letsencryptSSLVerificationBody);
 });
 
-router.use('/', initialize);
+
 
 // Publicly available routes here, IE. routes that should work with out requiring userid, appid and developer.
+router.use('/', initialize);
 
-
-
-// The routes after this line will require userid, appid and developer.
-if(config.enforceUserIdAppIdDeveloperId === 'yes'){
-  // Make userId compolsory in every request
-  router.use(router._enforceUserIdAndAppId);
-}
+router.use(router._enforceUserIdAndAppId);
 
 // Should automatically load routes
 // Other routes here

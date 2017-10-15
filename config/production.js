@@ -7,6 +7,7 @@ module.exports = {
 	secureMode: process.env.SECURE_MODE || true,
 	secret: process.env.SECRET || 'lakikihdgdfdjjjdgd67264660okjnbgtrdxswerfgytg373745ei8336%%^#%gdvdhj????jjhdghduue',
 	mongoURL: process.env.MONGOLAB_URL || 'mongodb://192.168.99.100/snipe',
+    logMongoURL: process.env.LOG_MONGOLAB_URL || 'mongodb://192.168.99.100/snipelogs',
     noFrontendCaching: process.env.NO_CACHE || 'no',
     frontendCacheExpiry: process.env.FRONTEND_CACHE_EXPIRY || '90',
     backendCacheExpiry: process.env.BACKEND_CACHE_EXPIRY || '90',

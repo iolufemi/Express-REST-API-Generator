@@ -3,7 +3,6 @@ var log = require('../logger');
 var config = require('../../config');
 var encryption = require('../encryption');
 var debug = require('debug')('response');
-var RequestLogs = require('../../models').RequestLogs;
 var _ = require('lodash');
 var queue = require('../queue');
 
