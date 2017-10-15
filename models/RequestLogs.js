@@ -187,3 +187,6 @@ var Model = db.model(collection, Schema);
 Model._mongoose = db;
 
 module.exports = Model;
+
+// ToDo: Log requests in a separate db for performance
+// Add the option of elasticsearch for API searchs

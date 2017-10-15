@@ -21,5 +21,5 @@ module.exports = {
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
     queueUIPort: process.env.QUEUE_UI_PORT || 3000,
-    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'yes'
+    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'no'
 };

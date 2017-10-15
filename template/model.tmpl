@@ -36,12 +36,12 @@ schemaObject.updatedAt = {
 
 schemaObject.owner = {
     type: db.Schema.Types.ObjectId,
-    ref: '<%= service %>s'
+    ref: 'Users'
 };
 
 schemaObject.createdBy = {
     type: db.Schema.Types.ObjectId,
-    ref: '<%= service %>s'
+    ref: 'Users'
 };
 
 schemaObject.client = {
@@ -51,7 +51,7 @@ schemaObject.client = {
 
 schemaObject.developer = {
     type: db.Schema.Types.ObjectId,
-    ref: '<%= service %>s'
+    ref: 'Users'
 };
 
 schemaObject.tags = {
