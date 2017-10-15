@@ -7,6 +7,7 @@ module.exports = {
 	secureMode: process.env.SECURE_MODE || false,
 	secret: process.env.SECRET || 'lakikihdgdfdjjjdgd67264664vdjhjdyncmxuei8336%%^#%gdvdhj????jjhdghduue',
 	mongoURL: process.env.MONGOLAB_URL || 'mongodb://192.168.99.100/snipe',
+    logMongoURL: process.env.LOG_MONGOLAB_URL || 'mongodb://192.168.99.100/snipelogs',
     noFrontendCaching: process.env.NO_CACHE || 'yes',
     frontendCacheExpiry: process.env.FRONTEND_CACHE_EXPIRY || '90',
     backendCacheExpiry: process.env.BACKEND_CACHE_EXPIRY || '90',
@@ -21,5 +22,5 @@ module.exports = {
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
     queueUIPort: process.env.QUEUE_UI_PORT || 3000,
-    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'yes'
+    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'no'
 };

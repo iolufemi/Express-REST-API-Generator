@@ -1,6 +1,6 @@
 "use strict";
 
-var db = require('../services/database').mongo;
+var db = require('../services/database').logMongo;
 
 var collection = 'RequestLogs';
 
@@ -29,21 +29,21 @@ var schemaObject = {
         default: service
     },
     body: {
-        type: db.Schema.Types.Mixed
+        type: db._mongoose.Schema.Types.Mixed
     },
     app: {
-        type: db.Schema.Types.ObjectId,
+        type: db._mongoose.Schema.Types.ObjectId,
         ref: 'Applications'
     },
     user: {
-        type: db.Schema.Types.ObjectId,
+        type: db._mongoose.Schema.Types.ObjectId,
         ref: 'Users'
     },
     device: {
         type: 'String'
     },
     response: {
-        type: db.Schema.Types.Mixed
+        type: db._mongoose.Schema.Types.Mixed
     },
 };
 
@@ -58,22 +58,22 @@ schemaObject.updatedAt = {
 };
 
 schemaObject.owner = {
-    type: db.Schema.Types.ObjectId,
+    type: db._mongoose.Schema.Types.ObjectId,
     ref: 'Users'
 };
 
 schemaObject.createdBy = {
-    type: db.Schema.Types.ObjectId,
+    type: db._mongoose.Schema.Types.ObjectId,
     ref: 'Users'
 };
 
 schemaObject.client = {
-    type: db.Schema.Types.ObjectId,
+    type: db._mongoose.Schema.Types.ObjectId,
     ref: 'Clients'
 };
 
 schemaObject.developer = {
-    type: db.Schema.Types.ObjectId,
+    type: db._mongoose.Schema.Types.ObjectId,
     ref: 'Users'
 };
 
@@ -83,7 +83,7 @@ schemaObject.tags = {
 };
 
 // Let us define our schema
-var Schema = db.Schema(schemaObject);
+var Schema = new db._mongoose.Schema(schemaObject);
 
 // Index all text for full text search
 // MyModel.find({$text: {$search: searchString}})
@@ -149,13 +149,13 @@ Schema.post('validate', function() {
 });
 
 Schema.pre('find', function(next) {
-  debug(this instanceof db.Query); // true
+  debug(this instanceof db._mongoose.Query); // true
   this.start = Date.now();
   next();
 });
 
 Schema.post('find', function(result) {
-  debug(this instanceof db.Query); // true
+  debug(this instanceof db._mongoose.Query); // true
   // prints returned documents
   debug('find() returned ' + JSON.stringify(result));
   // prints number of milliseconds the query took
@@ -184,6 +184,6 @@ Schema.pre('update', function(next) {
 });
 
 var Model = db.model(collection, Schema);
-Model._mongoose = db;
+Model._mongoose = db._mongoose;
 
 module.exports = Model;

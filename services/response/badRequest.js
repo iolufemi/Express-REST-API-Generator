@@ -1,6 +1,5 @@
 "use strict";
-var log = require('../logger');
-var RequestLogs = require('../../models').RequestLogs;
+var log = require('../logger'); 
 var _ = require('lodash');
 var queue = require('../queue');
 

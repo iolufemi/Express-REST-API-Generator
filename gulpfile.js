@@ -45,6 +45,7 @@ gulp.task('test', function() {
     process.env.SECURE_MODE = true;
     process.env.NO_CACHE = 'no';
     process.env.NODE_ENV = 'test';
+    process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID = 'yes';
     gulp.src('./test', {read: false})
         // `gulp-mocha` needs filepaths so you can't have any plugins before it 
         .pipe(mocha({
