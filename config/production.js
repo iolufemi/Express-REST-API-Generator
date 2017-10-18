@@ -22,5 +22,6 @@ module.exports = {
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
     queueUIPort: process.env.QUEUE_UI_PORT || 3000,
-    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'no'
+    enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'no',
+    apiDBKey: process.env.API_DB_Key || 'MDg4NWM1NTA0ZTZlNTQ5MjAzNzA1ODBlOWVkNzI3MzdlNmYxZTcyMjVkOTA3N2JjYTBhZjA0YmM0N2U4NDZkNi8vLy8vLzQ1MDY='
 };

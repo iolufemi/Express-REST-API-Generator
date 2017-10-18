@@ -148,7 +148,7 @@ Schema.pre('update', function(next) {
         queue.create('searchIndex', ourDoc)
         .save();
     }
-    
+    ourDoc.updatedAt = new Date(Date.now()).toISOString();
     next();
 });
 

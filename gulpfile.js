@@ -45,7 +45,6 @@ gulp.task('test', function() {
     process.env.SECURE_MODE = true;
     process.env.NO_CACHE = 'no';
     process.env.NODE_ENV = 'test';
-    process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID = 'yes';
     gulp.src('./test', {read: false})
         // `gulp-mocha` needs filepaths so you can't have any plugins before it 
         .pipe(mocha({
@@ -55,10 +54,23 @@ gulp.task('test', function() {
     );
 
 // Remember to pass argument '--name TheServiceName' or '-n TheServiceName' to the service creation command
+// If you want to use an API as a database model, pass the base url and the endpoint. '--baseurl http://google.com' or '--b http://google.com'
+// '--endpoint users' or '--e users'
 // Note that the name must be singular
 gulp.task('service', function(){
     var args = argv(process.argv.slice(2));
     var name;
+    var baseurl;
+    var endpoint;
+    baseurl = args.baseurl;
+    endpoint = args.endpoint;
+    if(!baseurl){
+        baseurl = args.b;
+    }
+
+    if(!endpoint){
+        endpoint = args.e;
+    }
     name = args.name;
     if(!name){
         name = args.n;
@@ -106,20 +118,37 @@ gulp.task('service', function(){
 });
     
     // Create the Model
-    fs.readFile('./template/model.tmpl', function(err, data){
-      if (err){
-        throw err;
-    } 
-    var tpl = _.template(data);
-    var result = tpl({service: nameCapitalise, object: nameLowerCase});
-
-    fs.writeFile('./models/'+nameCapitalisePlural+'.js', result, function(err){
-        if (err){
+    if(baseurl && endpoint){
+        fs.readFile('./template/model_api.tmpl', function(err, data){
+          if (err){
             throw err;
         } 
-        console.log('Model created at ./models/'+nameCapitalisePlural+'.js');
+        var tpl = _.template(data);
+        var result = tpl({baseurl: baseurl, endpoint: endpoint});
+
+        fs.writeFile('./models/'+nameCapitalisePlural+'.js', result, function(err){
+            if (err){
+                throw err;
+            } 
+            console.log('Model created at ./models/'+nameCapitalisePlural+'.js');
+        });
     });
-});
+    }else{
+        fs.readFile('./template/model.tmpl', function(err, data){
+          if (err){
+            throw err;
+        } 
+        var tpl = _.template(data);
+        var result = tpl({service: nameCapitalise, object: nameLowerCase});
+
+        fs.writeFile('./models/'+nameCapitalisePlural+'.js', result, function(err){
+            if (err){
+                throw err;
+            } 
+            console.log('Model created at ./models/'+nameCapitalisePlural+'.js');
+        });
+    });
+    }
     
     // Create the Model Unit Test
     fs.readFile('./template/model_test.tmpl', function(err, data){

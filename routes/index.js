@@ -108,7 +108,7 @@ router._enforceUserIdAndAppId = function(req,res,next){
   var appId = req.param('appId');
   var developer = req.param('developer');
   // The routes after this line will require userid, appid and developer.
-  if(config.enforceUserIdAppIdDeveloperId === 'yes'){
+  if(config.enforceUserIdAppIdDeveloperId === 'yes' || req.test){
     // Make userId compolsory in every request
     if(!userId){
         return res.badRequest(false,'No userId parameter was passed in the payload of this request. Please pass a userId.');
@@ -140,27 +140,7 @@ router._enforceUserIdAndAppId = function(req,res,next){
       } 
   }
 }else{
-    req.userId = userId;
-    req.appId = appId;
-    req.developer = developer;
-    if(req.body){
-        if(req.body && req.body.length){
-          req.body = _.map(req.body,function(value){
-            value.client = appId;
-            value.owner = userId;
-            value.createdBy = userId;
-            value.developer = developer;
-            return value;
-        });
-          next();
-      }else{
-          req.body.client = appId;
-          req.body.owner = userId;
-          req.body.createdBy = userId;
-          req.body.developer = developer;
-          next();
-      }
-  }
+    next();
 }
 };
 
