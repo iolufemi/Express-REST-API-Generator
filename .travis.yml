@@ -19,6 +19,8 @@ before_script:
   - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
+  - gulp service -n api
+  - gulp service -n test -b http://localhost:8080 -e apis
   - npm start >> femi.log . &
 script:
   - >-
