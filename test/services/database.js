@@ -74,6 +74,15 @@ describe('#MongoDB database service test', function(){
     });
 });
 
+var logmongodb = require('../../services/database').logMongo;
+
+describe('#MongoDB database service test', function(){
+    it('should exist as a function',function(done){
+        logmongodb.should.exist; /* jslint ignore:line */
+        done();
+    });
+});
+
 var redisdb = require('../../services/database').redis;
 
 describe('#Redis database service test', function(){

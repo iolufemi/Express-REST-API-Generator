@@ -28,7 +28,7 @@ describe('#Queue service', function(){
             res.json({status: 'ok'});
         });
 
-        var server = app.listen('8080',function () {
+        var server = app.listen('8081',function () {
             var host = server.address().address;
             var port = server.address().port;
             console.log('API server listening on host '+host+', port '+port+'!');
@@ -135,7 +135,7 @@ describe('#Queue service', function(){
 
         it('should run sendWebhook successfully for sending realtime HTTP notifications', function(done){
             var data =  {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 secure: false, // true or false
                 data: {
                     someData: 'this',
@@ -148,7 +148,7 @@ describe('#Queue service', function(){
 
         it('should run sendWebhook successfully for sending realtime HTTP notifications securely', function(done){
             var data =  {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 secure: true, // true or false
                 data: {
                     someData: 'this',
@@ -161,7 +161,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with POST method', function(done){
             var data =      {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 method: 'POST', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -177,7 +177,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with GET method', function(done){
             var data =      {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 method: 'GET', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -193,7 +193,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with PUT method', function(done){
             var data =      {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 method: 'PUT', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -209,7 +209,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with DELETE method', function(done){
             var data =      {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 method: 'DELETE', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -225,7 +225,7 @@ describe('#Queue service', function(){
 
         it('should run sendHTTPRequest successfully for calling web services with PATCH method', function(done){
             var data =      {
-                url: 'http://localhost:8080',
+                url: 'http://localhost:8081',
                 method: 'PATCH', // or any http method
                 headers: {
                     'User-Agent': 'Femi'
@@ -236,7 +236,16 @@ describe('#Queue service', function(){
                 }
             };
 
-            jobs.sendHTTPRequest(data,done);
+            jobs.sendHTTPRequest(data,function(err,data){
+                if(err){
+                    done(err);
+                }else{
+                    console.log('data Yayyyy! ',data);
+                    done();
+                }
+                
+
+            });
         });
 
     });

@@ -187,7 +187,6 @@ describe('<%= service %>s controller', function(){
             var req = {};
             req.query = {};
             req.query.select = 'name';
-            req.query.developer = objId1;
             <%= object %>s.find(req, res, next);
         });
 
@@ -321,6 +320,7 @@ it('should update a document', function(done){
     var req = {};
     req.params = {};
     req.params.id = <%= object %>Id;
+    req.body = {name: 'Mr Fufuf'};
     <%= object %>s.updateOne(req, res, next);
 });
 describe('Delete', function(){

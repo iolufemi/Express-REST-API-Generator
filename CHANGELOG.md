@@ -1,3 +1,8 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/EnsembleLab/api-template/compare/0.3.0...0.3.1) (2017-10-18)
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/EnsembleLab/api-template/compare/0.2.0...v0.3.0) (2017-09-13)
 

@@ -11,3 +11,5 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 });
 
 module.exports = models;
+// Todo: Automatically generate tests with the schema structure
+// Add the option of elasticsearch for API search
