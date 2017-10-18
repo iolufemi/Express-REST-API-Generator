@@ -164,6 +164,7 @@ describe('Router', function(){
     it('should enforce UserId', function(done){
         router._allRequestData(req, res, next);
         nextChecker = false;
+        req.test = true;
         router._enforceUserIdAndAppId(req, res, next);
         res.badRequest.should.be.called.once; /* jslint ignore:line */
         res.badRequest.should.be.calledWith(false, 'No userId parameter was passed in the payload of this request. Please pass a userId.');

@@ -106,11 +106,10 @@ describe('<%= service %> Model',function(){
         it('should delete data', function(done){
             var cb2 = sinon.spy();
             var our<%= object %> = <%= service %>.create([{name:'Olaolu'},{name: 'fola'},{name: 'bolu'}]);
-            var my<%= object %> = <%= service %>.deleteOne({name: 'bolu'});
 
             our<%= object %>.then(function(res){
                 res.should.be.an.object; /* jslint ignore:line */
-                return my<%= object %>;
+                return <%= service %>.deleteOne({name: 'bolu'});
             }).then(function(res){
                 cb2();
                 cb2.should.have.been.calledOnce; /* jslint ignore:line */
@@ -155,7 +154,7 @@ describe('<%= service %> Model',function(){
                 return <%= service %>.update({_id: id},{name: 'This is the titan'});
             })
             .then(function(res){
-                return <%= service %>.findOne({_id: id});
+                return <%= service %>.findById(id);
             })
             .then(function(res){
                 res.should.have.property('updatedAt');

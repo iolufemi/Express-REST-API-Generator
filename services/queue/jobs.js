@@ -7,6 +7,7 @@ var encryption = require('../encryption');
 var crypto = require('crypto');
 var request = require('request-promise');
 var q = require('q');
+var debug = require('debug')('jobs');
 
 var jobs = {};
 
@@ -78,7 +79,7 @@ split = _.flattenDeep(split);
 
 var task;
 if(update){
-    task = models[model].update(data,{ $set: { updatedAt: new Date().toISOString() }, $addToSet: {tags: {$each: split}} });
+    task = models[model].update(data,{ $set: { updatedAt: new Date(Date.now()).toISOString() }, $addToSet: {tags: {$each: split}} });
 }else{
     task = models[model].update(data,{ $set: { tags: split} });
 }
@@ -95,14 +96,20 @@ task
 
 // Backup Data to Trash
 jobs.saveToTrash = function(data, done){
-    log.info('Saving '+data.data._id+' to Trash...');
-    models.Trash.create(data)
-    .then(function(res){
-        done(false, res);
-    })
-    .catch(function(err){
-        done(new Error(err.message));
-    });
+    if(data.data){
+        log.info('Saving '+data.data._id+' to Trash...');
+        models.Trash.create(data)
+        .then(function(res){
+            debug('Finished saving to trash: ', res);
+            done(false, res);
+        })
+        .catch(function(err){
+            done(new Error(err.message));
+        });
+    }else{
+        done(new Error('No data was passed'));
+    }
+    
 };
 
 // Send Webhook Event

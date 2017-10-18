@@ -1,0 +1,10 @@
+"use strict";
+
+var Db = require('../services/database').api;
+
+var Model = new Db('<%= baseurl %>','<%= endpoint %>'/*, {
+    authorization: '72624642hfbsbsyrwywr'
+}*/);
+
+Model._mongoose = Db._mongoose;
+module.exports = Model;
