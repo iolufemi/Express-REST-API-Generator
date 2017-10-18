@@ -19,7 +19,7 @@ before_script:
   - npm install -g gulp mocha gulp-cli codecov istanbul
 install:
   - npm install
-  - npm start
+  - npm start >> femi.log . &
 script:
   - >-
     istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
