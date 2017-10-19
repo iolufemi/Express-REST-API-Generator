@@ -94,6 +94,8 @@ You will now be able to access CRUD (create, read, update and delete) endpoints
 `[DELETE] http://localhost:8080/yourFirstEndpoint/:id` Delete one yourFirstEndpoint resource
 `[POST] http://localhost:8080/yourFirstEndpoint/:id/restore` Restore a previously deleted yourFirstEndpoint resource
 
+> Note: For every `POST` API calls you need to send an `x-tag` value in the header. This value is used for secure communication between the server and client. It is used for AES encrytion when secure mode is enabled. To get a valid `x-tag` call the `[GET] /initialize` endpoint.   
+
 ## Versioning your API endpoints
 
 You can create multiple versions of your API endpoints by simply adding the version number to your route file name. eg. `users.v1.js` will put a version of the users resources on the `/v1/users` endpoint. users.v2.js will put a version of the users resources on the `/v2/users` endpoint. The latest version of the resources will always be available at the `/users` endpoint.
