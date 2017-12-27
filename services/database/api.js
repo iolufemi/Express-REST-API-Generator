@@ -21,7 +21,7 @@ var ApiModel = function(baseurl,endpoint,headers){
         var string = '';
         var list = [];
         if(typeof select !== 'object'){
-            throw new Error('Projection should ne an object. EG. {name: 1, place: 1}');
+            throw new Error('Projection should be an object. EG. {name: 1, place: 1}');
         }else{
             for(var key in select){
                 if(typeof select[key] === 'number'){
