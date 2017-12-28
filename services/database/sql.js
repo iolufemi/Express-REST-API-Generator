@@ -4,6 +4,7 @@ var config = require('../../config');
 var log = require('../../services/logger');
 var mongoose = require('mongoose');
 var Sequelize = require('sequelize');
+var debug = require('debug')('sql');
 
 var Op = Sequelize.Op;
 var operatorsAliases = {
@@ -46,6 +47,8 @@ options.pool = {
 };
 // SQLite only
 // options.storage = 'path/to/database.sqlite';
+
+options.logging = false;
 
 var sequelize = new Sequelize(config.SQLDatabase, config.SQLUsername, config.SQLPassword, options);
 
