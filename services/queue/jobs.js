@@ -59,6 +59,12 @@ jobs.createSearchTags = function(data, done){
     if(dataClone && dataClone.isSQL){
         delete dataClone.isSQL;
     }
+    if(dataClone && dataClone.createdAt){
+        delete dataClone.createdAt;
+    }
+    if(dataClone && dataClone.updatedAt){
+        delete dataClone.updatedAt;
+    }
 
     var ourDoc = dataClone;
     var split = [];
@@ -86,6 +92,7 @@ split = _.flattenDeep(split);
 var task;
 if(model){
     if(isSQL){
+        console.log('mememem: ',dataClone);
         task = models[model].update(dataClone,{ tags: split.join(', ')} );
     }else{
         if(update){
@@ -97,8 +104,8 @@ if(model){
 
     task
     .then(function(res){
-      return done(false, res);
-  })
+        return done(false, res);
+    })
     .catch(function(err){
       log.error(err);
       return done(new Error(err.message));
