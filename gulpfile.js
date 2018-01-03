@@ -62,6 +62,7 @@ gulp.task('service', function(){
     var name;
     var baseurl;
     var endpoint;
+    var isSQL;
     baseurl = args.baseurl;
     endpoint = args.endpoint;
     if(!baseurl){
@@ -71,7 +72,11 @@ gulp.task('service', function(){
     if(!endpoint){
         endpoint = args.e;
     }
+
+    isSQL = args.sql;
+
     name = args.name;
+    
     if(!name){
         name = args.n;
     }
@@ -102,7 +107,7 @@ gulp.task('service', function(){
 });
     
     // Create the Route Unit Test
-    fs.readFile('./template/route_test.tmpl', function(err, data){
+    fs.readFile(isSQL ? './template/route_sql_test.tmpl' : './template/route_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -134,7 +139,7 @@ gulp.task('service', function(){
         });
     });
     }else{
-        fs.readFile('./template/model.tmpl', function(err, data){
+        fs.readFile(isSQL ? './template/model_sql.tmpl' : './template/model.tmpl', function(err, data){
           if (err){
             throw err;
         } 
@@ -151,7 +156,7 @@ gulp.task('service', function(){
     }
     
     // Create the Model Unit Test
-    fs.readFile('./template/model_test.tmpl', function(err, data){
+    fs.readFile(isSQL ? './template/model_sql_test.tmpl' : './template/model_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -167,7 +172,7 @@ gulp.task('service', function(){
 });
     
     // Create the controller
-    fs.readFile('./template/controller.tmpl', function(err, data){
+    fs.readFile(isSQL ? './template/controller_sql.tmpl' : './template/controller.tmpl', function(err, data){
       if (err){
         throw err;
     } 
@@ -183,7 +188,7 @@ gulp.task('service', function(){
 });
     
     // Create the controller Unit test
-    fs.readFile('./template/controller_test.tmpl', function(err, data){
+    fs.readFile(isSQL ? './template/controller_sql_test.tmpl' : './template/controller_test.tmpl', function(err, data){
       if (err){
         throw err;
     } 

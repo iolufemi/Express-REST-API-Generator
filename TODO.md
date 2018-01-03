@@ -3,7 +3,6 @@
 |:------|:------:|:------
 | app.js | 62 | Write a complete Documentation for this project
 | config/index.js | 12 | Test for production and development senarios
-| models/Tests.js | 95 | Test transactions
 | models/index.js | 14 | Automatically generate tests with the schema structure
 | routes/index.js | 298 | Test API versioning
 | routes/index.js | 299 | Test rate limiting
