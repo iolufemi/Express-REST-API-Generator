@@ -1,0 +1,195 @@
+'use strict';
+
+var chai = require('chai');
+chai.should();
+var config = require('../../config');
+var chaiAsPromised = require('chai-as-promised');
+// chai.use(chaiAsPromised);
+var mongooseMock = require('mongoose-mock');
+// var expect = chai.expect;
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+chai.use(sinonChai);
+var <%= service %>;
+// Testing The <%= service %> Model
+describe('<%= service %> Model',function(){
+
+    var id;
+    var id2;
+
+    before(function(){  /* jslint ignore:line */
+        <%= service %> = require('../../models/<%= service %>s');
+        var workers = require('../../services/queue/workers');
+        var workers1 = require('../../services/queue/workers');
+        var workers2 = require('../../services/queue/workers');
+        var workers3 = require('../../services/queue/workers');
+    });
+
+    describe('<%= service %> CRUDS', function(){
+        it('should save data', function(done){
+            var my<%= object %> = <%= service %>.create({name: 'femi'});
+
+            my<%= object %>.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should read data', function(done){
+            var my<%= object %> = <%= service %>.findOne({where: {name: 'femi'}});
+
+            my<%= object %>.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should read all data', function(done){
+            var my<%= object %> = <%= service %>.findAll();
+
+            my<%= object %>.then(function(res){
+                res.should.be.an.array; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should update data', function(done){
+            var cb = sinon.spy();
+            var my<%= object %> = <%= service %>.update({name: 'Olaoluwa'}, { where: {name: 'femi'}});
+
+            my<%= object %>.then(function(res){
+                cb();
+                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should search data', function(done){
+            // Search needs more work for more accuracy
+            var my<%= object %> = <%= service %>.search('femi');
+
+            my<%= object %>.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should delete data', function(done){
+            var cb2 = sinon.spy();
+            var our<%= object %> = <%= service %>.bulkCreate([{name:'Olaolu'},{name: 'fola'},{name: 'bolu'}]);
+
+            our<%= object %>.then(function(res){
+                return <%= service %>.destroy({where: {name: 'bolu'}});
+            }).then(function(res){
+                cb2();
+                cb2.should.have.been.calledOnce; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should add createdAt', function(done){
+            var my<%= object %> = <%= service %>.create({name: 'this is for the gods'});
+
+            my<%= object %>.then(function(res){
+                id = res._id;
+                res.should.have.property('createdAt');
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should add updatedAt', function(done){
+            var my<%= object %> = <%= service %>.create({name: 'i am a demigod!'});
+            my<%= object %>.then(function(res){
+                id2 = res._id;
+                return <%= service %>.update({name: 'This is the titan'}, {where: {_id: id}});
+            })
+            .then(function(res){
+                return <%= service %>.findOne({where: {name: 'This is the titan'}});
+            })
+            .then(function(res){
+                res.should.have.property('updatedAt');
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should tag database entries properly', function(done){
+            var my<%= object %> = <%= service %>.create({name: 'femi',someOtherStringData: 'stuff'});
+
+            setTimeout(function(){
+                my<%= object %>.then(function(res){
+                    console.log("taggs: ",res._id);
+                    return <%= service %>.findOne({where: {_id: res._id}});
+                })
+                .then(function(res){
+                    if(typeof res.tags === 'string'){
+                        var _tags = res.tags.split(', ');
+                        _tags.length.should.equal(2);/* jslint ignore:line */
+                    }else{
+                        res.tags.length.should.equal(2);/* jslint ignore:line */
+                    }
+                    
+                    done();
+                })
+                .catch(function(err){
+                    done(err);
+                });
+            },3000);
+            
+        });
+
+        it('should count returned records', function(done){
+            var my<%= object %> = <%= service %>.count({where: {name: 'This is the titan'}});
+
+            my<%= object %>.then(function(res){
+                res.should.be.a.number; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
+        });
+
+        it('should find a record by id and delete', function(done){
+            var my<%= object %> = <%= service %>.findOne({where: {_id: id2}});
+
+            var <%= object %>er = my<%= object %>.then(function(res){
+                return res.destroy();
+            })
+            .then(function(res){
+                res.should.be.an('object');
+                done();
+            });
+            
+        });
+
+        it('should have transaction object', function(done){
+            var my<%= object %> = <%= service %>.transaction.should.exist;  /* jslint ignore:line */
+            done();
+        });
+
+    });
+});

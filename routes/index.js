@@ -183,7 +183,11 @@ req.cacheKey = key;
 }else{
     if(req.method === 'POST' || req.method === 'PUT' || req.method === 'PUSH'){
       req.cache.del(req.cacheKey)
-      .then(); // No delays
+      .then(function(res){})
+      .catch(function(err){
+        log.error('Failed to delete cached data: ', err);
+          // Don't block the call because of this failure.
+      }); // No delays
   }
   next();
 }

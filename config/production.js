@@ -18,10 +18,17 @@ module.exports = {
     letsencryptSSLVerificationBody: process.env.LETSENCRYPT_VERIFICATION_BODY || 'xvArhQBSilF4V30dGUagNAZ96ASipB0b0ex0kXn0za8._v6aFbaRYWeOmSebtlD-X4Ixf5tPsyULMsXM8HjsK-Q',
     maxContentLength: process.env.MAX_CONTENT_LENGTH || '9999',
     enforceSSL: process.env.ENFORCE_SSL || 'no',
-    gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '6870f32edf6a34aaca7f193f456fae50f8ad5a94',
+    gitOAuthToken: process.env.GIT_OAUTH_TOKEN || '86d6eb7abe03e8ae6a970cb67622e667c9c0f86a',
     queueUIUsername: process.env.QUEUE_UI_USERNAME || 'admin',
     queueUIPassword: process.env.QUEUE_UI_PASSWORD || 'password123/',
     queueUIPort: process.env.QUEUE_UI_PORT || 3000,
     enforceUserIdAppIdDeveloperId: process.env.ENFORCE_USER_ID_APP_ID_DEVELOPER_ID || 'no',
-    apiDBKey: process.env.API_DB_Key || 'MDg4NWM1NTA0ZTZlNTQ5MjAzNzA1ODBlOWVkNzI3MzdlNmYxZTcyMjVkOTA3N2JjYTBhZjA0YmM0N2U4NDZkNi8vLy8vLzQ1MDY='
+    apiDBKey: process.env.API_DB_Key || 'MDg4NWM1NTA0ZTZlNTQ5MjAzNzA1ODBlOWVkNzI3MzdlNmYxZTcyMjVkOTA3N2JjYTBhZjA0YmM0N2U4NDZkNi8vLy8vLzQ1MDY=',
+    SQLUsername: process.env.SQL_USERNAME || 'root',
+    SQLPassword: process.env.SQL_PASSWORD || null,
+    SQLDatabase: process.env.SQL_DATABASE || 'snipe',
+    SQLHost: process.env.SQL_HOST || 'localhost',
+    SQLPort: process.env.SQL_PORT || 3306,
+    SQLDriver: process.env.SQL_DRIVER || 'mysql', //'mysql'|'sqlite'|'postgres'|'mssql'
+    SQLTimezone: process.env.SQL_TIMEZONE || '+01:00'
 };

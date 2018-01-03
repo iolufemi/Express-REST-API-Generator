@@ -45,16 +45,28 @@ jobs.updateRequestLog = function(response, done){
 // Creates search tags for all db records
 jobs.createSearchTags = function(data, done){
     log.info('Creating search index for: ', data._id);
+    var dataClone = _.extend({},data);
     var model = data.model;
+    var isSQL = data.isSQL;
+
     var update = data.update ? true : false;
-    if(data && data.update){
-        delete data.update;
+    if(dataClone && dataClone.update){
+        delete dataClone.update;
     }
-    if(data && data.model){
-        delete data.model;
+    if(dataClone && dataClone.model){
+        delete dataClone.model;
     }
-    
-    var ourDoc = data;
+    if(dataClone && dataClone.isSQL){
+        delete dataClone.isSQL;
+    }
+    if(dataClone && dataClone.createdAt){
+        delete dataClone.createdAt;
+    }
+    if(dataClone && dataClone.updatedAt){
+        delete dataClone.updatedAt;
+    }
+
+    var ourDoc = dataClone;
     var split = [];
     
     for(var n in ourDoc){
@@ -78,20 +90,29 @@ jobs.createSearchTags = function(data, done){
 split = _.flattenDeep(split);
 
 var task;
-if(update){
-    task = models[model].update(data,{ $set: { updatedAt: new Date(Date.now()).toISOString() }, $addToSet: {tags: {$each: split}} });
+if(model){
+    if(isSQL){
+        task = models[model].update({ tags: split.join(', ')}, {where: dataClone} );
+    }else{
+        if(update){
+            task = models[model].update(dataClone,{ $set: { updatedAt: new Date(Date.now()).toISOString() }, $addToSet: {tags: {$each: split}} });
+        }else{
+            task = models[model].update(dataClone,{ $set: { tags: split} });
+        }
+    }
+
+    task
+    .then(function(res){
+        return done(false, res);
+    })
+    .catch(function(err){
+      log.error(err);
+      return done(new Error(err.message));
+  });
 }else{
-    task = models[model].update(data,{ $set: { tags: split} });
+    return done(new Error('No Model Passed!'));
 }
 
-task
-.then(function(res){
-  return done(false, res);
-})
-.catch(function(err){
-  log.error(err);
-  return done(new Error(err.message));
-});
 };
 
 // Backup Data to Trash
