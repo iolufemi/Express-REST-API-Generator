@@ -92,8 +92,7 @@ split = _.flattenDeep(split);
 var task;
 if(model){
     if(isSQL){
-        console.log('mememem: ',dataClone);
-        task = models[model].update(dataClone,{ tags: split.join(', ')} );
+        task = models[model].update({ tags: split.join(', ')}, {where: dataClone} );
     }else{
         if(update){
             task = models[model].update(dataClone,{ $set: { updatedAt: new Date(Date.now()).toISOString() }, $addToSet: {tags: {$each: split}} });

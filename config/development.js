@@ -29,5 +29,6 @@ module.exports = {
     SQLDatabase: process.env.SQL_DATABASE || 'snipe',
     SQLHost: process.env.SQL_HOST || '192.168.99.100',
     SQLPort: process.env.SQL_PORT || 3306,
-    SQLDriver: process.env.SQL_DRIVER || 'mysql' //'mysql'|'sqlite'|'postgres'|'mssql'
+    SQLDriver: process.env.SQL_DRIVER || 'mysql', //'mysql'|'sqlite'|'postgres'|'mssql'
+    SQLTimezone: process.env.SQL_TIMEZONE || '+01:00'
 };
