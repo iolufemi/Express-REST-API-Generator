@@ -160,7 +160,7 @@ describe('#Response service test', function(){
     it('should be forbidden', function(done){
         agent.
         get('/forbidden')
-        .expect(503,done);
+        .expect(403,done);
     });
     it('should not be found', function(done){
         agent.
