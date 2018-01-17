@@ -194,6 +194,14 @@ req.cacheKey = key;
 
 };
 
+router.use(helmet());
+router.use(cors());
+router.options('*', cors());
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+router.use(bodyParser.raw());
+router.use(bodyParser.text());
+
 // Log requests here
 router.use(function(req,res,next){
   var ipAddress = req.ip;
@@ -222,14 +230,6 @@ queue.create('logRequest', reqLog)
   log.info(reqLog);
   next();
 });
-
-router.use(helmet());
-router.use(cors());
-router.options('*', cors());
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
-router.use(bodyParser.raw());
-router.use(bodyParser.text());
 // load response handlers
 router.use(response);
 // Watch for encrypted requests
@@ -258,7 +258,7 @@ router.use(expressValidator());
 if(config.noFrontendCaching === 'yes'){
   router.use(helmet.noCache());
 }else{
-   router.use(router._APICache);
+ router.use(router._APICache);
 }
 
 router.get('/', function (req, res) {
