@@ -22,8 +22,8 @@ module.exports = function(data, message){
 }
 
 if(data){
-  this.status(503).json({status: 'error', data: data, message: message ? message : 'forbidden'});
+  this.status(403).json({status: 'error', data: data, message: message ? message : 'forbidden'});
 }else{
-  this.status(503).json({status: 'error', message: message ? message : 'forbidden'});
+  this.status(403).json({status: 'error', message: message ? message : 'forbidden'});
 }
 };
