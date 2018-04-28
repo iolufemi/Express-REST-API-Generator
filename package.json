@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "gulp sanity",
-    "start": "node app"
+    "start": "node app",
+    "clock": "node ./services/queue/clock"
   },
   "repository": {
     "type": "git",
