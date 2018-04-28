@@ -6,6 +6,7 @@ var queue = kue.createQueue({
   redis: config.redisURL
 });
 var log = require('../../services/logger');
+var Model = require('./Model');
 
 // Clean Up Completed Job
 queue
@@ -14,19 +15,19 @@ queue
 })
 .on('job complete', function(id, result){
     log.info('ID: ',id,' Result: ',result);
-  kue.Job.get(id, function(err, job){
-    if (err) {
-        return false;
-    }else{
-        job.remove(function(err){
-          if (err) {
-            throw new Error(err.message);
+    kue.Job.get(id, function(err, job){
+        if (err) {
+            return false;
         }else{
-            log.info('removed completed job #%d', job.id);
+            job.remove(function(err){
+              if (err) {
+                throw err;
+            }else{
+                log.info('removed completed job #%d', job.id);
+            }
+        });
         }
     });
-    }
-});
 });
 
 // Graceful Shutdown
@@ -57,3 +58,12 @@ queue.watchStuckJobs(1000);
 // Process Jobs Here
 module.exports = queue;
 module.exports.kue = kue;
+module.exports.addSchedule = function(crontab, name, job, data){
+    Model.create({crontab: crontab, name: name, job: job, arguments: data})
+    .then(function(){
+        // Silencio es dorado
+    })
+    .catch(function(err){
+        log.error('Error scheduling job - ', err);
+    });
+};
