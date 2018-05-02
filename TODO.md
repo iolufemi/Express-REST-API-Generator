@@ -14,5 +14,3 @@
 | routes/index.js | 305 | Develop the route loader into a separate node module to be publish on npm
 | routes/index.js | 306 | Develop all services onto separate node module to be publish on npm
 | services/logger/index.js | 36 | Test Error Handler
-| services/queue/clock.js | 11 | work on a clock functionality so kue can support scheduled jobs
-| services/queue/clock.js | 12 | Use the cron package here https://www.npmjs.com/package/cron for timer
