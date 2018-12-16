@@ -22,7 +22,8 @@ var schemaObject = {
 
 schemaObject.createdAt = {
     type: 'Date',
-    default: Date.now
+    default: Date.now,
+    index: true
 };
 
 schemaObject.updatedAt = {
@@ -32,12 +33,12 @@ schemaObject.updatedAt = {
 
 schemaObject.owner = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.deletedBy = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.client = {
@@ -137,7 +138,7 @@ Schema.post('find', function(result) {
 
 Schema.pre('update', function(next) {
     // Indexing for search
-    var ourDoc = this._update.$set;
+    var ourDoc = this._update;
     ourDoc.model = collection;
     ourDoc.update = true;
 

@@ -16,7 +16,7 @@ module.exports = {
 
             crypto.pbkdf2(config.secret, salt, 100000, bits / 8, 'sha512', function(err, key){
                 if (err){
-                    reject(new Error(err.message));
+                    reject(err);
                 }else{
                     var randomNumber = Math.floor((Math.random() * 9999) + 1);
                     resolve(new Buffer(aesjs.utils.hex.fromBytes(key)+'//////'+randomNumber).toString('base64'));
@@ -97,45 +97,44 @@ module.exports = {
             }
             
         });
-},
+    },
 
-interpreter: function(req, res, next){
-    var encryption = require('./');
-    if( req.get('x-tag') ){
-        res.set('x-tag', req.get('x-tag'));
-        res.set('Access-Control-Expose-Headers','x-tag');
+    interpreter: function(req, res, next){
+        var encryption = require('./');
+        var key = req.get('x-tag') ? req.get('x-tag') : req.query['x-tag'];
+        if( key ){
+            res.set('x-tag', key);
+            res.set('Access-Control-Expose-Headers','x-tag');
 
-        var key = req.get('x-tag');
-
-        if(req.method === 'POST' && config.secureMode && req.body.secure === true){
-            if(req.body.secureData){
-                var truthHash = req.body.truth;
-                encryption.decrypt(req.body.secureData, key, truthHash)
-                .then(function(resp){
-                    if(typeof resp === 'object'){
-                        req.body = resp;
-                        next();
-                    }else{
-                        debug('decryptedText: ', resp);
-                        var parsedJSON = JSON.parse(resp);
-                        req.body = parsedJSON;
-                        req.body.secure = true;
-                        next();
-                    }
-                })
-                .catch(function(err){
-                    next(new Error(err.message));
-                });
+            if(req.method === 'POST' && config.secureMode && req.body.secure === true){
+                if(req.body.secureData){
+                    var truthHash = req.body.truth;
+                    encryption.decrypt(req.body.secureData, key, truthHash)
+                    .then(function(resp){
+                        if(typeof resp === 'object'){
+                            req.body = resp;
+                            next();
+                        }else{
+                            debug('decryptedText: ', resp);
+                            var parsedJSON = JSON.parse(resp);
+                            req.body = parsedJSON;
+                            req.body.secure = true;
+                            next();
+                        }
+                    })
+                    .catch(function(err){
+                        next(err);
+                    });
+                }else{
+                    res.badRequest(false,'Expecting an encrypted data to be sent in the secureData body parameter.');
+                }
             }else{
-                res.badRequest(false,'Expecting an encrypted data to be sent in the secureData body parameter.');
+                next();
             }
-        }else{
+        }else if(req.method !== 'POST'){
             next();
+        }else{
+            res.badRequest(false,'Please initialize and send the x-tag header in every request.');
         }
-    }else if(req.method !== 'POST'){
-        next();
-    }else{
-        res.badRequest(false,'Please initialize and send the x-tag header in every request.');
     }
-}
 };

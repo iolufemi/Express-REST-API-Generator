@@ -20,7 +20,7 @@ jobs.createRequestLog = function(request, done){
   })
     .catch(function(err){
       log.error(err);
-      return done(new Error(err.message));
+      return done(new Error(err));
   });
 };
 
@@ -38,7 +38,7 @@ jobs.updateRequestLog = function(response, done){
     })
     .catch(function(err){
         log.error(err);
-        return done(new Error(err.message));
+        return done(new Error(err));
     });
 };
 
@@ -95,9 +95,9 @@ if(model){
         task = models[model].update({ tags: split.join(', ')}, {where: dataClone} );
     }else{
         if(update){
-            task = models[model].update(dataClone,{ $set: { updatedAt: new Date(Date.now()).toISOString() }, $addToSet: {tags: {$each: split}} });
+            task = models[model].update(dataClone,{ updatedAt: new Date(Date.now()).toISOString(), tags: split});
         }else{
-            task = models[model].update(dataClone,{ $set: { tags: split} });
+            task = models[model].update(dataClone,{ tags: split});
         }
     }
 
@@ -107,7 +107,7 @@ if(model){
     })
     .catch(function(err){
       log.error(err);
-      return done(new Error(err.message));
+      return done(new Error(err));
   });
 }else{
     return done(new Error('No Model Passed!'));
@@ -125,7 +125,7 @@ jobs.saveToTrash = function(data, done){
             done(false, res);
         })
         .catch(function(err){
-            done(new Error(err.message));
+            done(new Error(err));
         });
     }else{
         done(new Error('No data was passed'));
@@ -195,7 +195,7 @@ jobs.sendWebhook = function(data, done){
         done(false, resp);
     })
     .catch(function(err){
-        done(new Error(err.message));
+        done(new Error(err));
     });
 };
 

@@ -36,12 +36,12 @@ schemaObject.updatedAt = {
 
 schemaObject.owner = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.createdBy = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.client = {
@@ -141,7 +141,7 @@ Schema.post('find', function(result) {
 
 Schema.pre('update', function(next) {
     // Indexing for search
-    var ourDoc = this._update.$set;
+    var ourDoc = this._update;
     ourDoc.model = collection;
     ourDoc.update = true;
     if(ourDoc.updatedAt || ourDoc.tags){ /* jslint ignore:line */
