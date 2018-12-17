@@ -139,8 +139,8 @@ var <%= service %>sController = {};
             _query.limit = limit;
         }
         _query.where = query;
-        var totalResult = <%= service %>s.count(_query);
-        var total = <%= service %>s.count({});
+        var totalResult = <%= service %>s.estimatedDocumentCount(_query);
+        var total = <%= service %>s.estimatedDocumentCount({});
 
         if(sort){
             _query.order = [];
@@ -294,7 +294,7 @@ var <%= service %>sController = {};
     }
 
     _query.where = query;
-    <%= service %>s.update(data, _query)
+    <%= service %>s.updateMany(data, _query)
     .then(function(resp){
         res.ok(resp);
     })
@@ -311,7 +311,7 @@ var <%= service %>sController = {};
         delete data.secure;
     }
     _query.where = <%= service %>s.where = {_id:id};
-    <%= service %>s.update(data,_query)
+    <%= service %>s.updateMany(data,_query)
     .then(function(resp){
         if(!resp){
             next();

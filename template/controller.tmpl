@@ -125,8 +125,8 @@ var <%= service %>sController = {};
         if(populate){
             delete query.populate;
         }
-        var totalResult = <%= service %>s.count(query);
-        var total = <%= service %>s.count({});
+        var totalResult = <%= service %>s.estimatedDocumentCount(query);
+        var total = <%= service %>s.estimatedDocumentCount({});
         var question = <%= service %>s.find(query);
 
         if(limit){

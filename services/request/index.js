@@ -54,7 +54,7 @@ module.exports = function(service, requestId, uri, method, data, headers){
             return request(options);
         })
         .then(function(resp){
-            return [Model.update({RequestId: requestId, service: service}, {response: resp, responseStatusCode: 200, updatedAt: Date.now()}), resp];
+            return [Model.updateMany({RequestId: requestId, service: service}, {response: resp, responseStatusCode: 200, updatedAt: Date.now()}), resp];
         })
         .spread(function(update, resp){
             return resolve(resp);
@@ -65,7 +65,7 @@ module.exports = function(service, requestId, uri, method, data, headers){
             }else{
                 var updateddd;
                 if(existss){
-                    updateddd = Model.update({RequestId: requestId, service: service}, {response: (err.response && err.response.body) ? err.response.body : { type: 'internal error', message: err.message}, responseStatusCode: err.statusCode ? err.statusCode : 500, updatedAt: Date.now()});
+                    updateddd = Model.updateMany({RequestId: requestId, service: service}, {response: (err.response && err.response.body) ? err.response.body : { type: 'internal error', message: err.message}, responseStatusCode: err.statusCode ? err.statusCode : 500, updatedAt: Date.now()});
                 }else{
                     options.RequestId = requestId;
                     options.service = service;

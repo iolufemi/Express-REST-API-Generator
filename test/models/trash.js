@@ -69,7 +69,7 @@ describe('Trash Model',function(){
 
         it('should update data', function(done){
             var cb = sinon.spy();
-            var mytrash = Trash.update({'data.RequestId': 'gdfd6563'},{'data.RequestId': 'gfdvdt09876543456789'});
+            var mytrash = Trash.updateMany({'data.RequestId': 'gdfd6563'},{'data.RequestId': 'gfdvdt09876543456789'});
 
             mytrash.then(function(res){
                 cb();
@@ -192,7 +192,7 @@ it('should add updatedAt', function(done){
             }});
     mytrash.then(function(res){
         id2 = res._id;
-        return Trash.update({_id: id},{'data.RequestId': 'kgtggokoko456789'});
+        return Trash.updateMany({_id: id},{'data.RequestId': 'kgtggokoko456789'});
     })
     .then(function(res){
         return Trash.findOne({_id: id});
@@ -207,7 +207,7 @@ it('should add updatedAt', function(done){
 });
 
 it('should count returned records', function(done){
-    var mytrash = Trash.count({'data.RequestId': 'kgtggokoko456789'});
+    var mytrash = Trash.estimatedDocumentCount({'data.RequestId': 'kgtggokoko456789'});
 
     mytrash.then(function(res){
         res.should.be.a.number; /* jslint ignore:line */
