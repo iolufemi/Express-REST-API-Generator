@@ -12,7 +12,6 @@ addons:
     packages:
     - mongodb-org-server
 node_js:
-  - '10'
   - '8'
 before_script:
   - sleep 15
