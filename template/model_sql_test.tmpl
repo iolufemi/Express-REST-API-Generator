@@ -64,7 +64,7 @@ describe('<%= service %> Model',function(){
 
         it('should update data', function(done){
             var cb = sinon.spy();
-            var my<%= object %> = <%= service %>.updateMany({name: 'Olaoluwa'}, { where: {name: 'femi'}});
+            var my<%= object %> = <%= service %>.update({name: 'Olaoluwa'}, { where: {name: 'femi'}});
 
             my<%= object %>.then(function(res){
                 cb();
@@ -122,7 +122,7 @@ describe('<%= service %> Model',function(){
             var my<%= object %> = <%= service %>.create({name: 'i am a demigod!'});
             my<%= object %>.then(function(res){
                 id2 = res._id;
-                return <%= service %>.updateMany({name: 'This is the titan'}, {where: {_id: id}});
+                return <%= service %>.update({name: 'This is the titan'}, {where: {_id: id}});
             })
             .then(function(res){
                 return <%= service %>.findOne({where: {name: 'This is the titan'}});
@@ -162,7 +162,7 @@ describe('<%= service %> Model',function(){
         });
 
         it('should count returned records', function(done){
-            var my<%= object %> = <%= service %>.estimatedDocumentCount({where: {name: 'This is the titan'}});
+            var my<%= object %> = <%= service %>.count({where: {name: 'This is the titan'}});
 
             my<%= object %>.then(function(res){
                 res.should.be.a.number; /* jslint ignore:line */

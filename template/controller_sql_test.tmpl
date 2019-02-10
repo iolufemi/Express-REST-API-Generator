@@ -313,7 +313,7 @@ it('should update documents', function(done){
     var req = {};
     req.query = {name: 'Femi'};
     req.body = {name: 'Femi Updated'};
-    <%= object %>s.updateMany(req, res, next);
+    <%= object %>s.update(req, res, next);
 });
 it('should update a document', function(done){
     var next = function(err){

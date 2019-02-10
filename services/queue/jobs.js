@@ -32,7 +32,7 @@ jobs.updateRequestLog = function(response, done){
         delete response.requestId;
     }
     
-    models.RequestLogs.updateMany({RequestId: requestId},response)
+    models.RequestLogs.update({RequestId: requestId},response)
     .then(function(res){
         return done(false, res);
     })
@@ -92,12 +92,12 @@ split = _.flattenDeep(split);
 var task;
 if(model){
     if(isSQL){
-        task = models[model].updateMany({ tags: split.join(', ')}, {where: dataClone} );
+        task = models[model].update({ tags: split.join(', ')}, {where: dataClone} );
     }else{
         if(update){
-            task = models[model].updateMany(dataClone,{ updatedAt: new Date(Date.now()).toISOString(), tags: split});
+            task = models[model].update(dataClone,{ updatedAt: new Date(Date.now()).toISOString(), tags: split});
         }else{
-            task = models[model].updateMany(dataClone,{ tags: split});
+            task = models[model].update(dataClone,{ tags: split});
         }
     }
 
