@@ -153,6 +153,12 @@ ApiModel.prototype.count = function(query){
     return obj;
 };
 
+
+ApiModel.prototype.estimatedDocumentCount = function(query){
+    return this.count(query);
+};
+
+
 ApiModel.prototype.find = function(query){
     if(!query){
         query = {};
