@@ -104,6 +104,37 @@ You will now be able to access CRUD (create, read, update and delete) endpoints
 
 > Note: For every `POST` API calls you need to send an `x-tag` value in the header. This value is used for secure communication between the server and client. It is used for AES encrytion when secure mode is enabled. To get a valid `x-tag` call the `[GET] /initialize` endpoint.   
 
+## Some asynchronous goodness
+
+Start the clock (You should only have a single instance of this at all times.)
+
+```
+$ npm run clock
+```
+The clock is similar to a crontab. It dispatches tasks to available workers at a predefined interval.
+
+To define a clock, look for the `clock` collection in the MongoDB you connected to the `LOG_MONGOLAB_URL` environment variable, and create a record similar to the below
+
+```json
+{ 
+    "crontab" : "* * * * *", 
+    "name" : "Task Name", 
+    "job" : "theJobAsDefinedInTheWorkerFile", 
+    "enabled" : true
+}
+```
+
+> NOTE: Whenever you change the value of a clock on the DB, you need to restart the clock. (Still looking for the best way to make this automatic)
+
+Start the workers 
+
+```
+$ npm run workers
+```
+A worker runs tasks or processes in the background. It is useful for running long running processes and background tasks.
+
+See `/services/queue/jobs` for sample tasks and `/services/queue/workers` for how to setup worker processes.
+
 ## Versioning your API endpoints
 
 You can create multiple versions of your API endpoints by simply adding the version number to your route file name. eg. `users.v1.js` will put a version of the users resources on the `/v1/users` endpoint. users.v2.js will put a version of the users resources on the `/v2/users` endpoint. The latest version of the resources will always be available at the `/users` endpoint.
