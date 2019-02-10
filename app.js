@@ -35,7 +35,6 @@ if (cluster.isMaster && config.env === 'production') {
 	var app = express();
 	var router = require('./routes');
     var express_enforces_ssl = require('express-enforces-ssl');
-    var workers = require('./services/queue/workers');
 
     if(config.trustProxy === 'yes'){
       app.enable('trust proxy');

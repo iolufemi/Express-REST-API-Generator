@@ -6,7 +6,8 @@
   "scripts": {
     "test": "gulp sanity",
     "start": "node app",
-    "clock": "node ./services/queue/clock"
+    "clock": "node ./services/queue/clock",
+    "workers": "node ./services/queue/workers"
   },
   "repository": {
     "type": "git",
@@ -68,7 +69,7 @@
     "hpp": "^0.2.2",
     "kue": "^0.11.6",
     "lodash": "^4.17.4",
-    "mongoose": "^4.9.0",
+    "mongoose": "^5.0.0",
     "mysql2": "^1.5.1",
     "pg": "^6.4.2",
     "pg-hstore": "^2.3.2",
@@ -78,10 +79,12 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.1",
     "sequelize": "^4.28.6",
+    "shortid": "^2.2.8",
     "sqlite3": "^3.1.13",
     "tedious": "^2.1.5",
     "util": "^0.10.3",
     "winston": "^2.3.1",
-    "winston-bugsnag": "^2.1.0"
+    "winston-bugsnag": "^2.1.0",
+    "winston-loggly-bulk": "^2.0.2"
   }
 }

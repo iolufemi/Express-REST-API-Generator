@@ -74,7 +74,7 @@ describe('RequestLog Model',function(){
 
         it('should update data', function(done){
             var cb = sinon.spy();
-            var myrequestlog = RequestLog.update({RequestId: objId1},{RequestId: objId2});
+            var myrequestlog = RequestLog.updateMany({RequestId: objId1},{RequestId: objId2});
 
             myrequestlog.then(function(res){
                 cb();
@@ -176,7 +176,7 @@ it('should add updatedAt', function(done){
     var myrequestlog = RequestLog.create({RequestId: objId1});
     myrequestlog.then(function(res){
         id2 = res._id;
-        return RequestLog.update({_id: id},{RequestId: objId4});
+        return RequestLog.updateMany({_id: id},{RequestId: objId4});
     })
     .then(function(res){
         return RequestLog.findOne({_id: id});
@@ -191,7 +191,7 @@ it('should add updatedAt', function(done){
 });
 
 it('should count returned records', function(done){
-    var myrequestlog = RequestLog.count({RequestId: objId2});
+    var myrequestlog = RequestLog.estimatedDocumentCount({RequestId: objId2});
 
     myrequestlog.then(function(res){
         res.should.be.a.number; /* jslint ignore:line */

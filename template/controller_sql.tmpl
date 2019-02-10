@@ -50,8 +50,8 @@ var <%= service %>sController = {};
         if(query && query.appId){
             delete query.appId;
         }
-        if(query && query.userId){
-            delete query.userId;
+        if(query && query.accountId){
+            delete query.accountId;
         }
         
         <%= service %>s.search(query)
@@ -67,8 +67,8 @@ var <%= service %>sController = {};
         if(query && query.appId){
             delete query.appId;
         }
-        if(query && query.userId){
-            delete query.userId;
+        if(query && query.accountId){
+            delete query.accountId;
         }
         var _query = {};
         var projection = query.select; // Projection should be comma separated. eg. name,location
@@ -107,15 +107,24 @@ var <%= service %>sController = {};
         }
         var lastId = query.lastId * 1;
         if(lastId){
-            query._id = {};
-            query._id.$gte = lastId;
+            if(query.desc){
+                query._id = {};
+                query._id.$lt = lastId;
+                delete query.desc;
+            }else{
+                query._id = {};
+                query._id.$gt = lastId;
+            }
             delete query.lastId;
+        }
+        if(query.desc){
+            delete query.desc;
         }
         var sort = query.sort; // -fieldName: means descending while fieldName without the minus mean ascending bith by fieldName. eg, '-fieldName1 fieldName2'
         if(sort){
             delete query.sort;
         }
-        var populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name referenece and only pick the firstname attribute
+        var populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name reference and only pick the firstname attribute
         if(populate){
             delete query.populate;
         }
@@ -216,7 +225,7 @@ var <%= service %>sController = {};
     var query = req.query;
     var populate;
     if(query){
-        populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name referenece and only pick the firstname attribute
+        populate = query.populate; // Samples: 'name location' will populate name and location references. only supports this for now | 'name', 'firstname' will populate name reference and only pick the firstname attribute
     }
     _query.where = <%= service %>s.where = {_id:id};
 
@@ -276,8 +285,8 @@ var <%= service %>sController = {};
     if(query && query.appId){
         delete query.appId;
     }
-    if(query && query.userId){
-        delete query.userId;
+    if(query && query.accountId){
+        delete query.accountId;
     }
     var data  = req.body;
     if(data && data.secure){
@@ -322,8 +331,8 @@ var <%= service %>sController = {};
     if(query && query.appId){
         delete query.appId;
     }
-    if(query && query.userId){
-        delete query.userId;
+    if(query && query.accountId){
+        delete query.accountId;
     }
 
     _query.where = query;
@@ -339,8 +348,8 @@ var <%= service %>sController = {};
                 var backupData = {};
                 backupData.service = service;
                 backupData.data = resp[n];
-                backupData.owner = req.userId;
-                backupData.deletedBy = req.userId;
+                backupData.owner = req.accountId;
+                backupData.deletedBy = req.accountId;
                 backupData.client = req.appId;
                 backupData.developer = req.developer;
 
@@ -380,8 +389,8 @@ var <%= service %>sController = {};
         var backupData = {};
         backupData.service = service;
         backupData.data = resp;
-        backupData.owner = req.userId;
-        backupData.deletedBy = req.userId;
+        backupData.owner = req.accountId;
+        backupData.deletedBy = req.accountId;
         backupData.client = req.appId;
         backupData.developer = req.developer;
 

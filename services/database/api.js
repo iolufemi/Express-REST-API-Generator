@@ -153,6 +153,12 @@ ApiModel.prototype.count = function(query){
     return obj;
 };
 
+
+ApiModel.prototype.estimatedDocumentCount = function(query){
+    return this.count(query);
+};
+
+
 ApiModel.prototype.find = function(query){
     if(!query){
         query = {};
@@ -305,7 +311,7 @@ ApiModel.prototype.findById = function(id){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };
@@ -344,7 +350,7 @@ ApiModel.prototype.create = function(data){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };
@@ -384,7 +390,7 @@ ApiModel.prototype.updateMany = function(query, data){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };
@@ -436,7 +442,7 @@ ApiModel.prototype.findByIdAndUpdate = function(id, data){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };
@@ -462,7 +468,7 @@ ApiModel.prototype.deleteMany = function(query){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };
@@ -495,7 +501,7 @@ ApiModel.prototype.findByIdAndRemove = function(id){
                 return resolve(result);
             })
             .catch(function(err){
-                return reject(new Error(err));
+                return reject(err);
             });
         });
     };

@@ -1,5 +1,4 @@
 "use strict";
-var cluster = require('cluster');
 var config = require('../../config');
 var kue = require('kue');
 var queue = kue.createQueue({

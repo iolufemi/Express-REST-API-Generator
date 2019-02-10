@@ -12,8 +12,7 @@ addons:
     packages:
     - mongodb-org-server
 node_js:
-  - '7'
-  - '6'
+  - '8'
 before_script:
   - sleep 15
   - npm install -g gulp mocha gulp-cli codecov istanbul

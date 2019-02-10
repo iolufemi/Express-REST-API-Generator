@@ -161,30 +161,6 @@ describe('Router', function(){
         done();
     });
 
-    it('should enforce UserId', function(done){
-        router._allRequestData(req, res, next);
-        nextChecker = false;
-        req.test = true;
-        router._enforceUserIdAndAppId(req, res, next);
-        res.badRequest.should.be.called.once; /* jslint ignore:line */
-        res.badRequest.should.be.calledWith(false, 'No userId parameter was passed in the payload of this request. Please pass a userId.');
-        req.body = {};
-        req.body.userId = 'jdjdjdjd';
-        router._enforceUserIdAndAppId(req, res, next);
-        res.badRequest.should.be.called.twice; /* jslint ignore:line */
-        res.badRequest.should.be.calledWith(false, 'No appId parameter was passed in the payload of this request. Please pass an appId.');
-        nextChecker.should.be.false; /* jslint ignore:line */
-        req.body.appId = 'jdjdjdjd';
-        router._enforceUserIdAndAppId(req, res, next);
-        res.badRequest.should.be.callCount(3); /* jslint ignore:line */
-        res.badRequest.should.be.calledWith(false, 'No developer parameter was passed in the payload of this request. Please pass a developer id.');
-        nextChecker.should.be.false; /* jslint ignore:line */
-        req.body.developer = 'jdjdjdjd';
-        router._enforceUserIdAndAppId(req, res, next);
-        res.badRequest.should.be.callCount(3); /* jslint ignore:line */
-        nextChecker.should.be.true; /* jslint ignore:line */
-        done();
-    });
 });
 
 

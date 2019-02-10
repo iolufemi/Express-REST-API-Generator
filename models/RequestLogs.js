@@ -49,7 +49,8 @@ var schemaObject = {
 
 schemaObject.createdAt = {
     type: 'Date',
-    default: Date.now
+    default: Date.now,
+    index: true
 };
 
 schemaObject.updatedAt = {
@@ -59,12 +60,12 @@ schemaObject.updatedAt = {
 
 schemaObject.owner = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.createdBy = {
     type: db._mongoose.Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'Accounts'
 };
 
 schemaObject.client = {
@@ -165,20 +166,20 @@ Schema.post('find', function(result) {
 Schema.pre('update', function(next) {
 
     // Indexing for search
-    var ourDoc = this._update.$set;
-    debug('What we are updating: ', ourDoc);
-    ourDoc.model = collection;
-    ourDoc.update = true;
-    debug('what do we have here: ', ourDoc);
-    if(ourDoc.updatedAt || ourDoc.tags){
-        debug('updatedAt: ', ourDoc.updatedAt);
-        debug('tags: ', ourDoc.tags);
-        // Move along! Nothing to see here!!
-    }else{
-        // Dump it in the queue
-        queue.create('searchIndex', ourDoc)
-        .save();
-    }
+    var ourDoc = this._update;
+    // debug('What we are updating: ', ourDoc);
+    // ourDoc.model = collection;
+    // ourDoc.update = true;
+    // debug('what do we have here: ', ourDoc);
+    // if(ourDoc.updatedAt || ourDoc.tags){
+    //     debug('updatedAt: ', ourDoc.updatedAt);
+    //     debug('tags: ', ourDoc.tags);
+    //     // Move along! Nothing to see here!!
+    // }else{
+    //     // Dump it in the queue
+    //     queue.create('searchIndex', ourDoc)
+    //     .save();
+    // }
     ourDoc.updatedAt = new Date(Date.now()).toISOString();
     next();
 });

@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . .
 
-CMD [ "npm", "run", "clock" ]
+CMD [ "npm", "run", "workers" ]
