@@ -130,7 +130,7 @@ var <%= service %>sController = {};
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
-                extraData.totalResult = totalResult;
+                extraData.totalResult = totalResult + skip;
                 extraData.skip = skip;
                 extraData.pages = Math.ceil(total / limit);
                 extraData.isLastPage = (totalResult < limit) ? true : false;
@@ -147,7 +147,7 @@ var <%= service %>sController = {};
                 extraData.total = total;
                 extraData.skip = skip;
                 extraData.pages = Math.ceil(total / limit);
-                extraData.totalResult = totalResult;
+                extraData.totalResult = totalResult + skip;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
             })
