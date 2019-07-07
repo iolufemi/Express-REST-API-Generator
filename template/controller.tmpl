@@ -75,9 +75,14 @@ var <%= service %>sController = {};
             ourProjection = <%= service %>sController.buildProjection(projection);
             delete query.select;
         }
-        var limit = query.limit * 1;
-        if(limit){
+        var limit = query.limit * 1 || 50;
+        if (limit) {
             delete query.limit;
+        }
+        //use skip for pagniation
+        var skip = query.skip * 1 || 0;
+        if (skip) {
+            delete query.skip;
         }
         
         var from = query.from;
@@ -92,30 +97,6 @@ var <%= service %>sController = {};
                 to = new Date().toISOString();
             }
             query.createdAt.$lt = to;
-        }else{
-            query.createdAt = {};
-            query.createdAt.$gt = new Date('1989-03-15T00:00:00').toISOString();
-            if(to){
-                delete query.to;
-            }else{
-                to = new Date().toISOString();
-            }
-            query.createdAt.$lt = to;
-        }
-        var lastId = query.lastId;
-        if(lastId){
-            if(query.desc){
-                query._id = {};
-                query._id.$lt = lastId;
-                delete query.desc;
-            }else{
-                query._id = {};
-                query._id.$gt = lastId;
-            }
-            delete query.lastId;
-        }
-        if(query.desc){
-            delete query.desc;
         }
         var sort = query.sort; // -fieldName: means descending while fieldName without the minus mean ascending bith by fieldName. eg, '-fieldName1 fieldName2'
         if(sort){
@@ -128,15 +109,11 @@ var <%= service %>sController = {};
         var totalResult = <%= service %>s.estimatedDocumentCount(query);
         var total = <%= service %>s.estimatedDocumentCount({});
         var question = <%= service %>s.find(query);
+        
+        question = question.skip(skip)
 
-        if(limit){
-            totalResult = totalResult.limit(limit);
-            question = question.limit(limit);
-        }else{
-            limit = 50;
-            totalResult = totalResult.limit(limit);
-            question = question.limit(limit);
-        }
+        totalResult = totalResult.limit(limit);
+        question = question.limit(limit);
         if(sort){
             question = question.sort(sort);
         }
@@ -150,17 +127,12 @@ var <%= service %>sController = {};
                 return [question.select(resp),total,totalResult];
             })
             .spread(function(resp,total,totalResult){
-                var ourLastId;
-                if(resp.length === 0){
-                    ourLastId = null;
-                }else{
-                    ourLastId = resp[resp.length - 1]._id;
-                }
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
                 extraData.totalResult = totalResult;
-                extraData.lastId = ourLastId;
+                extraData.skip = skip;
+                extraData.pages = Math.ceil(total / limit);
                 extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
             })
@@ -170,16 +142,11 @@ var <%= service %>sController = {};
         }else{
             q.all([question,total,totalResult])
             .spread(function(resp,total,totalResult){
-                var ourLastId;
-                if(resp.length === 0){
-                    ourLastId = null;
-                }else{
-                    ourLastId = resp[resp.length - 1]._id;
-                }
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
-                extraData.lastId = ourLastId;
+                extraData.skip = skip;
+                extraData.pages = Math.ceil(total / limit);
                 extraData.totalResult = totalResult;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
