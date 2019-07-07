@@ -127,12 +127,15 @@ var <%= service %>sController = {};
                 return [question.select(resp),total,totalResult];
             })
             .spread(function(resp,total,totalResult){
+                var pages = Math.ceil(total / limit)
+                var remainingPages = Math.ceil((total - (totalResult + skip)) / limit)
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
                 extraData.totalResult = totalResult + skip;
                 extraData.skip = skip;
-                extraData.pages = Math.ceil(total / limit);
+                extraData.pages = pages;
+                extraData.currentPage = pages - remainingPages;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
             })
@@ -142,11 +145,14 @@ var <%= service %>sController = {};
         }else{
             q.all([question,total,totalResult])
             .spread(function(resp,total,totalResult){
+                var pages = Math.ceil(total / limit)
+                var remainingPages = Math.ceil((total - (totalResult + skip)) / limit)
                 var extraData = {};
                 extraData.limit = limit * 1;
                 extraData.total = total;
                 extraData.skip = skip;
-                extraData.pages = Math.ceil(total / limit);
+                extraData.pages = pages;
+                extraData.currentPage = pages - remainingPages;
                 extraData.totalResult = totalResult + skip;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
                 res.ok(resp, false, extraData);
