@@ -176,7 +176,43 @@ Schema.pre('update', function(next) {
 
   next();
 });
+Schema.pre('updateOne', function(next) {
+  // Indexing for search
+  var ourDoc = this._update;
+  ourDoc.model = collection;
+  ourDoc.update = true;
 
+
+  //check if a second object exists
+  //incase {$set:{}} or {$push:{}} comes turn it to {} 
+
+  for (var key in ourDoc) {
+    if (ourDoc[key] != null && ourDoc[key].constructor == Object) {
+      for (var key2 in ourDoc[key]) {
+        ourDoc[key2] = ourDoc[key][key2]
+      }
+      delete ourDoc[key]
+    }
+  }
+
+
+  if (ourDoc.updatedAt || ourDoc.tags) { /* jslint ignore:line */
+
+    // Move along! Nothing to see here!!
+  } else {
+    ourDoc.query = this.getQuery()
+
+    queue.create('searchIndex', ourDoc)
+      .save();
+
+
+    // Dump it in the queue
+
+  }
+  ourDoc.updatedAt = new Date(Date.now()).toISOString();
+
+  next();
+});
 var Model = db.model(collection, Schema);
 Model._mongoose = db._mongoose;
 
