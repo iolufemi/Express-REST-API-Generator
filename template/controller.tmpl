@@ -106,14 +106,17 @@ var <%= service %>sController = {};
         if(populate){
             delete query.populate;
         }
-        var totalResult = <%= service %>s.estimatedDocumentCount(query);
+        var totalResult = <%= service %>s.countDocuments(query);
         var total = <%= service %>s.estimatedDocumentCount({});
         var question = <%= service %>s.find(query);
         
         question = question.skip(skip)
+        if (from == null) {
+            totalResult = totalResult.limit(limit);
+            question = question.limit(limit);
+        }
 
-        totalResult = totalResult.limit(limit);
-        question = question.limit(limit);
+     
         if(sort){
             question = question.sort(sort);
         }
