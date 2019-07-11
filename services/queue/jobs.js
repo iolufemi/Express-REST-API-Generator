@@ -45,12 +45,28 @@ jobs.updateRequestLog = function(response, done){
 
 // Creates search tags for all db records
 jobs.createSearchTags = function (data, done) {
+   
+    // //check if a second object exists
+    // //incase {$set:{}} or {$push:{}} comes turn it to {} 
+
+    if (data.update) {
+        for (var key in data) {
+            if (data[key] != null && data[key].constructor == Object) {
+                for (var key2 in data[key]) {
+                    data[key2] = data[key][key2]
+                }
+                delete data[key]
+            }
+        }
+        if (data.updatedAt || data.tags) { console.log(JSON.stringify(data)); return done(false, 'nothing to do') }
+    }
     log.info('Creating search index for: ', data._id || data);
     var dataClone = _.extend({}, data),
         model = data.model,
         isSQL = data.isSQL,
         update = data.update ? true : false,
-        query = {}
+        query = {},
+        ourCurrentData = {};
     if (dataClone && dataClone.update) {
         query = data.query
         delete data.query
@@ -70,13 +86,16 @@ jobs.createSearchTags = function (data, done) {
     }
 
     if (model) {
+
         models[model].findOne(update ? query : dataClone).then(function (currentData) {
+
             if (update) {
+                ourCurrentData = currentData
                 for (var i in data) {
                     //remove what is been updated from current data and give fully
-                    delete currentData[i]
+                    //  delete ourCurrentData[i]
                 }
-                dataClone = _.extend(dataClone, currentData);
+                dataClone = _.extend(dataClone, ourCurrentData);
             }
             var ourDoc = dataClone;
             var split = [];
