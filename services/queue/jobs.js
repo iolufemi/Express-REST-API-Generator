@@ -78,7 +78,6 @@ jobs.createSearchTags = function (data, done) {
 
             }
         }
-        if (data.tags && data.tags.length > 0) return done(false, 'nothing to do')
     }
     log.info('Creating search index for: ', data._id || data);
 
@@ -88,6 +87,7 @@ jobs.createSearchTags = function (data, done) {
         models[model].findOne(update ? query : dataClone).then(function (currentData) {
 
             if (update) {
+                if (data.tags && data.tags.length > 0) return done(false, 'nothing to do')
                 for (var i in dataClone) {
                     //remove what is been updated from current data and give fully
                     delete currentData[i]
