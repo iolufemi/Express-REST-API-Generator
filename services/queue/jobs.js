@@ -45,10 +45,29 @@ jobs.updateRequestLog = function(response, done){
 
 // Creates search tags for all db records
 jobs.createSearchTags = function (data, done) {
-   
+     var model = data.model,
+        isSQL = data.isSQL,
+        update = data.update ? true : false,
+        query = {};
+    if (data && data.update) {
+        query = data.query
+        delete data.query
+        delete data.update;
+    }
+    if (data && data.model) {
+        delete data.model;
+    }
+    if (data && data.isSQL) {
+        delete data.isSQL;
+    }
+    if (data && data.createdAt) {
+        delete data.createdAt;
+    }
+    if (data && data.updatedAt) {
+        delete data.updatedAt;
+    }
     // //check if a second object exists
     // //incase {$set:{}} or {$push:{}} comes turn it to {} 
-
     if (data.update) {
         for (var key in data) {
             if (data[key] != null && data[key].constructor == Object) {
@@ -56,46 +75,25 @@ jobs.createSearchTags = function (data, done) {
                     data[key2] = data[key][key2]
                 }
                 delete data[key]
+
             }
         }
-        if (data.updatedAt || data.tags) { console.log(JSON.stringify(data)); return done(false, 'nothing to do') }
+        if (data.tags && data.tags.length > 0) return done(false, 'nothing to do')
     }
     log.info('Creating search index for: ', data._id || data);
-    var dataClone = _.extend({}, data),
-        model = data.model,
-        isSQL = data.isSQL,
-        update = data.update ? true : false,
-        query = {},
-        ourCurrentData = {};
-    if (dataClone && dataClone.update) {
-        query = data.query
-        delete data.query
-        delete dataClone.update;
-    }
-    if (dataClone && dataClone.model) {
-        delete dataClone.model;
-    }
-    if (dataClone && dataClone.isSQL) {
-        delete dataClone.isSQL;
-    }
-    if (dataClone && dataClone.createdAt) {
-        delete dataClone.createdAt;
-    }
-    if (dataClone && dataClone.updatedAt) {
-        delete dataClone.updatedAt;
-    }
 
+    var dataClone = _.extend({}, data)
     if (model) {
 
         models[model].findOne(update ? query : dataClone).then(function (currentData) {
 
             if (update) {
-                ourCurrentData = currentData
-                for (var i in data) {
+                for (var i in dataClone) {
                     //remove what is been updated from current data and give fully
-                    //  delete ourCurrentData[i]
+                    delete currentData[i]
                 }
-                dataClone = _.extend(dataClone, ourCurrentData);
+
+                dataClone = _.extend(dataClone, currentData);
             }
             var ourDoc = dataClone;
             var split = [];
@@ -118,6 +116,7 @@ jobs.createSearchTags = function (data, done) {
                 }
             }
             split = _.flattenDeep(split);
+
             var task;
 
 
