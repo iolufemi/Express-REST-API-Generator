@@ -39,7 +39,7 @@ module.exports.errorHandler = function(err, req, res, next){ // jshint ignore:li
 		res.unauthorized(err);
 	}else if(err.statusCode === 400){
 		res.badRequest(err);
-	}else if(err.statusCode === 503){
+	}else if(err.statusCode === 403){
 		res.forbidden(err);
 	}else{
 		res.serverError(err);
