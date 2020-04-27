@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 var log = require('../logger');
 var _ = require('lodash');
 var queue = require('../queue');
 
 module.exports = function(){
-	log.warn('Sending 404 response: '+'not found');
+    log.warn('Sending 404 response: '+'not found');
     var req = this.req;
     var res = this;
 
@@ -13,7 +13,7 @@ module.exports = function(){
     response.requestId = req.requestId;
     
     queue.create('logResponse', response)
-    .save();
+        .save();
 
     this.status(404).json({status: 'error', message: 'not found'});
 };

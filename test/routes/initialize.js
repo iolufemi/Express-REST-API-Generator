@@ -2,11 +2,11 @@
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var request = require('supertest');
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 
@@ -75,13 +75,13 @@ req.method = '';
 describe('/initialize', function(){
     it('should return a string', function(done){
         agent
-        .get('/initialize')
-        .then(function(resp){
-            resp.body.data['x-tag'].should.be.a('string');
-            done();
-        })
-        .catch(function(err){
-            done(err);
-        });
+            .get('/initialize')
+            .then(function(resp){
+                resp.body.data['x-tag'].should.be.a('string');
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
     });
 });

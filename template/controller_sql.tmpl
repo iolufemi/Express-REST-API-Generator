@@ -56,7 +56,7 @@ var <%= service %>sController = {};
         
         <%= service %>s.search(query)
         .then(function(resp){
-            res.ok(resp);
+            res.ok(JSON.parse(JSON.stringify(resp)));
         })
         .catch(function(err){
             next(err);
@@ -156,15 +156,17 @@ var <%= service %>sController = {};
             }
         }
 
-        // if(populate){
-        //     _query.include = [];
-        //     var splitPopulation = populate.split(' ');
-        //     for(var m in splitPopulation){
-        //         if(typeof splitPopulation[m] === 'string'){
-        //             _query.include.push({model: <%= service %>s});
-        //         }
-        //     }
-        // }
+        if (populate) {
+            _query.include = [];
+            var splitPopulation = populate.split(' ');
+            for (var m in splitPopulation) {
+                if (typeof splitPopulation[m] === 'string') {
+                    if (models[splitPopulation[m]]) {
+                        _query.include.push({ model: models[splitPopulation[m]] });
+                    }
+                }
+            }
+        }
 
         if(projection){
             q.all([ourProjection,total,totalResult])
@@ -187,7 +189,7 @@ var <%= service %>sController = {};
                 extraData.totalResult = totalResult;
                 extraData.lastId = ourLastId;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
-                res.ok(resp, false, extraData);
+                res.ok(JSON.parse(JSON.stringify(resp)), false, extraData);
             })
             .catch(function(err){
                 next(err);
@@ -209,7 +211,7 @@ var <%= service %>sController = {};
                 extraData.lastId = ourLastId;
                 extraData.totalResult = totalResult;
                 extraData.isLastPage = (totalResult < limit) ? true : false;
-                res.ok(resp, false, extraData);
+                res.ok(JSON.parse(JSON.stringify(resp)), false, extraData);
             })
             .catch(function(err){
                 next(err);
@@ -229,17 +231,18 @@ var <%= service %>sController = {};
     }
     _query.where = <%= service %>s.where = {_id:id};
 
-    
-    // if(populate){
-    //     delete query.populate;
-    //     _query.include = [];
-    //     var splitPopulation = populate.split(' ');
-    //     for(var m in splitPopulation){
-    //         if(typeof splitPopulation[m] === 'string'){
-    //             _query.include.push({model: <%= service %>s});
-    //         }
-    //     }
-    // }
+    if (populate) {
+        delete query.populate;
+        _query.include = [];
+        var splitPopulation = populate.split(' ');
+        for (var m in splitPopulation) {
+            if (typeof splitPopulation[m] === 'string') {
+                if (models[splitPopulation[m]]) {
+                    _query.include.push({ model: models[splitPopulation[m]] });
+                }
+            }
+        }
+    }
 
     var question = <%= service %>s.findOne(_query);
 
@@ -248,7 +251,7 @@ var <%= service %>sController = {};
         if(!resp){
             next();
         }else{
-            res.ok(resp);
+            res.ok(resp.toJSON());
         }
     })
     .catch(function(err){
@@ -383,7 +386,7 @@ var <%= service %>sController = {};
     <%= service %>s.findOne(_query)
     .then(function(resp){
         if(!resp){
-            throw new Error('Could not find data');
+            throw {statusCode: 404 , message: 'Could not find data'};
         }
         // Backup data in Trash
         var backupData = {};

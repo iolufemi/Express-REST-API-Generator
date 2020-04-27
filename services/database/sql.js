@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var config = require('../../config');
 var log = require('../../services/logger');
@@ -57,13 +57,13 @@ options.logging = function(log){
 var sequelize = new Sequelize(config.SQLDatabase, config.SQLUsername, config.SQLPassword, options);
 
 sequelize
-.authenticate()
-.then(function(){
-    log.info('SQL database connection successful');
-})
-.catch(function(err){
-    log.error('Unable to connect to the database: ', err);
-});
+    .authenticate()
+    .then(function(){
+        log.info('SQL database connection successful');
+    })
+    .catch(function(err){
+        log.error('Unable to connect to the database: ', err);
+    });
 
 module.exports = sequelize;
 module.exports._sequelize = Sequelize;
