@@ -57,7 +57,7 @@ gulp.task('test', function() {
 // If you want to use an API as a database model, pass the base url and the endpoint. '--baseurl http://google.com' or '--b http://google.com'
 // '--endpoint users' or '--e users'
 // Note that the name must be singular
-gulp.task('service', function(){
+gulp.task('service', function(done){
     var args = argv(process.argv.slice(2));
     var name;
     var baseurl;
@@ -202,6 +202,8 @@ gulp.task('service', function(){
             console.log('Controller unit test created at ./test/controllers/'+namePlural+'.js');
         });
     });
+
+    return done();
 
 });
 
