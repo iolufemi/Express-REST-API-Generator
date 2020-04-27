@@ -93,14 +93,14 @@ This will automatically restart your app whenever a change is detected.
 
 You will now be able to access CRUD (create, read, update and delete) endpoints 
 
-`[POST] http://localhost:8080/yourFirstEndpoint` Create yourFirstEndpoint resources
-`[GET] http://localhost:8080/yourFirstEndpoint` Get yourFirstEndpoint resources. Supports limits, sorting, pagination, select (projection), search and date range
-`[GET] http://localhost:8080/yourFirstEndpoint/:id` Get a yourFirstEndpoint resource
-`[PUT] http://localhost:8080/yourFirstEndpoint` Update yourFirstEndpoint resources
-`[PATCH] http://localhost:8080/yourFirstEndpoint/:id` Update one yourFirstEndpoint resource
-`[DELETE] http://localhost:8080/yourFirstEndpoint?key=value` Delete yourFirstEndpoint resources
-`[DELETE] http://localhost:8080/yourFirstEndpoint/:id` Delete one yourFirstEndpoint resource
-`[POST] http://localhost:8080/yourFirstEndpoint/:id/restore` Restore a previously deleted yourFirstEndpoint resource
+- `[POST] http://localhost:8080/yourFirstEndpoint` Create yourFirstEndpoint resources
+- `[GET] http://localhost:8080/yourFirstEndpoint` Get yourFirstEndpoint resources. Supports limits, sorting, pagination, select (projection), search and date range
+- `[GET] http://localhost:8080/yourFirstEndpoint/:id` Get a yourFirstEndpoint resource
+- `[PUT] http://localhost:8080/yourFirstEndpoint` Update yourFirstEndpoint resources
+- `[PATCH] http://localhost:8080/yourFirstEndpoint/:id` Update one yourFirstEndpoint resource
+- `[DELETE] http://localhost:8080/yourFirstEndpoint?key=value` Delete yourFirstEndpoint resources
+- `[DELETE] http://localhost:8080/yourFirstEndpoint/:id` Delete one yourFirstEndpoint resource
+- `[POST] http://localhost:8080/yourFirstEndpoint/:id/restore` Restore a previously deleted yourFirstEndpoint resource
 
 > Note: For every `POST` API calls you need to send an `x-tag` value in the header. This value is used for secure communication between the server and client. It is used for AES encrytion when secure mode is enabled. To get a valid `x-tag` call the `[GET] /initialize` endpoint.   
 

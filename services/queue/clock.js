@@ -25,6 +25,8 @@ Model.find({enabled: true})
                                 log.info('Pushing '+job.name+' to queue...');
                                 queue.create(job.job, job.arguments)
                                     .save();
+                                resp.lastRunAt = new Date()
+                                resp.save()
                             }
                         })
                         .catch(function(err){
