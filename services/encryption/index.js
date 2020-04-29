@@ -19,7 +19,7 @@ module.exports = {
                     reject(err);
                 } else {
                     var randomNumber = Math.floor((Math.random() * 9999) + 1);
-                    resolve(new Buffer(aesjs.utils.hex.fromBytes(key) + '//////' + randomNumber).toString('base64'));
+                    resolve(Buffer.from(aesjs.utils.hex.fromBytes(key) + '//////' + randomNumber).toString('base64'));
                 }
             });
         });
@@ -28,7 +28,7 @@ module.exports = {
     encrypt: function (text, key) {
         debug('started encryption');
         debug('using key: ', key);
-        key = new Buffer(key, 'base64').toString('utf-8');
+        key = Buffer.from(key, 'base64').toString('utf-8');
         debug('What i see here: ', key);
         var splitKey = key.split('//////');
         key = splitKey[0];
@@ -63,7 +63,7 @@ module.exports = {
 
     decrypt: function (text, key, truthHash) {
         debug('text: ', text);
-        key = new Buffer(key, 'base64').toString('utf-8');
+        key = Buffer.from(key, 'base64').toString('utf-8');
         debug('What i see here: ', key);
         var splitKey = key.split('//////');
         key = splitKey[0];

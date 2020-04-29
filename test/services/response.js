@@ -194,6 +194,7 @@ describe('#Response service test', function(){
         var tag;
         encryption.generateKey()
             .then(function(res){
+                console.log(res);
                 tag = res;
                 return encryption.encrypt(demoData, tag);
             })

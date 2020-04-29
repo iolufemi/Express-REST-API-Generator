@@ -87,5 +87,9 @@
     "winston": "^2.3.1",
     "winston-bugsnag": "^2.1.0",
     "winston-loggly-bulk": "^2.0.2"
+  },
+  "mocha": {
+    "recursive": true,
+    "timeout": 20000
   }
 }
