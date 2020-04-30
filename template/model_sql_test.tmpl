@@ -8,6 +8,7 @@ var chaiAsPromised = require('chai-as-promised');
 var mongooseMock = require('mongoose-mock');
 // var expect = chai.expect;
 var sinon = require('sinon');
+var q = require('q');
 var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 var <%= service %>;
@@ -136,14 +137,12 @@ describe('<%= service %> Model',function(){
             });
         });
 
-        it('should tag database entries properly', function(done){
-            var my<%= object %> = <%= service %>.create({name: 'femi',someOtherStringData: 'stuff'});
-
+        it('should tag database entries properly', async function(){
+            var my<%= object %> = await <%= service %>.create({name: 'femi',someOtherStringData: 'stuff'});
+            
+            return q.Promise(function(resolve, reject) {
             setTimeout(function(){
-                my<%= object %>.then(function(res){
-                    console.log("taggs: ",res._id);
-                    return <%= service %>.findOne({where: {_id: res._id}});
-                })
+                <%= service %>.findOne({where: {_id: my<%= object %>._id}})
                 .then(function(res){
                     if(typeof res.tags === 'string'){
                         var _tags = res.tags.split(', ');
@@ -152,14 +151,14 @@ describe('<%= service %> Model',function(){
                         res.tags.length.should.equal(2);/* jslint ignore:line */
                     }
                     
-                    done();
+                    resolve(res);
                 })
                 .catch(function(err){
-                    done(err);
+                    reject(err);
                 });
             },3000);
-            
-        });
+            });
+            });
 
         it('should count returned records', function(done){
             var my<%= object %> = <%= service %>.count({where: {name: 'This is the titan'}});

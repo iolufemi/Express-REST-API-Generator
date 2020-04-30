@@ -8,23 +8,24 @@ var q = require('q');
 var _ = require('lodash');
 
 
-var ApiModel = function(baseurl,endpoint,headers){
+var ApiModel = function(baseurl, endpoint, headers) {
     log.info('API connection successful');
     this.headers = {};
     this.headers = _.extend(this.headers, headers);
     this.query = {};
     this.data = null;
     this.id = null;
-    this.url = baseurl+'/'+endpoint;
+    this.url = baseurl + '/' + endpoint;
 
-    this.buildSelect = function(select){
+    this.buildSelect = function(select) {
         var string = '';
         var list = [];
-        if(typeof select !== 'object'){
-            throw {statusCode: 400 , message: 'Projection should be an object. EG. {name: 1, place: 1}'};
-        }else{
-            for(var key in select){
-                if(typeof select[key] === 'number'){
+        if (typeof select !== 'object') {
+            throw { statusCode: 400, message: 'Projection should be an object. EG. {name: 1, place: 1}' };
+        }
+        else {
+            for (var key in select) {
+                if (typeof select[key] === 'number') {
                     list.push(key);
                 }
             }
@@ -33,8 +34,8 @@ var ApiModel = function(baseurl,endpoint,headers){
         return string;
     };
 
-    this.call = function(data){
-        debug('Sending HTTP ' +data.method+' request to '+data.url+' with data => '+JSON.stringify(data.data)+' and headers => '+JSON.stringify(this.headers)+' all the data => '+JSON.stringify(data));
+    this.call = function(data) {
+        debug('Sending HTTP ' + data.method + ' request to ' + data.url + ' with data => ' + JSON.stringify(data.data) + ' and headers => ' + JSON.stringify(this.headers) + ' all the data => ' + JSON.stringify(data));
         // Expected data
         // {
         // url: 'http://string.com',
@@ -60,12 +61,14 @@ var ApiModel = function(baseurl,endpoint,headers){
         //     options.qs._id = options.qs._id.toString();
         // }
 
-        if(data.method === 'GET'){
+        if (data.method === 'GET') {
             debug(data);
             options.qs = data.qs;
-        }else if(data.method === 'POST'){
+        }
+        else if (data.method === 'POST') {
             options.body = data.data;
-        }else{
+        }
+        else {
             options.qs = data.qs;
             options.body = data.data;
             debug('opt: ', options);
@@ -73,22 +76,22 @@ var ApiModel = function(baseurl,endpoint,headers){
         return request(options);
     };
 
-    this.limit = function(limit){
+    this.limit = function(limit) {
         this.query.limit = limit;
         return this;
     };
 
-    this.select = function(select){
+    this.select = function(select) {
         this.query.select = this.buildSelect(select);
         return this;
     };
 
-    this.sort = function(sort){
+    this.sort = function(sort) {
         this.query.sort = sort;
         return this;
     };
 
-    this.populate = function(populate){
+    this.populate = function(populate) {
         this.query.populate = populate;
         return this;
     };
@@ -96,9 +99,9 @@ var ApiModel = function(baseurl,endpoint,headers){
     return this;
 };
 
-ApiModel.prototype.search = function(string){
-    if(typeof string !== 'string'){
-        throw {statusCode: 400 , message: 'Please pass a string to search with'};
+ApiModel.prototype.search = function(string) {
+    if (typeof string !== 'string') {
+        throw { statusCode: 400, message: 'Please pass a string to search with' };
     }
     this.query = {};
     this.query = _.extend(this.query, {
@@ -111,15 +114,15 @@ ApiModel.prototype.search = function(string){
     };
 
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
-                    return reject({statusCode: 422 , message: err});
+                .catch(function(err) {
+                    return reject({ statusCode: 422, message: err });
                 });
         });
     };
@@ -127,7 +130,7 @@ ApiModel.prototype.search = function(string){
     return obj;
 };
 
-ApiModel.prototype.count = function(query){
+ApiModel.prototype.count = function(query) {
     this.query = {};
     this.query = _.extend(this.query, query);
     var data = {
@@ -137,15 +140,15 @@ ApiModel.prototype.count = function(query){
     };
 
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.totalResult);
                     return resolve(result);
                 })
-                .catch(function(err){
-                    return reject({statusCode: 422 , message: err});
+                .catch(function(err) {
+                    return reject({ statusCode: 422, message: err });
                 });
         });
     };
@@ -154,31 +157,31 @@ ApiModel.prototype.count = function(query){
 };
 
 
-ApiModel.prototype.estimatedDocumentCount = function(query){
+ApiModel.prototype.estimatedDocumentCount = function(query) {
     return this.count(query);
 };
 
 
-ApiModel.prototype.find = function(query){
-    if(!query){
+ApiModel.prototype.find = function(query) {
+    if (!query) {
         query = {};
     }
 
-    if(query.createdAt && query.createdAt.$gt){
+    if (query.createdAt && query.createdAt.$gt) {
         query.from = query.createdAt.$gt;
         delete query.createdAt.$gt;
     }
 
-    if(query.createdAt && query.createdAt.$lt){
+    if (query.createdAt && query.createdAt.$lt) {
         query.to = query.createdAt.$lt;
         delete query.createdAt.$lt;
     }
 
-    if(query.createdAt){
+    if (query.createdAt) {
         delete query.createdAt;
     }
 
-    if(query._id && query._id.$gt){
+    if (query._id && query._id.$gt) {
         query.lastId = query._id.$gt;
         delete query._id.$gt;
     }
@@ -191,15 +194,15 @@ ApiModel.prototype.find = function(query){
         qs: this.query
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
-                    return reject({statusCode: 422 , message: err});
+                .catch(function(err) {
+                    return reject({ statusCode: 422, message: err });
                 });
         });
     };
@@ -207,22 +210,22 @@ ApiModel.prototype.find = function(query){
     return obj;
 };
 
-ApiModel.prototype.findOne = function(query){
-    if(!query){
+ApiModel.prototype.findOne = function(query) {
+    if (!query) {
         query = {};
     }
 
-    if(query.createdAt && query.createdAt.$gt){
+    if (query.createdAt && query.createdAt.$gt) {
         query.from = query.createdAt.$gt;
         delete query.createdAt.$gt;
     }
 
-    if(query.createdAt && query.createdAt.$lt){
+    if (query.createdAt && query.createdAt.$lt) {
         query.to = query.createdAt.$lt;
         delete query.createdAt.$lt;
     }
 
-    if(query._id && query._id.$gt){
+    if (query._id && query._id.$gt) {
         query.lastId = query._id.$gt;
         delete query._id.$gt;
     }
@@ -234,16 +237,18 @@ ApiModel.prototype.findOne = function(query){
         method: 'GET', // or any http method
         qs: this.query
     };
+    this.limit(1);
+    this.sort('-_id');
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data[0]);
                     return resolve(result);
                 })
-                .catch(function(err){
-                    return reject({statusCode: 422 , message: err});
+                .catch(function(err) {
+                    return reject({ statusCode: 422, message: err });
                 });
         });
     };
@@ -251,45 +256,45 @@ ApiModel.prototype.findOne = function(query){
     return obj;
 };
 
-ApiModel.prototype.findOneAndUpdate = function(query, data){
-    if(!query){
+ApiModel.prototype.findOneAndUpdate = function(query, data) {
+    if (!query) {
         query = {};
     }
     this.query = {};
     this.query = _.extend(this.query, query);
     this.data = data;
-    if(this.data && this.data._id && typeof this.data._id !== 'string'){
+    if (this.data && this.data._id && typeof this.data._id !== 'string') {
         this.data._id = this.data._id.toString();
     }
     var obj = this;
     return obj.findOne(this.query)
-        .then(function(resp){
+        .then(function(resp) {
             debug('to update: ', resp);
             return obj.findByIdAndUpdate(resp._id, obj.data);
         });
 };
 
-ApiModel.prototype.findOneAndRemove = function(query){
-    if(!query){
+ApiModel.prototype.findOneAndRemove = function(query) {
+    if (!query) {
         query = {};
     }
     this.query = {};
     this.query = _.extend(this.query, query);
     var obj = this;
     return obj.findOne(this.query)
-        .then(function(resp){
+        .then(function(resp) {
             debug('to remove: ', resp);
             return obj.findByIdAndRemove(resp._id);
         });
 };
 
-ApiModel.prototype.findById = function(id){
-    if(!id){
-        throw {statusCode: 400 , message: 'Stop! You need to pass an ID'};
+ApiModel.prototype.findById = function(id) {
+    if (!id) {
+        throw { statusCode: 400, message: 'Stop! You need to pass an ID' };
     }
 
-    if(typeof id !== 'string'){
-        throw {statusCode: 400 , message: 'Stop! ID needs to be a string'};
+    if (typeof id !== 'string') {
+        throw { statusCode: 400, message: 'Stop! ID needs to be a string' };
     }
 
     this.id = id;
@@ -297,20 +302,20 @@ ApiModel.prototype.findById = function(id){
     debug('the id id id: ', id);
     this.query = {};
     var data = {
-        url: this.url+'/'+this.id,
+        url: this.url + '/' + this.id,
         method: 'GET',
         qs: this.query
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(data)
-                .then(function(resp){
+                .then(function(resp) {
                     debug('what do we have here: ', resp);
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -319,18 +324,18 @@ ApiModel.prototype.findById = function(id){
     return obj;
 };
 
-ApiModel.prototype.create = function(data){
-    if(!data){
-        throw {statusCode: 400 , message: 'Stop! You need to pass data'};
+ApiModel.prototype.create = function(data) {
+    if (!data) {
+        throw { statusCode: 400, message: 'Stop! You need to pass data' };
     }
 
-    if(typeof data !== 'object'){
-        throw {statusCode: 400 , message: 'Stop! Data must be an object'};
+    if (typeof data !== 'object') {
+        throw { statusCode: 400, message: 'Stop! Data must be an object' };
     }
 
     this.data = data;
 
-    if(this.data && this.data._id && typeof this.data._id !== 'string'){
+    if (this.data && this.data._id && typeof this.data._id !== 'string') {
         this.data._id = this.data._id.toString();
     }
 
@@ -342,14 +347,14 @@ ApiModel.prototype.create = function(data){
         data: this.data
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(_data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -358,18 +363,18 @@ ApiModel.prototype.create = function(data){
     return obj;
 };
 
-ApiModel.prototype.updateMany = function(query, data){
-    if(!data){
-        throw {statusCode: 400 , message: 'Stop! You need to pass data'};
+ApiModel.prototype.updateMany = function(query, data) {
+    if (!data) {
+        throw { statusCode: 400, message: 'Stop! You need to pass data' };
     }
 
-    if(typeof data !== 'object'){
-        throw {statusCode: 400 , message: 'Stop! Data must be an object'};
+    if (typeof data !== 'object') {
+        throw { statusCode: 400, message: 'Stop! Data must be an object' };
     }
 
     data.updatedAt = new Date(Date.now()).toISOString();
     this.data = data;
-    if(this.data && this.data._id && typeof this.data._id !== 'string'){
+    if (this.data && this.data._id && typeof this.data._id !== 'string') {
         this.data._id = this.data._id.toString();
     }
     this.query = {};
@@ -382,14 +387,14 @@ ApiModel.prototype.updateMany = function(query, data){
         qs: this.query
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(_data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -398,50 +403,50 @@ ApiModel.prototype.updateMany = function(query, data){
     return obj;
 };
 
-ApiModel.prototype.update = function(query, data){
+ApiModel.prototype.update = function(query, data) {
     return this.updateMany(query, data);
 };
 
-ApiModel.prototype.findByIdAndUpdate = function(id, data){
-    if(!data){
-        throw {statusCode: 400 , message: 'Stop! You need to pass data'};
+ApiModel.prototype.findByIdAndUpdate = function(id, data) {
+    if (!data) {
+        throw { statusCode: 400, message: 'Stop! You need to pass data' };
     }
 
-    if(typeof data !== 'object'){
-        throw {statusCode: 400 , message: 'Stop! Data must be an object'};
+    if (typeof data !== 'object') {
+        throw { statusCode: 400, message: 'Stop! Data must be an object' };
     }
 
-    if(!id){
-        throw {statusCode: 400 , message: 'Stop! You need to pass an ID'};
+    if (!id) {
+        throw { statusCode: 400, message: 'Stop! You need to pass an ID' };
     }
 
-    if(typeof id !== 'string'){
-        throw {statusCode: 400 , message: 'Stop! ID needs to be a string'};
+    if (typeof id !== 'string') {
+        throw { statusCode: 400, message: 'Stop! ID needs to be a string' };
     }
 
     data.updatedAt = new Date(Date.now()).toISOString();
     this.data = data;
 
-    if(this.data && this.data._id && typeof this.data._id !== 'string'){
+    if (this.data && this.data._id && typeof this.data._id !== 'string') {
         this.data._id = this.data._id.toString();
     }
     this.id = id;
 
     debug('this is what we are sending: ', this.data);
     var _data = {
-        url: this.url+'/'+this.id,
+        url: this.url + '/' + this.id,
         method: 'PATCH', // or any http method
         data: this.data
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(_data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -450,7 +455,7 @@ ApiModel.prototype.findByIdAndUpdate = function(id, data){
     return obj;
 };
 
-ApiModel.prototype.deleteMany = function(query){
+ApiModel.prototype.deleteMany = function(query) {
     this.query = {};
     this.query = _.extend(this.query, query);
 
@@ -460,14 +465,14 @@ ApiModel.prototype.deleteMany = function(query){
         qs: this.query
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(_data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -476,31 +481,31 @@ ApiModel.prototype.deleteMany = function(query){
     return obj;
 };
 
-ApiModel.prototype.findByIdAndRemove = function(id){
-    if(!id){
-        throw {statusCode: 400 , message: 'Stop! You need to pass an ID'};
+ApiModel.prototype.findByIdAndRemove = function(id) {
+    if (!id) {
+        throw { statusCode: 400, message: 'Stop! You need to pass an ID' };
     }
 
-    if(typeof id !== 'string'){
-        throw {statusCode: 400 , message: 'Stop! ID needs to be a string'};
+    if (typeof id !== 'string') {
+        throw { statusCode: 400, message: 'Stop! ID needs to be a string' };
     }
 
     this.id = id;
 
     var _data = {
-        url: this.url+'/'+this.id,
+        url: this.url + '/' + this.id,
         method: 'DELETE'
     };
     var obj = this;
-    obj.then = function(cb){
-        return q.Promise(function(resolve, reject){
+    obj.then = function(cb) {
+        return q.Promise(function(resolve, reject) {
             obj.call(_data)
-                .then(function(resp){
+                .then(function(resp) {
                     var result = cb(resp.data);
                     debug('Was deleted: ', resp);
                     return resolve(result);
                 })
-                .catch(function(err){
+                .catch(function(err) {
                     return reject(err);
                 });
         });
@@ -509,15 +514,15 @@ ApiModel.prototype.findByIdAndRemove = function(id){
     return obj;
 };
 
-ApiModel.prototype.deleteOne = function(query){
-    if(!query){
+ApiModel.prototype.deleteOne = function(query) {
+    if (!query) {
         query = {};
     }
     this.query = {};
     this.query = _.extend(this.query, query);
     var obj = this;
     return obj.findOne(this.query)
-        .then(function(resp){
+        .then(function(resp) {
             debug('to delete: ', resp);
             return obj.findByIdAndRemove(resp._id);
         });
