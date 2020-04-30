@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var queue = require('./');
 var jobs = require('./jobs');

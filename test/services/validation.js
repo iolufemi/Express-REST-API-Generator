@@ -5,13 +5,12 @@ process.env.SECURE_MODE = true;
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var crypto = require('crypto');
 var express = require('express');
 var app = express();
 var request = require('supertest');
-var expressValidator = require('express-validator');
 var response = require('../../services/response');
 var bodyParser = require('body-parser');
 
@@ -21,8 +20,8 @@ var res = {};
 var req = {};
 var demoData = '{"el escribimos": "silencio es dorado"}';
 var demoDataHash = crypto.createHash('sha512')
-.update(demoData)
-.digest('hex');
+    .update(demoData)
+    .digest('hex');
 
 console.log('hash', demoDataHash);
 var nextChecker = false;    
@@ -66,13 +65,12 @@ var validator = require('../../services/validator');
 // Dummy App
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(expressValidator());
 app.use(response);
 
 app.post('/', function(req,res,next){
     req._required = [
-    'name',
-    'name2'
+        'name',
+        'name2'
     ];
 
     next();
@@ -93,15 +91,15 @@ describe('#Validation service test', function(){
 
     it('should fail due to non existence of a required parameter',function(done){
         agent
-        .post('/')
-        .send({name:"femi"})
-        .expect(400,done);
+            .post('/')
+            .send({name:'femi'})
+            .expect(400,done);
     });
 
     it('should be successful', function(done){
         agent
-        .post('/')
-        .send({name:'femi2',name2:'femi'})
-        .expect(200,done);
+            .post('/')
+            .send({name:'femi2',name2:'femi'})
+            .expect(200,done);
     });
 });

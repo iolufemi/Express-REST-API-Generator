@@ -3,7 +3,7 @@
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var crypto = require('crypto');
 
@@ -13,8 +13,8 @@ var res = {};
 var req = {};
 var demoData = '{"el escribimos": "silencio es dorado"}';
 var demoDataHash = crypto.createHash('sha512')
-.update(demoData)
-.digest('hex');
+    .update(demoData)
+    .digest('hex');
 
 console.log('hash', demoDataHash);
 var nextChecker = false;    
@@ -90,6 +90,12 @@ app.get('/unauthorized', function(req,res){
     res.unauthorized('It worked!');
 });
 
+app.get('/unprocessable', function(req,res){
+    res.unprocessable('It worked!');
+});
+
+
+
 
 var encryption = require('../../services/encryption');
 var app2 = express();
@@ -126,107 +132,114 @@ describe('#Response service test', function(){
         res.should.have.property('notFound');
         res.should.have.property('serverError');
         res.should.have.property('unauthorized');
+        res.should.have.property('unprocessable');
         done();
     });
 
     it('should be ok', function(done){
         agent.
-        get('/ok')
-        .expect(200,done);
+            get('/ok')
+            .expect(200,done);
     });
 
     console.log(process.env.NO_CACHE);
     if(config.noFrontendCaching !== 'yes'){
         it('should be a cached response', function(done){
             agent.
-            get('/ok')
-            .expect(200)
-            .then(function(res){
-                console.log(res.body);
-                res.body.cached.should.be.true; /* jslint ignore:line */
-                done();
-            })
-            .catch(function(err){
-                done(err);
-            });
+                get('/ok')
+                .expect(200)
+                .then(function(res){
+                    console.log(res.body);
+                    res.body.cached.should.be.true; /* jslint ignore:line */
+                    done();
+                })
+                .catch(function(err){
+                    done(err);
+                });
         });
     }
 
     it('should be a badRequest', function(done){
         agent.
-        get('/badRequest')
-        .expect(400,done);
+            get('/badRequest')
+            .expect(400,done);
     });
     it('should be forbidden', function(done){
         agent.
-        get('/forbidden')
-        .expect(403,done);
+            get('/forbidden')
+            .expect(403,done);
     });
     it('should not be found', function(done){
         agent.
-        get('/notFound')
-        .expect(404,done);
+            get('/notFound')
+            .expect(404,done);
     });
     it('should be unauthorized', function(done){
         agent.
-        get('/unauthorized')
-        .expect(401,done);
+            get('/unauthorized')
+            .expect(401,done);
     });
     it('should be a serverError', function(done){
         agent.
-        get('/serverError')
-        .expect(500,done);
+            get('/serverError')
+            .expect(500,done);
+    });
+    it('should be an unprocessable entity response', function(done){
+        agent.
+            get('/unprocessable')
+            .expect(422,done);
     });
 
     it('should be an encrypted response', function(done){
         var tag;
         encryption.generateKey()
-        .then(function(res){
-            tag = res;
-            return encryption.encrypt(demoData, tag);
-        })
-        .then(function(res){
-            console.log('Our encrypted data: ', res.encryptedText);
-            return agent2.
-            post('/secure')
-            .set('x-tag', tag)
-            .send({truth: res.truth,secureData: res.encryptedText, secure: true})
-            .expect(200);
-        })
-        .then(function(res){
-            console.log('Our response body: ', res.body);
-            var data = res.body;
-            data.secure.should.be.true; /* jslint ignore:line */
-            done();
-        })
-        .catch(function(err){
-            done(err);
-        });
+            .then(function(res){
+                console.log(res);
+                tag = res;
+                return encryption.encrypt(demoData, tag);
+            })
+            .then(function(res){
+                console.log('Our encrypted data: ', res.encryptedText);
+                return agent2.
+                    post('/secure')
+                    .set('x-tag', tag)
+                    .send({truth: res.truth,secureData: res.encryptedText, secure: true})
+                    .expect(200);
+            })
+            .then(function(res){
+                console.log('Our response body: ', res.body);
+                var data = res.body;
+                data.secure.should.be.true; /* jslint ignore:line */
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
     });
 
     it('should detect tampered data', function(done){
         var tag;
         encryption.generateKey()
-        .then(function(res){
-            tag = res;
-            var demoData2 = '{"escribimos": "silencios es dorado"}';
-            return encryption.encrypt(demoData2, tag);
-        })
-        .then(function(res){
-            console.log('Our encrypted data: ', res);
-            return agent2.
-            post('/secure')
-            .set('x-tag', tag)
-            .send({truth: demoDataHash,secureData: res.encryptedText, secure: true})
-            .expect(500);
-        })
-        .then(function(res){
-            console.log('Our response body: ', res.body);
-            done();
-        })
-        .catch(function(err){
-            done(err);
-        });
+            .then(function(res){
+                tag = res;
+                var demoData2 = '{"escribimos": "silencios es dorado"}';
+                return encryption.encrypt(demoData2, tag);
+            })
+            .then(function(res){
+                console.log('Our encrypted data: ', res);
+                return agent2.
+                    post('/secure')
+                    .set('x-tag', tag)
+                    .send({truth: demoDataHash,secureData: res.encryptedText, secure: true})
+                    .expect(400);
+            })
+            .then(function(res){
+                console.log('Our response body: ', res.body);
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
     });
 
 });

@@ -4,13 +4,13 @@ process.env.RATE_LIMIT = 10;
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var request = require('supertest');
 var router = require('../../routes');
 var express = require('express');
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 var app4 = express();
@@ -62,75 +62,75 @@ req.method = '';
 
 // describe('Test rate limiting', function(){
 
-    // before(function(){ /* jslint ignore:line */
-    //     var workers = require('../../services/queue/workers');
-    //     var workers2 = require('../../services/queue/workers');
-    //     var workers3 = require('../../services/queue/workers');
-    // });
+// before(function(){ /* jslint ignore:line */
+//     var workers = require('../../services/queue/workers');
+//     var workers2 = require('../../services/queue/workers');
+//     var workers3 = require('../../services/queue/workers');
+// });
 
-    // it('should reach request rate limit', function(done){
-    //     agent4
-    //     .get('/initialize')
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize');
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         return agent4
-    //         .get('/initialize')
-    //         .expect(429);
-    //     })
-    //     .then(function(res){
-    //         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
-    //         requestId = res.headers['x-request-id'];
-    //         done();
-    //     })
-    //     .catch(function(err){
-    //         done(err);
-    //     });
-    // });
+// it('should reach request rate limit', function(done){
+//     agent4
+//     .get('/initialize')
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize');
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         return agent4
+//         .get('/initialize')
+//         .expect(429);
+//     })
+//     .then(function(res){
+//         console.log('Limit: ', res.headers['x-ratelimit-limit'], '| Remaining: ', res.headers['x-ratelimit-remaining'], ' | Body: ', res.body);
+//         requestId = res.headers['x-request-id'];
+//         done();
+//     })
+//     .catch(function(err){
+//         done(err);
+//     });
+// });
 
 // it('should save rate limit error on request log', function(done){
 //     var RequestLog = require('../../models/RequestLogs');
