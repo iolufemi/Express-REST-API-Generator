@@ -28,5 +28,5 @@ install:
 script:
   - sleep 15
   - >-
-    istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+    istanbul cover ./node_modules/mocha/bin/_mocha --exit --report lcovonly -- -R spec
     && codecov
