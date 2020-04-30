@@ -46,72 +46,105 @@ jobs.updateRequestLog = function(response, done){
 
 // Creates search tags for all db records
 jobs.createSearchTags = function(data, done){
-    log.info('Creating search index for: ', data._id);
-    var dataClone = _.extend({},data);
-    var model = data.model;
-    var isSQL = data.isSQL;
-
-    var update = data.update ? true : false;
-    if(dataClone && dataClone.update){
-        delete dataClone.update;
+  
+    var model = data.model,
+        isSQL = data.isSQL,
+        update = data.update ? true : false,
+        query = {};
+    if (data && data.update) {
+        query = data.query
+        delete data.query
+        delete data.update;
     }
-    if(dataClone && dataClone.model){
-        delete dataClone.model;
+    if (data && data.model) {
+        delete data.model;
     }
-    if(dataClone && dataClone.isSQL){
-        delete dataClone.isSQL;
+    if (data && data.isSQL) {
+        delete data.isSQL;
     }
-    if(dataClone && dataClone.createdAt){
-        delete dataClone.createdAt;
+    if (data && data.createdAt) {
+        delete data.createdAt;
     }
-    if(dataClone && dataClone.updatedAt){
-        delete dataClone.updatedAt;
+    if (data && data.updatedAt) {
+        delete data.updatedAt;
     }
-
-    var ourDoc = dataClone;
-    var split = [];
-    
-    for(var n in ourDoc){
-        if(ourDoc[n] === ourDoc._id){ /* jslint ignore:line */
-            // Skip
-        }else if(ourDoc[n] === ourDoc.createdAt){ /* jslint ignore:line */
-            // Skip
-        }else if(ourDoc[n] === ourDoc.updatedAt){ /* jslint ignore:line */
-            // Skip
-        }else if(ourDoc[n] === ourDoc.tags){ /* jslint ignore:line */
-            // Skip
-        }else{
-            if(typeof ourDoc[n] === 'string'){
-                split.push(ourDoc[n].split(' '));
-            }else{ /* jslint ignore:line */
-            // Move on nothing to see here
+    // //check if a second object exists
+    // //incase {$set:{}} or {$push:{}} comes turn it to {} 
+    if (data.update) {
+        for (var key in data) {
+            if (data[key] != null && data[key].constructor == Object) {
+                for (var key2 in data[key]) {
+                    data[key2] = data[key][key2]
+                }
+                delete data[key]
             }
         }
 
     }
-    split = _.flattenDeep(split);
+    log.info('Creating search index for: ', data._id || data);
 
-    var task;
-    if(model){
-        if(isSQL){
-            task = models[model].update({ tags: split.join(', ')}, {where: dataClone} );
-        }else{
-            if(update){
-                task = models[model].update(dataClone,{ updatedAt: new Date(Date.now()).toISOString(), tags: split});
-            }else{
-                task = models[model].update(dataClone,{ tags: split});
+    var dataClone = _.extend({}, data)
+    if (model) {
+
+        models[model].findOne(update ? query : dataClone).then(function (currentData) {
+
+            if (update) {
+                if ((Object.entries(data).length === 1 && data.tags) || (data.tags && data.tags.length > 0)) return done(false, 'nothing to do')
+                for (var i in dataClone) {
+                    //remove what is been updated from current data and give fully
+                    delete currentData[i]
+                }
+
+                dataClone = _.extend(dataClone, currentData);
             }
-        }
+            var ourDoc = dataClone;
+            var split = [];
 
-        task
-            .then(function(res){
-                return done(false, res);
-            })
-            .catch(function(err){
-                log.error(err);
-                return done({statusCode: 422 , message: err});
-            });
-    }else{
+            for (var n in ourDoc) {
+                if (ObjectId.isValid(ourDoc[n])) { /* jslint ignore:line */
+                    // Skip
+                }
+                else if (ourDoc[n] === ourDoc.createdAt) { /* jslint ignore:line */
+                    // Skip
+                }
+                else if (ourDoc[n] === ourDoc.updatedAt) { /* jslint ignore:line */
+                    // Skip
+                }
+                else if (ourDoc[n] === ourDoc.tags) { /* jslint ignore:line */
+                    // Skip
+                }
+                else {
+                    if (ourDoc[n] != null && typeof ourDoc[n] === 'string') {
+                        split.push(ourDoc[n].split(' '));
+                    }
+                    else { /* jslint ignore:line */
+                        // Move on nothing to see here
+                    }
+                }
+            }
+            split = _.flattenDeep(split);
+
+            var task;
+
+
+            if (isSQL) {
+                task = models[model].update({ tags: split.join(', ') }, { where: dataClone });
+            }
+            else {
+                task = models[model].updateOne(update ? query : dataClone, { tags: split, updatedAt: new Date(Date.now()).toISOString() });
+            }
+
+            task
+                .then(function (res) {
+                    return done(false, res);
+                })
+                .catch(function (err) {
+                    log.error(err);
+                    return done({statusCode: 422 , message: err});
+                });
+        })
+    }
+    else {
         return done({statusCode: 400 , message: 'No Model Passed!'});
     }
 
