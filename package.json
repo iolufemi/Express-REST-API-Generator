@@ -1,6 +1,6 @@
 {
   "name": "api-template",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A template for creating APIs Fast",
   "main": "app.js",
   "scripts": {

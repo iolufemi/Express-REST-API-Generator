@@ -285,12 +285,10 @@ gulp.task('release_done', function(cb) {
 });
 
 gulp.task('release', gulp.series(
-    'sanity',
     'bump-version',
     'changelog',
     'commit-changes',
     'push-changes',
     'create-new-tag',
     'github-release',
-    'release_done'
-));
+    'release_done'));
