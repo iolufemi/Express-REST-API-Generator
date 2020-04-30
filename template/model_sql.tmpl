@@ -63,6 +63,10 @@ var <%= service %>s = db.define(table, schemaObject, {
     }]
 });
 
+<%= service %>s.associate = function (models) {
+    // models.<%= service %>s.belongsTo(models.toPop, { foreignKey: 'toPop', sourceKey: '_id' });
+};
+
 // <%= service %>s.hasMany(<%= service %>s, {foreignKey: 'toPop', sourceKey: '_id'});
 
 // Adding hooks

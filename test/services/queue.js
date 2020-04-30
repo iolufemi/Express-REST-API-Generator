@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var queue = require('../../services/queue');
 
 var workers = require('../../services/queue/workers');
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 var fnv = require('fnv-plus');
 var mongoose = require('mongoose');
@@ -69,30 +69,30 @@ describe('#Queue service', function(){
     describe('#Testing Jobs', function(){
 
         it('should run createRequestLog successfully', function(done){
-          var myrequestlog = {
-            RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714967', 128).str(),
-            ipAddress: '192.168.90.9',
-            url: 'http://google.com',
-            method: 'POST',
-            body: {name: 'femi'},
-            createdAt: new Date()
-        };
-        jobs.createRequestLog(myrequestlog,done);
-    });
-
-        it('should run updateRequestLog successfully', function(done){
-          var myrequestlog = {
-            requestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714966', 128).str(),
-            response: {
+            var myrequestlog = {
+                RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714967', 128).str(),
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
                 method: 'POST',
                 body: {name: 'femi'},
                 createdAt: new Date()
-            }
-        };
-        jobs.updateRequestLog(myrequestlog,done);
-    });
+            };
+            jobs.createRequestLog(myrequestlog,done);
+        });
+
+        it('should run updateRequestLog successfully', function(done){
+            var myrequestlog = {
+                requestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714966', 128).str(),
+                response: {
+                    ipAddress: '192.168.90.9',
+                    url: 'http://google.com',
+                    method: 'POST',
+                    body: {name: 'femi'},
+                    createdAt: new Date()
+                }
+            };
+            jobs.updateRequestLog(myrequestlog,done);
+        });
         it('should run createSearchTags successfully for saving data', function(done){
             var myrequestlog = {
                 RequestId: fnv.hash(new Date().valueOf() + '59abab38ead925031a714969', 128).str(),
@@ -134,9 +134,9 @@ describe('#Queue service', function(){
         });
 
         it('should run sendWebhook successfully for sending realtime HTTP notifications', function(done){
-            var data =  {
-                url: 'http://localhost:8081',
-                secure: false, // true or false
+            var data = {
+                reference: Date.now(),
+                webhookURL: 'https://postman-echo.com/post',
                 data: {
                     someData: 'this',
                     someOtherData: 'and this'
@@ -146,18 +146,18 @@ describe('#Queue service', function(){
             jobs.sendWebhook(data,done);
         });
 
-        it('should run sendWebhook successfully for sending realtime HTTP notifications securely', function(done){
-            var data =  {
-                url: 'http://localhost:8081',
-                secure: true, // true or false
-                data: {
-                    someData: 'this',
-                    someOtherData: 'and this'
-                }
-            };
+        // it('should run sendWebhook successfully for sending realtime HTTP notifications securely', function(done){
+        //     var data =  {
+        //         url: 'http://localhost:8081',
+        //         secure: true, // true or false
+        //         data: {
+        //             someData: 'this',
+        //             someOtherData: 'and this'
+        //         }
+        //     };
 
-            jobs.sendWebhook(data,done);
-        });
+        //     jobs.sendWebhook(data,done);
+        // });
 
         it('should run sendHTTPRequest successfully for calling web services with POST method', function(done){
             var data =      {

@@ -1,15 +1,15 @@
 'use strict';
-var log = require('../logger'); 
+var log = require('../logger');
 var _ = require('lodash');
 var queue = require('../queue');
 
 module.exports = function(data, message){
-    log.warn('Sending bad request response: ', data, message || 'bad request');
+    log.warn('Sending unprocessable entity response: ', data, message || 'unprocessable entity');
     var req = this.req;
     var res = this;
-
+    
     // Dump it in the queue
-    var response = {response: {status: 'error', data: data, message: message ? message : 'bad request'}};
+    var response = {response: {status: 'error', data: data, message: message ? message : 'unprocessable entity'}};
     response.requestId = req.requestId;
     
     queue.create('logResponse', response)
@@ -22,8 +22,8 @@ module.exports = function(data, message){
     }
 
     if(data){
-        this.status(400).json({status: 'error', data: data, message: message ? message : 'bad request'});
+        this.status(422).json({status: 'error', data: data, message: message ? message : 'unprocessable entity'});
     }else{
-        this.status(400).json({status: 'error', message: message ? message : 'bad request'});
+        this.status(422).json({status: 'error', message: message ? message : 'unprocessable entity'});
     }
 };

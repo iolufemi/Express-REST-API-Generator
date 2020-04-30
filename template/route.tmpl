@@ -1,6 +1,7 @@
 "use strict";
 var express = require('express');
 var router = express.Router();
+var validator = require('../services/validator');
 var <%= object %>sController = require('../controllers/<%= service %>s');
 
 var service = '<%= object %>s';
@@ -19,7 +20,7 @@ router.get('/'+service+'/:id', <%= object %>sController.findOne);
 //     ];
 
 //     next();
-// }
+// }, validator,
 
 // create <%= object %>(s) a single <%= object %> object will create one <%= object %> while an array of <%= object %>s will create multiple <%= object %>s
 router.post('/'+service, <%= object %>sController.create);

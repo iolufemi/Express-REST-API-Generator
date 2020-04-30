@@ -43,9 +43,9 @@ describe('RequestLog Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should read data', function(done){
@@ -55,9 +55,9 @@ describe('RequestLog Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should read all data', function(done){
@@ -67,9 +67,9 @@ describe('RequestLog Model',function(){
                 res.should.be.an.array; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should update data', function(done){
@@ -81,9 +81,9 @@ describe('RequestLog Model',function(){
                 cb.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should update many data', function(done){
@@ -95,9 +95,9 @@ describe('RequestLog Model',function(){
                 cb.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should search data', function(done){
@@ -108,9 +108,9 @@ describe('RequestLog Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should delete data', function(done){
@@ -140,141 +140,141 @@ describe('RequestLog Model',function(){
                 cb2.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
-it('should delete many data', function(done){
-    var cb = sinon.spy();
-    var myrequestlog = RequestLog.deleteMany({RequestId: objId2});
+        it('should delete many data', function(done){
+            var cb = sinon.spy();
+            var myrequestlog = RequestLog.deleteMany({RequestId: objId2});
 
-    myrequestlog.then(function(res){
-        cb();
-        cb.should.have.been.calledOnce; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
+            myrequestlog.then(function(res){
+                cb();
+                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should add createdAt', function(done){
+            var myrequestlog = RequestLog.create({RequestId: objId2});
+
+            myrequestlog.then(function(res){
+                id = res._id;
+                res.should.have.property('createdAt');
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should add updatedAt', function(done){
+            var myrequestlog = RequestLog.create({RequestId: objId1});
+            myrequestlog.then(function(res){
+                id2 = res._id;
+                return RequestLog.updateMany({_id: id},{RequestId: objId4});
+            })
+                .then(function(res){
+                    return RequestLog.findOne({_id: id});
+                })
+                .then(function(res){
+                    res.should.have.property('updatedAt');
+                    done();
+                })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should count returned records', function(done){
+            var myrequestlog = RequestLog.estimatedDocumentCount({RequestId: objId2});
+
+            myrequestlog.then(function(res){
+                res.should.be.a.number; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id', function(done){
+            var myrequestlog = RequestLog.findById(id);
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id and delete', function(done){
+            var myrequestlog = RequestLog.findByIdAndRemove(id2);
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id and update', function(done){
+            var myrequestlog = RequestLog.findByIdAndUpdate(id,{name: 'fufu'});
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query', function(done){
+            var myrequestlog = RequestLog.findOne({RequestId: objId4});
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query and update', function(done){
+            var myrequestlog = RequestLog.findOneAndUpdate({RequestId: objId4},{RequestId: objId1});
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query and delete', function(done){
+            var myrequestlog = RequestLog.findOneAndRemove({RequestId: objId1});
+
+            myrequestlog.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
     });
-});
-
-it('should add createdAt', function(done){
-    var myrequestlog = RequestLog.create({RequestId: objId2});
-
-    myrequestlog.then(function(res){
-        id = res._id;
-        res.should.have.property('createdAt');
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should add updatedAt', function(done){
-    var myrequestlog = RequestLog.create({RequestId: objId1});
-    myrequestlog.then(function(res){
-        id2 = res._id;
-        return RequestLog.updateMany({_id: id},{RequestId: objId4});
-    })
-    .then(function(res){
-        return RequestLog.findOne({_id: id});
-    })
-    .then(function(res){
-        res.should.have.property('updatedAt');
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should count returned records', function(done){
-    var myrequestlog = RequestLog.estimatedDocumentCount({RequestId: objId2});
-
-    myrequestlog.then(function(res){
-        res.should.be.a.number; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id', function(done){
-    var myrequestlog = RequestLog.findById(id);
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id and delete', function(done){
-    var myrequestlog = RequestLog.findByIdAndRemove(id2);
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id and update', function(done){
-    var myrequestlog = RequestLog.findByIdAndUpdate(id,{name: 'fufu'});
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query', function(done){
-    var myrequestlog = RequestLog.findOne({RequestId: objId4});
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query and update', function(done){
-    var myrequestlog = RequestLog.findOneAndUpdate({RequestId: objId4},{RequestId: objId1});
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query and delete', function(done){
-    var myrequestlog = RequestLog.findOneAndRemove({RequestId: objId1});
-
-    myrequestlog.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-});
 });
 
 

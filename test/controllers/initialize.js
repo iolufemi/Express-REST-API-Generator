@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 chai.should();
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var initialize = require('../../controllers/Initialize.js');
 
