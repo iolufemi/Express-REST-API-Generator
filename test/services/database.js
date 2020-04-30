@@ -5,7 +5,7 @@ process.env.SECURE_MODE = true;
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var crypto = require('crypto');
 
@@ -15,8 +15,8 @@ var res = {};
 var req = {};
 var demoData = '{"el escribimos": "silencio es dorado"}';
 var demoDataHash = crypto.createHash('sha512')
-.update(demoData)
-.digest('hex');
+    .update(demoData)
+    .digest('hex');
 
 console.log('hash', demoDataHash);
 var nextChecker = false;    

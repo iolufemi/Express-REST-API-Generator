@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var db = require('../database').logMongo;
 
@@ -12,7 +12,8 @@ var schemaObject = {
         unique: true
     },
     uri: {
-        type: 'String'
+        type: 'String',
+        index: true
     },
     method: {
         type: 'String'
@@ -30,7 +31,8 @@ var schemaObject = {
         type: db._mongoose.Schema.Types.Mixed
     },
     responseStatusCode: {
-        type: 'Number'
+        type: 'Number',
+        index:true
     }
 };
 

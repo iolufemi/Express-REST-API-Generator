@@ -5,7 +5,7 @@ process.env.SECURE_MODE = true;
 var chai = require('chai');
 chai.should();
 var config = require('../../config');
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var crypto = require('crypto');
 
@@ -15,8 +15,8 @@ var res = {};
 var req = {};
 var demoData = '{"el escribimos": "silencio es dorado"}';
 var demoDataHash = crypto.createHash('sha512')
-.update(demoData)
-.digest('hex');
+    .update(demoData)
+    .digest('hex');
 
 console.log('hash', demoDataHash);
 var nextChecker = false;    
@@ -74,39 +74,39 @@ describe('#Encryption service test', function(){
 
     it('should encrypt and decrypt data', function(done){
         encryption.generateKey()
-        .then(function(resp){
-            header['x-tag'] = resp;
+            .then(function(resp){
+                header['x-tag'] = resp;
             
-            return encryption.encrypt(demoData, req.get('x-tag'));
-        })
-        .then(function(resp){
-            console.log("encrypted data: ", resp);
-            res.set('encryptedData', resp.encryptedText);
-            console.log('hash: ', demoDataHash, 'generated hash: ', resp.truth);
-            return encryption.decrypt(resp.encryptedText, req.get('x-tag'), resp.truth);
-        })
-        .then(function(resp){
-            console.log("decrypted data: ", resp);
-            resp.should.be.a('string');
-            done();
-        })
-        .catch(function(err){
-            done(err);
-        });
+                return encryption.encrypt(demoData, req.get('x-tag'));
+            })
+            .then(function(resp){
+                console.log('encrypted data: ', resp);
+                res.set('encryptedData', resp.encryptedText);
+                console.log('hash: ', demoDataHash, 'generated hash: ', resp.truth);
+                return encryption.decrypt(resp.encryptedText, req.get('x-tag'), resp.truth);
+            })
+            .then(function(resp){
+                console.log('decrypted data: ', resp);
+                resp.should.be.a('string');
+                done();
+            })
+            .catch(function(err){
+                done(err);
+            });
     });
     
     it('should detect compromised data', function(done){
         encryption.decrypt('5b9f535be7edbad69ac03aced46f6586c1b2d', req.get('x-tag'), demoDataHash)
-        .then(function(resp){
-            done(resp);
-        })
-        .catch(function(err){
-            if(err.message === 'Data integrity compromised!'){
-                done();
-            }else{
-                done(err);
-            }
-        });
+            .then(function(resp){
+                done(resp);
+            })
+            .catch(function(err){
+                if(err.message === 'Data integrity compromised!'){
+                    done();
+                }else{
+                    done(err);
+                }
+            });
     });
     
     it('should interpret data when data is not POST', function(done){

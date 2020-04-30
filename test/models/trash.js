@@ -38,9 +38,9 @@ describe('Trash Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should read data', function(done){
@@ -50,9 +50,9 @@ describe('Trash Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should read all data', function(done){
@@ -62,9 +62,9 @@ describe('Trash Model',function(){
                 res.should.be.an.array; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should update data', function(done){
@@ -76,9 +76,9 @@ describe('Trash Model',function(){
                 cb.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should update many data', function(done){
@@ -90,9 +90,9 @@ describe('Trash Model',function(){
                 cb.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should search data', function(done){
@@ -103,9 +103,9 @@ describe('Trash Model',function(){
                 res.should.be.an.object; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
         it('should delete data', function(done){
@@ -142,27 +142,27 @@ describe('Trash Model',function(){
                 cb2.should.have.been.calledOnce; /* jslint ignore:line */
                 done();
             })
-            .catch(function(err){
-                done(err);
-            });
+                .catch(function(err){
+                    done(err);
+                });
         });
 
-it('should delete many data', function(done){
-    var cb = sinon.spy();
-    var mytrash = Trash.deleteMany({'data.RequestId': 'kokoko456789'});
+        it('should delete many data', function(done){
+            var cb = sinon.spy();
+            var mytrash = Trash.deleteMany({'data.RequestId': 'kokoko456789'});
 
-    mytrash.then(function(res){
-        cb();
-        cb.should.have.been.calledOnce; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
+            mytrash.then(function(res){
+                cb();
+                cb.should.have.been.calledOnce; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
 
-it('should add createdAt', function(done){
-    var mytrash = Trash.create({data: {
+        it('should add createdAt', function(done){
+            var mytrash = Trash.create({data: {
                 RequestId: 'gdf099olllojd6563',
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
@@ -171,18 +171,18 @@ it('should add createdAt', function(done){
                 createdAt: new Date()
             }});
 
-    mytrash.then(function(res){
-        id = res._id;
-        res.should.have.property('createdAt');
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
+            mytrash.then(function(res){
+                id = res._id;
+                res.should.have.property('createdAt');
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
 
-it('should add updatedAt', function(done){
-    var mytrash = Trash.create({data: {
+        it('should add updatedAt', function(done){
+            var mytrash = Trash.create({data: {
                 RequestId: 'gdf099olllojd6563',
                 ipAddress: '192.168.90.9',
                 url: 'http://google.com',
@@ -190,107 +190,107 @@ it('should add updatedAt', function(done){
                 body: {name: 'femi4'},
                 createdAt: new Date()
             }});
-    mytrash.then(function(res){
-        id2 = res._id;
-        return Trash.updateMany({_id: id},{'data.RequestId': 'kgtggokoko456789'});
-    })
-    .then(function(res){
-        return Trash.findOne({_id: id});
-    })
-    .then(function(res){
-        res.should.have.property('updatedAt');
-        done();
-    })
-    .catch(function(err){
-        done(err);
+            mytrash.then(function(res){
+                id2 = res._id;
+                return Trash.updateMany({_id: id},{'data.RequestId': 'kgtggokoko456789'});
+            })
+                .then(function(res){
+                    return Trash.findOne({_id: id});
+                })
+                .then(function(res){
+                    res.should.have.property('updatedAt');
+                    done();
+                })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should count returned records', function(done){
+            var mytrash = Trash.estimatedDocumentCount({'data.RequestId': 'kgtggokoko456789'});
+
+            mytrash.then(function(res){
+                res.should.be.a.number; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id', function(done){
+            var mytrash = Trash.findById(id);
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id and delete', function(done){
+            var mytrash = Trash.findByIdAndRemove(id2);
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find a record by id and update', function(done){
+            var mytrash = Trash.findByIdAndUpdate(id,{name: 'fufu'});
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query', function(done){
+            var mytrash = Trash.findOne({'data.RequestId': 'kgtggokoko456789'});
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query and update', function(done){
+            var mytrash = Trash.findOneAndUpdate({'data.RequestId': 'kgtggokoko456789'},{'data.RequestId': 'kgtggohyu0900koko456789'});
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
+        it('should find the first match from a query and delete', function(done){
+            var mytrash = Trash.findOneAndRemove({'data.RequestId': 'kgtggohyu0900koko456789'});
+
+            mytrash.then(function(res){
+                res.should.be.an.object; /* jslint ignore:line */
+                done();
+            })
+                .catch(function(err){
+                    done(err);
+                });
+        });
+
     });
-});
-
-it('should count returned records', function(done){
-    var mytrash = Trash.estimatedDocumentCount({'data.RequestId': 'kgtggokoko456789'});
-
-    mytrash.then(function(res){
-        res.should.be.a.number; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id', function(done){
-    var mytrash = Trash.findById(id);
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id and delete', function(done){
-    var mytrash = Trash.findByIdAndRemove(id2);
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find a record by id and update', function(done){
-    var mytrash = Trash.findByIdAndUpdate(id,{name: 'fufu'});
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query', function(done){
-    var mytrash = Trash.findOne({'data.RequestId': 'kgtggokoko456789'});
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query and update', function(done){
-    var mytrash = Trash.findOneAndUpdate({'data.RequestId': 'kgtggokoko456789'},{'data.RequestId': 'kgtggohyu0900koko456789'});
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-it('should find the first match from a query and delete', function(done){
-    var mytrash = Trash.findOneAndRemove({'data.RequestId': 'kgtggohyu0900koko456789'});
-
-    mytrash.then(function(res){
-        res.should.be.an.object; /* jslint ignore:line */
-        done();
-    })
-    .catch(function(err){
-        done(err);
-    });
-});
-
-});
 });
 
 
