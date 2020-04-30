@@ -140,21 +140,44 @@ Schema.post('find', function(result) {
 });
 
 Schema.pre('update', function(next) {
-    // Indexing for search
-    var ourDoc = this._update;
-    ourDoc.model = collection;
-    ourDoc.update = true;
-    if(ourDoc.updatedAt || ourDoc.tags){ /* jslint ignore:line */
-        // Move along! Nothing to see here!!
-    }else{
-        // Dump it in the queue
-        queue.create('searchIndex', ourDoc)
-        .save();
-    }
+   
+  // Indexing for search
+  var ourDoc = this._update;
+  ourDoc.model = collection;
+  ourDoc.update = true;
 
-    ourDoc.updatedAt = new Date(Date.now()).toISOString();
-    
-    next();
+  ourDoc.query = this.getQuery()
+
+  queue.create('searchIndex', ourDoc)
+    .save();
+
+
+  // Dump it in the queue
+
+
+  ourDoc.updatedAt = new Date(Date.now()).toISOString();
+
+  next();
+});
+Schema.pre('updateOne', function(next) {
+   
+  // Indexing for search
+  var ourDoc = this._update;
+  ourDoc.model = collection;
+  ourDoc.update = true;
+
+  ourDoc.query = this.getQuery()
+
+  queue.create('searchIndex', ourDoc)
+    .save();
+
+
+  // Dump it in the queue
+
+
+  ourDoc.updatedAt = new Date(Date.now()).toISOString();
+
+  next();
 });
 
 var Model = db.model(collection, Schema);
