@@ -16,3 +16,4 @@
 | services/request/index.js | 90 | Test request module
 | N/A | N/A | Add DynamoDB support
 | N/A | N/A | Add Firebase support
+| N/A | N/A | Add the alility to disable some database engines
