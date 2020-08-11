@@ -1,4 +1,5 @@
-version: '3'
+version: "3"
+
 services:
 
     # MySQL
@@ -12,14 +13,14 @@ services:
         ports:
             - "3307:3306"
         restart: always
-            
+
     # The Application
     api:
         build:
             context: ./
             dockerfile: ./Dockerfile
         ports:
-            - 8080:8080
+            - 8280:8080
         links:
             - redis
             - mongo
@@ -33,6 +34,8 @@ services:
             - SQL_DATABASE=giro
             - SQL_HOST=mysqldb
         restart: always
+        volumes:
+            - .:/usr/src/app
 
     # The Web Server
     clock:
@@ -71,7 +74,7 @@ services:
             - SQL_DATABASE=giro
             - SQL_HOST=mysqldb
         restart: always
-    
+
     # Php MyAdmin
     mysqladmin:
         image: phpmyadmin/phpmyadmin
@@ -82,7 +85,7 @@ services:
             - "mysqldb"
         ports:
             - "8000:80"
-            
+
     # MongoDB Admin
     mongoadmin:
         image: mongo-express
@@ -105,7 +108,7 @@ services:
     mongo:
         image: mongo:3.6
         restart: always
-        
+
 volumes:
     mysql:
         driver: local
