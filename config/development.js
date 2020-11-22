@@ -36,5 +36,6 @@ module.exports = {
     logglyToken: process.env.LOGGLY_TOKEN || false,
     logglySubdomain: process.env.LOGGLY_SUBDOMAIN || false,
     logglyTag: process.env.LOGGLY_TAG || false,
-    cleanUpFailedJobs: process.env.CLEANUP_FAILED_JOBS || 'yes'
+    cleanUpFailedJobs: process.env.CLEANUP_FAILED_JOBS || 'yes',
+    disableMySQL: process.env.DISABLE_MYSQL || 'yes'
 };
