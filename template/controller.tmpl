@@ -84,23 +84,23 @@ var <%= service %>sController = {};
         var to = query.to;
         if(from){
             query.createdAt = {};
-            query.createdAt.$gt = from;
+            query.createdAt.$gte = from;
             delete query.from;
             if(to){
                 delete query.to;
             }else{
                 to = new Date().toISOString();
             }
-            query.createdAt.$lt = to;
+            query.createdAt.$lte = to;
         }else{
             query.createdAt = {};
-            query.createdAt.$gt = new Date('1989-03-15T00:00:00').toISOString();
+            query.createdAt.$gte = new Date('1989-03-15T00:00:00').toISOString();
             if(to){
                 delete query.to;
             }else{
                 to = new Date().toISOString();
             }
-            query.createdAt.$lt = to;
+            query.createdAt.$lte = to;
         }
         var lastId = query.lastId;
         if(lastId){

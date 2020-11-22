@@ -19,8 +19,6 @@ var bodyParser = require('body-parser');
 var initRouter = require('../../routes/initialize');
 var routers = require('../../routes');
 
-var app = express();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(response);
