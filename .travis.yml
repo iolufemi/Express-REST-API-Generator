@@ -5,7 +5,7 @@ services:
   - redis-server
   - mysql
 env:
-  - MONGOLAB_URL=mongodb://127.0.0.1/snipe LOG_MONGOLAB_URL=mongodb://127.0.0.1/snipelogs REDIS_URL=redis://127.0.0.1/1 SECURE_MODE=true NO_CACHE=no SQL_HOST=127.0.0.1
+  - MONGOLAB_URL=mongodb://127.0.0.1/snipe LOG_MONGOLAB_URL=mongodb://127.0.0.1/snipelogs REDIS_URL=redis://127.0.0.1/1 SECURE_MODE=true NO_CACHE=no SQL_HOST=127.0.0.1 DISABLE_MYSQL=no
 addons:
   apt:
     sources:
