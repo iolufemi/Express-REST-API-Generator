@@ -59,7 +59,7 @@
     "cron": "^1.3.0",
     "crypto": "0.0.3",
     "debug": "^2.6.3",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "express-content-length-validator": "^1.0.0",
     "express-enforces-ssl": "^1.1.0",
     "express-limiter": "^1.6.0",
