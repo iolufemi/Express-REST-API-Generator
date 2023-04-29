@@ -299,7 +299,7 @@ it('should update documents', function(done){
     };
     var res = {};
     res.ok = function(data, cache, extraData){
-        data.nModified.should.be.above(0); /* jslint ignore:line */
+        data.modifiedCount.should.be.above(0); /* jslint ignore:line */
         done();
     };
     var req = {};

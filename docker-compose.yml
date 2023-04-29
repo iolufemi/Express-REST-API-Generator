@@ -3,7 +3,7 @@ services:
 
     # MySQL
     mysqldb:
-        image: mysql:5.7.26
+        image: mysql:8.0
         restart: always
         environment:
             - MYSQL_ROOT_PASSWORD=command
@@ -103,7 +103,7 @@ services:
 
     # Mongo
     mongo:
-        image: mongo:3.6
+        image: mongo:6.0
         restart: always
         
 volumes:

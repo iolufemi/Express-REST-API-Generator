@@ -6,9 +6,6 @@ var log = require('../../services/logger');
 mongoose.Promise = require('q').Promise;
 // Connect to DB
 var mongooseConfig = {};
-mongooseConfig.useNewUrlParser = true;
-mongooseConfig.useCreateIndex = true;
-mongooseConfig.useUnifiedTopology = true;
 
 if(config.env === 'production'){
     mongooseConfig.autoIndex = false;

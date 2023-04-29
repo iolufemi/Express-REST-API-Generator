@@ -18,8 +18,11 @@ var associate = function(models){
 files.forEach(function(file) {
     count = count + 1;
     var splitFileName = file.split('.');
-    if(splitFileName[0] !== 'index'){
-        models[splitFileName[0]] = require('./'+splitFileName[0]);
+    if (splitFileName[0] !== 'index') {
+        models[splitFileName[0]] = require('./' + splitFileName[0]);
+    }
+    if (count === filesCount) {
+        associate(models);
     }
     if(count === filesCount){
         associate(models);
