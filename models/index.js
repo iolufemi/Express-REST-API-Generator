@@ -24,9 +24,6 @@ files.forEach(function(file) {
     if (count === filesCount) {
         associate(models);
     }
-    if(count === filesCount){
-        associate(models);
-    }
 });
 
 module.exports = models;
