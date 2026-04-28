@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/iolufemi-express-rest-api-and-mcp-server-framework-badge.png)](https://mseep.ai/app/iolufemi-express-rest-api-and-mcp-server-framework)
+
 # Express REST API and MCP Server Framework
 
 [![codecov](https://codecov.io/gh/iolufemi/Express-REST-API-Generator/branch/master/graph/badge.svg)](https://codecov.io/gh/iolufemi/Express-REST-API-Generator) [![Documentation Status](https://readthedocs.org/projects/express-rest-api-generato/badge/?version=latest)](https://express-rest-api-generato.readthedocs.io//en/latest/?badge=latest)
